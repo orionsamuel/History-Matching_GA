@@ -6,5 +6,7 @@ int main(){
 
     ga.init();
 
+    cout << "Finish" << endl;
+
     return 0;
 }

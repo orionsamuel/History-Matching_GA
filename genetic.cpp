@@ -10,6 +10,7 @@ genetic_algorithm::~genetic_algorithm(){
 
 void genetic_algorithm::init(){
     firstPopulation();
+    simulation(0);
 }
 
 void genetic_algorithm::firstPopulation(){
@@ -21,8 +22,8 @@ void genetic_algorithm::firstPopulation(){
         system("rm Output/0/*");
     }
 
-    for(int i = 0; i < size_population; i++){
-        string command = "cp Input/inputDS.dat Output/0/inputDS"+to_string(i)+".dat";
+    for(int i = 0; i < SIZE_POPULATION; i++){
+        string command = "cp Input/inputDS.dat Output/0/inputDS_"+to_string(i)+".dat";
         const char* file = (char*) command.c_str();
         system(file);
     }
@@ -30,6 +31,22 @@ void genetic_algorithm::firstPopulation(){
 
 void genetic_algorithm::othersPopulations(){
 
+}
+
+void genetic_algorithm::simulation(int idIteration){
+    system("rm -f output_simulation");
+    for(int i = 0; i < SIZE_POPULATION; i++){
+        string command = "cp Output/"+to_string(idIteration)+"/inputDS_"+to_string(i)+".dat ../Codigo_Bifasico_Slab/simulacoes/dev/inputDS.dat";
+        const char* file = (char*) command.c_str();
+        system(file);
+        system("./../Codigo_Bifasico_Slab/rodarSimulador.sh >> output_simulation 2>> output_simulation");
+        command = "cp ../Codigo_Bifasico_Slab/simulacoes/dev/out/resultadoVazaoAgua.dat Output/"+to_string(idIteration)+"/vazaoAgua_"+to_string(i)+".dat";
+        file = (char*) command.c_str();
+        system(file);
+        command = "cp ../Codigo_Bifasico_Slab/simulacoes/dev/out/resultadoVazaoOleo.dat Output/"+to_string(idIteration)+"/vazaoOleo_"+to_string(i)+".dat";
+        file = (char*) command.c_str();
+        system(file);
+    }
 }
 
 void genetic_algorithm::fitness(){

@@ -6,5 +6,5 @@ struct individual{
     float error_rank;
 };
 
-#define size_population 100
-#define n_generations 50
+#define SIZE_POPULATION 10
+#define N_GENERATIONS 50
