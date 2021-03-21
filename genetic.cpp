@@ -1,13 +1,7 @@
 #include "genetic.hpp"
 
-genetic_algorithm::genetic_algorithm(int size_population, int n_generations){
-    this->size_population = size_population;
-    this->n_generations = n_generations;
-
-    for(int i = 0; i < size_population; i++){
-        individual ind;
-        this->population.push_back(ind);
-    }
+genetic_algorithm::genetic_algorithm(){
+    
 }
 
 genetic_algorithm::~genetic_algorithm(){
@@ -23,6 +17,8 @@ void genetic_algorithm::firstPopulation(){
 
     if(dp == NULL){
         system("mkdir Output/0");
+    }else{
+        system("rm Output/0/*");
     }
 
     for(int i = 0; i < size_population; i++){

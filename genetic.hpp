@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 #include <string>
  #include <sys/types.h>
  #include <dirent.h>
@@ -9,12 +8,10 @@ using namespace std;
 
 class genetic_algorithm{
     private:
-    int size_population;
-    int n_generations;
-    vector <individual> population;
+    individual population[size_population];
 
     public:
-    genetic_algorithm(int size_population, int n_generations);
+    genetic_algorithm();
     ~genetic_algorithm();
 
     void init();
