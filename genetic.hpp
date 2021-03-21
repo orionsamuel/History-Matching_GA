@@ -5,15 +5,15 @@
 using namespace std;
 
 class genetic_algorithm{
-    public:
+    private:
     int size_population;
     int n_individuals;
     vector <individual> population;
 
+    public:
     genetic_algorithm(int size_population, int n_inviduals);
     ~genetic_algorithm();
 
-    private:
     void init();
     void firstPopulation();
     void othersPopulations();
