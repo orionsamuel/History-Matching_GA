@@ -14,6 +14,7 @@ class functions{
     void simulation(int idIteration);
     float rand(float min, float max);
     void sort_rank();
+    const vector<string> split(const string& s, const char& c);
 
 };
 
