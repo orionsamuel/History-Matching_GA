@@ -2,6 +2,9 @@
 #include <string>
 #include <sys/types.h>
 #include <dirent.h>
+#include <random>
+#include <iomanip>
+#include <fstream>
 #include "utils.hpp"
 
 using namespace std;
@@ -22,5 +25,6 @@ class genetic_algorithm{
     void crossover();
     void mutation();
     void sort_rank();
+    float rand(float min, float max);
 
 };

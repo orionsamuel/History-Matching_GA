@@ -27,6 +27,13 @@ void genetic_algorithm::firstPopulation(){
         const char* file = (char*) command.c_str();
         system(file);
     }
+
+    for(int i = 0; i < SIZE_POPULATION; i++){
+        population[i].porosity = rand(MIN_POROSITY, MAX_POROSITY);
+        population[i].permeability_1 = rand(MIN_PERMEABILITY, MAX_PERMEABILITY);
+        population[i].permeability_2 = rand(MIN_PERMEABILITY, MAX_PERMEABILITY);
+        population[i].permeability_3 = rand(MIN_PERMEABILITY, MAX_PERMEABILITY);
+    }
 }
 
 void genetic_algorithm::othersPopulations(){
@@ -63,4 +70,14 @@ void genetic_algorithm::mutation(){
 
 void genetic_algorithm::sort_rank(){
 
+}
+
+float genetic_algorithm::rand(float min, float max){
+    random_device rd;
+    default_random_engine eng(rd());
+    uniform_real_distribution<float>distr(min, max);
+
+    float num = distr(eng);
+
+    return num;
 }
