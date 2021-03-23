@@ -8,6 +8,7 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+#include <cmath>
 #include "functions.hpp"
 
 using namespace std;
@@ -26,7 +27,7 @@ class genetic_algorithm: public functions{
     void init();
     void firstPopulation();
     void othersPopulations(int idIteration);
-    void fitness();
+    void fitness(int idIteration);
     void crossover();
     void mutation(vector <individual>& childrens); 
 };

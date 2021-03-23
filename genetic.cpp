@@ -13,7 +13,6 @@ void genetic_algorithm::init(){
     ifstream result_oil("Input/resultadoVazaoOleo.dat", ios::in);
 
     string line, line2, content, content2;
-    result real_value;
 
     while(!result_water.eof() && !result_oil.eof()){
         getline(result_water, line);
@@ -32,7 +31,6 @@ void genetic_algorithm::init(){
     for(int i = 0; i < v.size(); i++){
         real_results[i].water = stod(v[i]);
         real_results[i].oil = stod(v2[i]);
-        cout << real_results[i].water << endl;
     }
 
     firstPopulation();
@@ -141,8 +139,52 @@ void genetic_algorithm::othersPopulations(int idIteration){
 
 }
 
-void genetic_algorithm::fitness(){
+void genetic_algorithm::fitness(int idIteration){
+    for(int i = 0; i < SIZE_POPULATION; i++){
+        double rank;
+
+        ifstream result_water("Output/"+to_string(idIteration)+"/vazaoAgua_"+to_string(i)+".dat", ios::in);
+        ifstream result_oil("Output/"+to_string(idIteration)+"/vazaoOleo_"+to_string(i)+".dat", ios::in);
+
+        string line, line2, content, content2;
+
+        while(!result_water.eof() && !result_oil.eof()){
+            getline(result_water, line);
+            getline(result_oil, line2);
+            content += line;
+            content += " ";
+            content2 += line2;
+            content2 += " ";
+        }
+
+        vector<string> v{split(content, ' ')};
+        vector<string> v2{split(content2, ' ')};
     
+        result simulate_results[v.size()];
+
+        for(int j = 0; j < v.size(); i++){
+            simulate_results[j].water = stod(v[j]);
+            simulate_results[j].oil = stod(v2[j]);
+        }
+
+        for(int j = 0; j < N_METRICS; j++){
+            if(j == 0){
+                for(int k = 0; k < v.size(); k++){
+                    rank += pow((real_results[k].water - simulate_results[k].water),2);
+                }
+                rank *= WATER_WEIGHT;
+            }else if(j == 1){
+                for(int k = 0; k < v.size(); k++){
+                    rank += pow((real_results[k].oil - simulate_results[k].oil),2);
+                }
+                rank *= OIL_WEIGHT;
+            }
+            rank += rank;            
+        }
+        rank = sqrt((rank / (v.size() * 2)));
+
+        population[i].error_rank = rank;
+    }
 }
 
 void genetic_algorithm::crossover(){
