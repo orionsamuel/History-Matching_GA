@@ -12,7 +12,7 @@ struct result{
 };
 
 #define SIZE_POPULATION 10
-#define N_GENERATIONS 50
+#define N_GENERATIONS 3
 
 #define CROSSOVER_RATE 20
 

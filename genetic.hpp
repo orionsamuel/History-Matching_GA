@@ -25,7 +25,7 @@ class genetic_algorithm: public functions{
 
     void init();
     void firstPopulation();
-    void othersPopulations();
+    void othersPopulations(int idIteration);
     void fitness();
     void crossover();
     void mutation(vector <individual>& childrens); 

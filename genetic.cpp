@@ -10,6 +10,9 @@ genetic_algorithm::~genetic_algorithm(){
 
 void genetic_algorithm::init(){
     firstPopulation();
+    for(int i = 0; i < N_GENERATIONS; i++){
+        othersPopulations(i);
+    }
 }
 
 void genetic_algorithm::firstPopulation(){
@@ -53,10 +56,54 @@ void genetic_algorithm::firstPopulation(){
         const char* file = (char*) command.c_str();
         system(file);
     }
+
     simulation(0);
 }
 
-void genetic_algorithm::othersPopulations(){
+void genetic_algorithm::othersPopulations(int idIteration){
+    crossover();
+
+    string command = "Output/"+to_string(idIteration);
+    const char* file = (char*) command.c_str();
+    DIR* dp = opendir(file);
+
+    if(dp == NULL){
+        command = "mkdir Output/"+to_string(idIteration);
+        file = (char*) command.c_str();
+        system(file);
+    }else{
+        command = "rm -f Output/"+to_string(idIteration)+"/*";
+        file = (char*) command.c_str();
+        system(file);
+    }
+
+    for(int i = 0; i < SIZE_POPULATION; i++){
+        string command = "cp Input/inputDS.dat Output/"+to_string(idIteration)+"/inputDS_"+to_string(i)+".dat";
+        const char* file = (char*) command.c_str();
+        system(file);
+    }
+
+    for(int i = 0; i < SIZE_POPULATION; i++){
+        ifstream read_input("Output/"+to_string(idIteration)+"/inputDS_"+to_string(i)+".dat", ios::in);
+        ofstream write_input("inputDS_"+to_string(i)+".dat", ios::out);
+        int count = 0;
+        string linha;
+        while(!read_input.eof()){
+            getline(read_input, linha);
+            if(count == 142){
+                vector<string> v{split(linha, ' ')};
+                write_input << "         " << v[0] << "   " << scientific << population[i].porosity << "   " << population[i].permeability_1 << "   " << population[i].permeability_2 << "   " << population[i].permeability_3 << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+            }else{
+                write_input << linha << endl;
+            }
+            count++;
+        }
+        string command = "mv inputDS_"+to_string(i)+".dat Output/"+to_string(idIteration)+"/";
+        const char* file = (char*) command.c_str();
+        system(file);
+    }
+
+    simulation(idIteration);
 
 }
 
