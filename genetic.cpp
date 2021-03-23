@@ -85,7 +85,9 @@ void genetic_algorithm::firstPopulation(){
         system(file);
     }
 
-    //simulation(0);
+    simulation(0);
+    fitness(0);
+    sort_rank(population);
 }
 
 void genetic_algorithm::othersPopulations(int idIteration){
@@ -135,7 +137,9 @@ void genetic_algorithm::othersPopulations(int idIteration){
         system(file);
     }
 
-    //simulation(idIteration);
+    simulation(idIteration);
+    fitness(idIteration);
+    sort_rank(population);
 
 }
 
@@ -146,16 +150,26 @@ void genetic_algorithm::fitness(int idIteration){
         ifstream result_water("Output/"+to_string(idIteration)+"/vazaoAgua_"+to_string(i)+".dat", ios::in);
         ifstream result_oil("Output/"+to_string(idIteration)+"/vazaoOleo_"+to_string(i)+".dat", ios::in);
 
+        ofstream write_output_water("inputDS_"+to_string(i)+".dat", ios::app);
+        ofstream write_output_oil("inputDS_"+to_string(i)+".dat", ios::app);
+
         string line, line2, content, content2;
 
         while(!result_water.eof() && !result_oil.eof()){
             getline(result_water, line);
             getline(result_oil, line2);
+
+            write_output_water << line << endl;
+            write_output_oil << line2 << endl;
+
             content += line;
             content += " ";
             content2 += line2;
             content2 += " ";
         }
+
+        result_water.close();
+        result_oil.close();
 
         vector<string> v{split(content, ' ')};
         vector<string> v2{split(content2, ' ')};
@@ -184,6 +198,25 @@ void genetic_algorithm::fitness(int idIteration){
         rank = sqrt((rank / (v.size() * 2)));
 
         population[i].error_rank = rank;
+
+        write_output_water << endl;
+        write_output_water << endl;
+        write_output_water << endl;
+        write_output_water << rank << endl;
+
+        write_output_oil << endl;
+        write_output_oil << endl;
+        write_output_oil << endl;
+        write_output_oil << rank << endl;
+
+        string command = "mv vazaoAgua_"+to_string(i)+".dat Output/"+to_string(idIteration)+"/";
+        const char* file = (char*) command.c_str();
+        system(file);
+
+        command = "mv vazaoOleo__"+to_string(i)+".dat Output/"+to_string(idIteration)+"/";
+        file = (char*) command.c_str();
+        system(file);
+
     }
 }
 

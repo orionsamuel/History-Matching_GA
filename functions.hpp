@@ -15,10 +15,9 @@ class functions{
 
     void simulation(int idIteration);
     double rand_double(double min, double max);
-    void sort_rank();
+    void sort_rank(individual v[]);
     double max(double num1, double num2);
     double min(double num1, double num2);
-    void getReal_results(result* values);
     const vector<string> split(const string& s, const char& c);
 
 };

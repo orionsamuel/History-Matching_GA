@@ -26,8 +26,17 @@ double functions::rand_double(double min, double max){
     return num;
 }
 
-void functions::sort_rank(){
-
+void functions::sort_rank(individual v[]){
+    double aux;
+    for(int i = 0; i < SIZE_POPULATION; i++){
+        for(int j = (i + 1); j < SIZE_POPULATION; j++){
+            if(v[i].error_rank > v[j].error_rank){
+                aux = v[i].error_rank;
+                v[i].error_rank = v[j].error_rank;
+                v[j].error_rank = aux;
+             }
+        }
+    }
 }
 
 double functions::max(double num1, double num2){
