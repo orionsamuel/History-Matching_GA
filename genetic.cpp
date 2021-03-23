@@ -28,10 +28,10 @@ void genetic_algorithm::firstPopulation(){
     }
 
     for(int i = 0; i < SIZE_POPULATION; i++){
-        population[i].porosity = rand(MIN_POROSITY, MAX_POROSITY);
-        population[i].permeability_1 = rand(MIN_POROSITY, MAX_PERMEABILITY);
-        population[i].permeability_2 = rand(MIN_PERMEABILITY, MAX_PERMEABILITY);
-        population[i].permeability_3 = rand(MIN_PERMEABILITY, MAX_PERMEABILITY);
+        population[i].porosity = rand_double(MIN_POROSITY, MAX_POROSITY);
+        population[i].permeability_1 = rand_double(MIN_POROSITY, MAX_PERMEABILITY);
+        population[i].permeability_2 = rand_double(MIN_PERMEABILITY, MAX_PERMEABILITY);
+        population[i].permeability_3 = rand_double(MIN_PERMEABILITY, MAX_PERMEABILITY);
     }
 
     for(int i = 0; i < SIZE_POPULATION; i++){
@@ -88,6 +88,8 @@ void genetic_algorithm::crossover(){
         count = count + 2;
     }
 
+    mutation(childrens);
+
     count = 0;
     for(int i = crossover_rate; i > 0; i--){
         population[SIZE_POPULATION - i].porosity = childrens[count].porosity;
@@ -100,6 +102,60 @@ void genetic_algorithm::crossover(){
     
 }
 
-void genetic_algorithm::mutation(){
+void genetic_algorithm::mutation(vector <individual>& childrens){
+    for(int i = 0; i < childrens.size(); i++){
+        srand (time(NULL));
+        int percent = rand() % 2;
+        int tunning = rand() % 1;
 
+        if(percent == 0){
+            double valuePorosity = ((childrens[i].porosity * 5) / 100);
+            double valuePermeability_1 = ((childrens[i].permeability_1 * 5) / 100);
+            double valuePermeability_2 = ((childrens[i].permeability_2 * 5) / 100);
+            double valuePermeability_3 = ((childrens[i].permeability_2 * 5) / 100);
+            if(tunning = 0){
+                childrens[i].porosity = max(MAX_POROSITY, (childrens[i].porosity + valuePorosity));
+                childrens[i].permeability_1 = max(MAX_POROSITY, (childrens[i].permeability_1 + valuePermeability_1));
+                childrens[i].permeability_2 = max(MAX_POROSITY, (childrens[i].permeability_2 + valuePermeability_2));
+                childrens[i].permeability_3 = max(MAX_POROSITY, (childrens[i].permeability_3 + valuePermeability_3));
+            }else{
+                childrens[i].porosity = min(MAX_POROSITY, (childrens[i].porosity + valuePorosity));
+                childrens[i].permeability_1 = min(MAX_POROSITY, (childrens[i].permeability_1 + valuePermeability_1));
+                childrens[i].permeability_2 = min(MAX_POROSITY, (childrens[i].permeability_2 + valuePermeability_2));
+                childrens[i].permeability_3 = min(MAX_POROSITY, (childrens[i].permeability_3 + valuePermeability_3));
+            }
+        }else if(percent == 1){
+            double valuePorosity = ((childrens[i].porosity * 10) / 100);
+            double valuePermeability_1 = ((childrens[i].permeability_1 * 10) / 100);
+            double valuePermeability_2 = ((childrens[i].permeability_2 * 10) / 100);
+            double valuePermeability_3 = ((childrens[i].permeability_2 * 10) / 100);
+            if(tunning = 0){
+                childrens[i].porosity = max(MAX_POROSITY, (childrens[i].porosity + valuePorosity));
+                childrens[i].permeability_1 = max(MAX_POROSITY, (childrens[i].permeability_1 + valuePermeability_1));
+                childrens[i].permeability_2 = max(MAX_POROSITY, (childrens[i].permeability_2 + valuePermeability_2));
+                childrens[i].permeability_3 = max(MAX_POROSITY, (childrens[i].permeability_3 + valuePermeability_3));
+            }else{
+                childrens[i].porosity = min(MAX_POROSITY, (childrens[i].porosity + valuePorosity));
+                childrens[i].permeability_1 = min(MAX_POROSITY, (childrens[i].permeability_1 + valuePermeability_1));
+                childrens[i].permeability_2 = min(MAX_POROSITY, (childrens[i].permeability_2 + valuePermeability_2));
+                childrens[i].permeability_3 = min(MAX_POROSITY, (childrens[i].permeability_3 + valuePermeability_3));
+            }
+        }else if(percent == 2){
+            double valuePorosity = ((childrens[i].porosity * 20) / 100);
+            double valuePermeability_1 = ((childrens[i].permeability_1 * 20) / 100);
+            double valuePermeability_2 = ((childrens[i].permeability_2 * 20) / 100);
+            double valuePermeability_3 = ((childrens[i].permeability_2 * 20) / 100);
+            if(tunning = 0){
+                childrens[i].porosity = max(MAX_POROSITY, (childrens[i].porosity + valuePorosity));
+                childrens[i].permeability_1 = max(MAX_POROSITY, (childrens[i].permeability_1 + valuePermeability_1));
+                childrens[i].permeability_2 = max(MAX_POROSITY, (childrens[i].permeability_2 + valuePermeability_2));
+                childrens[i].permeability_3 = max(MAX_POROSITY, (childrens[i].permeability_3 + valuePermeability_3));
+            }else{
+                childrens[i].porosity = min(MAX_POROSITY, (childrens[i].porosity + valuePorosity));
+                childrens[i].permeability_1 = min(MAX_POROSITY, (childrens[i].permeability_1 + valuePermeability_1));
+                childrens[i].permeability_2 = min(MAX_POROSITY, (childrens[i].permeability_2 + valuePermeability_2));
+                childrens[i].permeability_3 = min(MAX_POROSITY, (childrens[i].permeability_3 + valuePermeability_3));
+            }
+        }
+    }
 }

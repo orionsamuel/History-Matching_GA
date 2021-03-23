@@ -1,14 +1,14 @@
 struct individual{
-    float porosity;
-    float permeability_1;
-    float permeability_2;
-    float permeability_3;
-    float error_rank;
+    double porosity;
+    double permeability_1;
+    double permeability_2;
+    double permeability_3;
+    double error_rank;
 };
 
 struct result{
-    float real_water;
-    float real_oil;
+    double real_water;
+    double real_oil;
 };
 
 #define SIZE_POPULATION 10

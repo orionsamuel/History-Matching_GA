@@ -6,6 +6,8 @@
 #include <random>
 #include <iomanip>
 #include <vector>
+#include <cstdlib>
+#include <ctime>
 #include "functions.hpp"
 
 using namespace std;
@@ -15,7 +17,7 @@ class genetic_algorithm: public functions{
     individual population[SIZE_POPULATION];
     vector <result> results;
     int crossover_rate = ((SIZE_POPULATION * CROSSOVER_RATE) / 100);
-    int mutation_rate = ((SIZE_POPULATION * MUTATION_RATE) / 100);
+    int mutation_rate = ((CROSSOVER_RATE * MUTATION_RATE) / 100);
 
     public:
     genetic_algorithm();
@@ -26,5 +28,5 @@ class genetic_algorithm: public functions{
     void othersPopulations();
     void fitness();
     void crossover();
-    void mutation(); 
+    void mutation(vector <individual>& childrens); 
 };

@@ -12,8 +12,10 @@ class functions{
     public:
 
     void simulation(int idIteration);
-    float rand(float min, float max);
+    double rand_double(double min, double max);
     void sort_rank();
+    double max(double num1, double num2);
+    double min(double num1, double num2);
     const vector<string> split(const string& s, const char& c);
 
 };

@@ -16,18 +16,34 @@ void functions::simulation(int idIteration){
     }
 }
 
-float functions::rand(float min, float max){
+double functions::rand_double(double min, double max){
     random_device rd;
     default_random_engine eng(rd());
-    uniform_real_distribution<float>distr(min, max);
+    uniform_real_distribution<double>distr(min, max);
 
-    float num = distr(eng);
+    double num = distr(eng);
 
     return num;
 }
 
 void functions::sort_rank(){
 
+}
+
+double functions::max(double num1, double num2){
+    if(num1 > num2){
+        return num1;
+    }else{
+        return num2;
+    }
+}
+
+double functions::min(double num1, double num2){
+    if(num1 < num2){
+        return num1;
+    }else{
+        return num2;
+    }
 }
 
 const vector<string> functions::split(const string& s, const char& c){
@@ -38,7 +54,7 @@ const vector<string> functions::split(const string& s, const char& c){
 		if(n != c) buff+=n; else
 		if(n == c && buff != "") { v.push_back(buff); buff = ""; }
 	}
-    
+
 	if(buff != "") v.push_back(buff);
 	
 	return v;
