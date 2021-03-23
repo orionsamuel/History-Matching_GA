@@ -7,8 +7,8 @@ struct individual{
 };
 
 struct result{
-    double real_water;
-    double real_oil;
+    double water;
+    double oil;
 };
 
 #define SIZE_POPULATION 10
@@ -24,3 +24,6 @@ struct result{
 
 #define MIN_PERMEABILITY 0.0000000E+00
 #define MAX_PERMEABILITY 4.4235002E-02
+
+#define WATER_WEIGHT 4.0
+#define OIL_WEIGHT 1.0

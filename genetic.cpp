@@ -8,7 +8,33 @@ genetic_algorithm::~genetic_algorithm(){
 
 }
 
-void genetic_algorithm::init(){
+void genetic_algorithm::init(){    
+    ifstream result_water("Input/resultadoVazaoAgua.dat", ios::in);
+    ifstream result_oil("Input/resultadoVazaoOleo.dat", ios::in);
+
+    string line, line2, content, content2;
+    result real_value;
+
+    while(!result_water.eof() && !result_oil.eof()){
+        getline(result_water, line);
+        getline(result_oil, line2);
+        content += line;
+        content += " ";
+        content2 += line2;
+        content2 += " ";
+    }
+
+    vector<string> v{split(content, ' ')};
+    vector<string> v2{split(content2, ' ')};
+    
+    real_results = new result[v.size()];
+
+    for(int i = 0; i < v.size(); i++){
+        real_results[i].water = stod(v[i]);
+        real_results[i].oil = stod(v2[i]);
+        cout << real_results[i].water << endl;
+    }
+
     firstPopulation();
     for(int i = 1; i < N_GENERATIONS; i++){
         othersPopulations(i);
@@ -41,23 +67,27 @@ void genetic_algorithm::firstPopulation(){
         ifstream read_input("Output/0/inputDS_"+to_string(i)+".dat", ios::in);
         ofstream write_input("inputDS_"+to_string(i)+".dat", ios::out);
         int count = 0;
-        string linha;
+        string line;
         while(!read_input.eof()){
-            getline(read_input, linha);
+            getline(read_input, line);
             if(count == 142){
-                vector<string> v{split(linha, ' ')};
+                vector<string> v{split(line, ' ')};
                 write_input << "         " << v[0] << "   " << scientific << population[i].porosity << "   " << population[i].permeability_1 << "   " << population[i].permeability_2 << "   " << population[i].permeability_3 << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
             }else{
-                write_input << linha << endl;
+                write_input << line << endl;
             }
             count++;
         }
+
+        read_input.close();
+        write_input.close();
+
         string command = "mv inputDS_"+to_string(i)+".dat Output/0/";
         const char* file = (char*) command.c_str();
         system(file);
     }
 
-    simulation(0);
+    //simulation(0);
 }
 
 void genetic_algorithm::othersPopulations(int idIteration){
@@ -87,28 +117,32 @@ void genetic_algorithm::othersPopulations(int idIteration){
         ifstream read_input("Output/"+to_string(idIteration)+"/inputDS_"+to_string(i)+".dat", ios::in);
         ofstream write_input("inputDS_"+to_string(i)+".dat", ios::out);
         int count = 0;
-        string linha;
+        string line;
         while(!read_input.eof()){
-            getline(read_input, linha);
+            getline(read_input, line);
             if(count == 142){
-                vector<string> v{split(linha, ' ')};
+                vector<string> v{split(line, ' ')};
                 write_input << "         " << v[0] << "   " << scientific << population[i].porosity << "   " << population[i].permeability_1 << "   " << population[i].permeability_2 << "   " << population[i].permeability_3 << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
             }else{
-                write_input << linha << endl;
+                write_input << line << endl;
             }
             count++;
         }
+
+        read_input.close();
+        write_input.close();
+
         string command = "mv inputDS_"+to_string(i)+".dat Output/"+to_string(idIteration)+"/";
         const char* file = (char*) command.c_str();
         system(file);
     }
 
-    simulation(idIteration);
+    //simulation(idIteration);
 
 }
 
 void genetic_algorithm::fitness(){
-
+    
 }
 
 void genetic_algorithm::crossover(){

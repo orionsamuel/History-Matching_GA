@@ -8,5 +8,7 @@ int main(){
 
     cout << "Finish" << endl;
 
+    ga.~genetic_algorithm();
+
     return 0;
 }
