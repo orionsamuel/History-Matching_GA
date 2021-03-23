@@ -6,8 +6,17 @@ struct individual{
     float error_rank;
 };
 
+struct result{
+    float real_water;
+    float real_oil;
+};
+
 #define SIZE_POPULATION 10
 #define N_GENERATIONS 50
+
+#define CROSSOVER_RATE 20
+
+#define MUTATION_RATE 50
 
 #define MIN_POROSITY 0.0000000E+00
 #define MAX_POROSITY 0.3

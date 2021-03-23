@@ -65,7 +65,39 @@ void genetic_algorithm::fitness(){
 }
 
 void genetic_algorithm::crossover(){
+    vector <individual> childrens;
 
+    int count = 0;
+    while(count < (crossover_rate / 2)){
+        individual children_1, children_2;
+
+        children_1.porosity = population[count].porosity;
+        children_1.permeability_1 = population[count + 1].permeability_1;
+        children_1.permeability_2 = population[count + 1].permeability_2;
+        children_1.permeability_3 = population[count + 1].permeability_3;
+
+        childrens.push_back((children_1));
+
+        children_2.porosity = population[count + 1].porosity;
+        children_2.permeability_1 = population[count].permeability_1;
+        children_2.permeability_2 = population[count].permeability_2;
+        children_2.permeability_3 = population[count].permeability_3;
+
+        childrens.push_back((children_2));
+
+        count = count + 2;
+    }
+
+    count = 0;
+    for(int i = crossover_rate; i > 0; i--){
+        population[SIZE_POPULATION - i].porosity = childrens[count].porosity;
+        population[SIZE_POPULATION - i].permeability_1 = childrens[count].permeability_1;
+        population[SIZE_POPULATION - i].permeability_2 = childrens[count].permeability_2;
+        population[SIZE_POPULATION - i].permeability_3 = childrens[count].permeability_3;
+
+        count++;
+    }
+    
 }
 
 void genetic_algorithm::mutation(){
