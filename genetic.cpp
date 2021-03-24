@@ -194,8 +194,7 @@ void genetic_algorithm::fitness(int idIteration){
                     rank += pow((this->real_results[k].oil - simulate_results[k].oil),2);
                 }
                 rank *= OIL_WEIGHT;
-            }
-            rank += rank;            
+            }           
         }
 
         rank = sqrt((rank / (v.size() * 2)));
