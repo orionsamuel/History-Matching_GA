@@ -23,6 +23,9 @@ void genetic_algorithm::init(){
         content2 += " ";
     }
 
+    result_water.close();
+    result_oil.close();
+
     vector<string> v{split(content, ' ')};
     vector<string> v2{split(content2, ' ')};
     
@@ -34,7 +37,7 @@ void genetic_algorithm::init(){
     }
 
     firstPopulation();
-    for(int i = 1; i < N_GENERATIONS; i++){
+    for(int i = 0; i < N_GENERATIONS; i++){
         othersPopulations(i);
     }
 }
@@ -150,8 +153,8 @@ void genetic_algorithm::fitness(int idIteration){
         ifstream result_water("Output/"+to_string(idIteration)+"/vazaoAgua_"+to_string(i)+".dat", ios::in);
         ifstream result_oil("Output/"+to_string(idIteration)+"/vazaoOleo_"+to_string(i)+".dat", ios::in);
 
-        ofstream write_output_water("inputDS_"+to_string(i)+".dat", ios::app);
-        ofstream write_output_oil("inputDS_"+to_string(i)+".dat", ios::app);
+        ofstream write_output_water("vazaoAgua_"+to_string(i)+".dat", ios::app);
+        ofstream write_output_oil("vazaoOleo_"+to_string(i)+".dat", ios::app);
 
         string line, line2, content, content2;
 
@@ -173,10 +176,10 @@ void genetic_algorithm::fitness(int idIteration){
 
         vector<string> v{split(content, ' ')};
         vector<string> v2{split(content2, ' ')};
-    
+
         result simulate_results[v.size()];
 
-        for(int j = 0; j < v.size(); i++){
+        for(int j = 0; j < v.size(); j++){
             simulate_results[j].water = stod(v[j]);
             simulate_results[j].oil = stod(v2[j]);
         }
@@ -195,6 +198,7 @@ void genetic_algorithm::fitness(int idIteration){
             }
             rank += rank;            
         }
+
         rank = sqrt((rank / (v.size() * 2)));
 
         population[i].error_rank = rank;
@@ -202,18 +206,21 @@ void genetic_algorithm::fitness(int idIteration){
         write_output_water << endl;
         write_output_water << endl;
         write_output_water << endl;
-        write_output_water << rank << endl;
+        write_output_water << "Taxa de Erro: " << rank << endl;
 
         write_output_oil << endl;
         write_output_oil << endl;
         write_output_oil << endl;
         write_output_oil << rank << endl;
 
+        write_output_water.close();
+        write_output_oil.close();
+
         string command = "mv vazaoAgua_"+to_string(i)+".dat Output/"+to_string(idIteration)+"/";
         const char* file = (char*) command.c_str();
         system(file);
 
-        command = "mv vazaoOleo__"+to_string(i)+".dat Output/"+to_string(idIteration)+"/";
+        command = "mv vazaoOleo_"+to_string(i)+".dat Output/"+to_string(idIteration)+"/";
         file = (char*) command.c_str();
         system(file);
 
