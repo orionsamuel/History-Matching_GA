@@ -37,7 +37,7 @@ void genetic_algorithm::init(){
     }
 
     firstPopulation();
-    for(int i = 0; i < N_GENERATIONS; i++){
+    for(int i = 1; i < N_GENERATIONS; i++){
         othersPopulations(i);
     }
 }
