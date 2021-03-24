@@ -23,7 +23,7 @@ struct result{
 #define MIN_PERMEABILITY 0.0000000E+00
 #define MAX_PERMEABILITY 2.4235002E-02
 
-#define WATER_WEIGHT 4.0
-#define OIL_WEIGHT 1.0
+#define WATER_WEIGHT 0.5
+#define OIL_WEIGHT 0.5
 
 #define N_METRICS 2
