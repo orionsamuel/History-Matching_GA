@@ -17,8 +17,9 @@ class genetic_algorithm: public functions{
     private:
     individual population[SIZE_POPULATION];
     result* real_results;
+    individual children[((SIZE_POPULATION * CROSSOVER_RATE) / 100)];
     int crossover_rate = ((SIZE_POPULATION * CROSSOVER_RATE) / 100);
-    int mutation_rate = ((CROSSOVER_RATE * MUTATION_RATE) / 100);
+    int mutation_rate = ((((SIZE_POPULATION * CROSSOVER_RATE) / 100) * MUTATION_RATE) / 100);
 
     public:
     genetic_algorithm();
@@ -29,5 +30,6 @@ class genetic_algorithm: public functions{
     void othersPopulations(int idIteration);
     void fitness(int idIteration);
     void crossover();
-    void mutation(vector <individual>& childrens); 
+    void mutation(); 
+    void sortRank();
 };
