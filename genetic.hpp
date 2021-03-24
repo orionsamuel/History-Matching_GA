@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
+#include <algorithm>
 #include "functions.hpp"
 
 using namespace std;
@@ -31,5 +32,4 @@ class genetic_algorithm: public functions{
     void fitness(int idIteration);
     void crossover();
     void mutation(); 
-    void sortRank();
 };

@@ -15,10 +15,13 @@ class functions{
 
     void simulation(int idIteration);
     double rand_double(double min, double max);
-    void sort_rank(individual v[]);
     double max(double num1, double num2);
     double min(double num1, double num2);
     const vector<string> split(const string& s, const char& c);
+
+    static bool compare(const individual n, const individual m){
+        return n.error_rank < m.error_rank;
+    }
 
 };
 

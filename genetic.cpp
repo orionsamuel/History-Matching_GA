@@ -1,7 +1,7 @@
 #include "genetic.hpp"
 
 genetic_algorithm::genetic_algorithm(){
-    
+    srand (time(0));
 }
 
 genetic_algorithm::~genetic_algorithm(){
@@ -90,8 +90,7 @@ void genetic_algorithm::firstPopulation(){
 
     simulation(0);
     fitness(0);
-    //sort_rank(population);
-    sortRank();
+    sort(begin(this->population), end(this->population), compare);
 }
 
 void genetic_algorithm::othersPopulations(int idIteration){
@@ -143,9 +142,7 @@ void genetic_algorithm::othersPopulations(int idIteration){
 
     simulation(idIteration);
     fitness(idIteration);
-    //sort_rank(population);
-    sortRank();
-
+    sort(begin(this->population), end(this->population), compare);
 }
 
 void genetic_algorithm::fitness(int idIteration){
@@ -263,9 +260,8 @@ void genetic_algorithm::crossover(){
 
 void genetic_algorithm::mutation(){
     for(int i = 0; i < mutation_rate; i++){
-        srand (time(NULL));
-        int percent = rand() % 2;
-        int tunning = rand() % 1;
+        int percent = rand() % 3;
+        int tunning = rand() % 2;
 
         if(percent == 0){
             double valuePorosity = ((this->children[i].porosity * 5) / 100);
@@ -315,19 +311,6 @@ void genetic_algorithm::mutation(){
                 this->children[i].permeability_2 = min(MAX_POROSITY, (this->children[i].permeability_2 + valuePermeability_2));
                 this->children[i].permeability_3 = min(MAX_POROSITY, (this->children[i].permeability_3 + valuePermeability_3));
             }
-        }
-    }
-}
-
-void genetic_algorithm::sortRank(){
-    double aux;
-    for(int i = 0; i < SIZE_POPULATION; i++){
-        for(int j = (i + 1); j < SIZE_POPULATION; j++){
-            if(this->population[i].error_rank > this->population[j].error_rank){
-                aux = this->population[i].error_rank;
-                this->population[i].error_rank = this->population[j].error_rank;
-                this->population[j].error_rank = aux;
-             }
         }
     }
 }
