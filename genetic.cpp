@@ -204,12 +204,12 @@ void genetic_algorithm::fitness(int idIteration){
         write_output_water << endl;
         write_output_water << endl;
         write_output_water << endl;
-        write_output_water << "Taxa de Erro: " << rank << endl;
+        write_output_water << scientific << "Taxa de Erro: " << rank << endl;
 
         write_output_oil << endl;
         write_output_oil << endl;
         write_output_oil << endl;
-        write_output_oil << rank << endl;
+        write_output_oil << scientific << "Taxa de Erro: " << rank << endl;
 
         write_output_water.close();
         write_output_oil.close();
