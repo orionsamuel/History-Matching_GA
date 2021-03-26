@@ -268,15 +268,15 @@ void genetic_algorithm::mutation(){
             double valuePermeability_2 = ((this->children[i].permeability_2 * 5) / 100);
             double valuePermeability_3 = ((this->children[i].permeability_2 * 5) / 100);
             if(tunning = 0){
-                this->children[i].porosity = max(MAX_POROSITY, (this->children[i].porosity + valuePorosity));
-                this->children[i].permeability_1 = max(MAX_POROSITY, (this->children[i].permeability_1 + valuePermeability_1));
-                this->children[i].permeability_2 = max(MAX_POROSITY, (this->children[i].permeability_2 + valuePermeability_2));
-                this->children[i].permeability_3 = max(MAX_POROSITY, (this->children[i].permeability_3 + valuePermeability_3));
-            }else{
                 this->children[i].porosity = min(MAX_POROSITY, (this->children[i].porosity + valuePorosity));
-                this->children[i].permeability_1 = min(MAX_POROSITY, (this->children[i].permeability_1 + valuePermeability_1));
-                this->children[i].permeability_2 = min(MAX_POROSITY, (this->children[i].permeability_2 + valuePermeability_2));
-                this->children[i].permeability_3 = min(MAX_POROSITY, (this->children[i].permeability_3 + valuePermeability_3));
+                this->children[i].permeability_1 = min(MAX_PERMEABILITY, (this->children[i].permeability_1 + valuePermeability_1));
+                this->children[i].permeability_2 = min(MAX_PERMEABILITY, (this->children[i].permeability_2 + valuePermeability_2));
+                this->children[i].permeability_3 = min(MAX_PERMEABILITY, (this->children[i].permeability_3 + valuePermeability_3));
+            }else{
+                this->children[i].porosity = max(MIN_POROSITY, (this->children[i].porosity + valuePorosity));
+                this->children[i].permeability_1 = max(MIN_PERMEABILITY, (this->children[i].permeability_1 + valuePermeability_1));
+                this->children[i].permeability_2 = max(MIN_PERMEABILITY, (this->children[i].permeability_2 + valuePermeability_2));
+                this->children[i].permeability_3 = max(MIN_PERMEABILITY, (this->children[i].permeability_3 + valuePermeability_3));
             }
         }else if(percent == 1){
             double valuePorosity = ((this->children[i].porosity * 10) / 100);
@@ -284,15 +284,15 @@ void genetic_algorithm::mutation(){
             double valuePermeability_2 = ((this->children[i].permeability_2 * 10) / 100);
             double valuePermeability_3 = ((this->children[i].permeability_2 * 10) / 100);
             if(tunning = 0){
-                this->children[i].porosity = max(MAX_POROSITY, (this->children[i].porosity + valuePorosity));
-                this->children[i].permeability_1 = max(MAX_POROSITY, (this->children[i].permeability_1 + valuePermeability_1));
-                this->children[i].permeability_2 = max(MAX_POROSITY, (this->children[i].permeability_2 + valuePermeability_2));
-                this->children[i].permeability_3 = max(MAX_POROSITY, (this->children[i].permeability_3 + valuePermeability_3));
-            }else{
                 this->children[i].porosity = min(MAX_POROSITY, (this->children[i].porosity + valuePorosity));
-                this->children[i].permeability_1 = min(MAX_POROSITY, (this->children[i].permeability_1 + valuePermeability_1));
-                this->children[i].permeability_2 = min(MAX_POROSITY, (this->children[i].permeability_2 + valuePermeability_2));
-                this->children[i].permeability_3 = min(MAX_POROSITY, (this->children[i].permeability_3 + valuePermeability_3));
+                this->children[i].permeability_1 = min(MAX_PERMEABILITY, (this->children[i].permeability_1 + valuePermeability_1));
+                this->children[i].permeability_2 = min(MAX_PERMEABILITY, (this->children[i].permeability_2 + valuePermeability_2));
+                this->children[i].permeability_3 = min(MAX_PERMEABILITY, (this->children[i].permeability_3 + valuePermeability_3));
+            }else{
+                this->children[i].porosity = max(MIN_POROSITY, (this->children[i].porosity + valuePorosity));
+                this->children[i].permeability_1 = max(MIN_PERMEABILITY, (this->children[i].permeability_1 + valuePermeability_1));
+                this->children[i].permeability_2 = max(MIN_PERMEABILITY, (this->children[i].permeability_2 + valuePermeability_2));
+                this->children[i].permeability_3 = max(MIN_PERMEABILITY, (this->children[i].permeability_3 + valuePermeability_3));
             }
         }else if(percent == 2){
             double valuePorosity = ((this->children[i].porosity * 20) / 100);
@@ -300,15 +300,15 @@ void genetic_algorithm::mutation(){
             double valuePermeability_2 = ((this->children[i].permeability_2 * 20) / 100);
             double valuePermeability_3 = ((this->children[i].permeability_2 * 20) / 100);
             if(tunning = 0){
-                this->children[i].porosity = max(MAX_POROSITY, (this->children[i].porosity + valuePorosity));
-                this->children[i].permeability_1 = max(MAX_POROSITY, (this->children[i].permeability_1 + valuePermeability_1));
-                this->children[i].permeability_2 = max(MAX_POROSITY, (this->children[i].permeability_2 + valuePermeability_2));
-                this->children[i].permeability_3 = max(MAX_POROSITY, (this->children[i].permeability_3 + valuePermeability_3));
-            }else{
                 this->children[i].porosity = min(MAX_POROSITY, (this->children[i].porosity + valuePorosity));
-                this->children[i].permeability_1 = min(MAX_POROSITY, (this->children[i].permeability_1 + valuePermeability_1));
-                this->children[i].permeability_2 = min(MAX_POROSITY, (this->children[i].permeability_2 + valuePermeability_2));
-                this->children[i].permeability_3 = min(MAX_POROSITY, (this->children[i].permeability_3 + valuePermeability_3));
+                this->children[i].permeability_1 = min(MAX_PERMEABILITY, (this->children[i].permeability_1 + valuePermeability_1));
+                this->children[i].permeability_2 = min(MAX_PERMEABILITY, (this->children[i].permeability_2 + valuePermeability_2));
+                this->children[i].permeability_3 = min(MAX_PERMEABILITY, (this->children[i].permeability_3 + valuePermeability_3));
+            }else{
+                this->children[i].porosity = max(MIN_POROSITY, (this->children[i].porosity + valuePorosity));
+                this->children[i].permeability_1 = max(MIN_PERMEABILITY, (this->children[i].permeability_1 + valuePermeability_1));
+                this->children[i].permeability_2 = max(MIN_PERMEABILITY, (this->children[i].permeability_2 + valuePermeability_2));
+                this->children[i].permeability_3 = max(MIN_PERMEABILITY, (this->children[i].permeability_3 + valuePermeability_3));
             }
         }
     }
