@@ -155,6 +155,30 @@ void genetic_algorithm::readDataset(){
     simulation(0);
     fitness(0);
     sort(begin(this->population), end(this->population), compare);
+
+    for(int i = 0; i < SIZE_POPULATION; i++){
+        ifstream read_input("Output/0/inputDS_"+to_string(i)+".dat", ios::in);
+        ofstream write_input("inputDS_"+to_string(i)+".dat", ios::out);
+        int count = 0;
+        line = "";
+        while(!read_input.eof()){
+            getline(read_input, line);
+            if(count == 142){
+                vector<string> v{split(line, ' ')};
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity << "   " << this->population[i].permeability_1 << "   " << this->population[i].permeability_2 << "   " << this->population[i].permeability_3 << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+            }else{
+                write_input << line << endl;
+            }
+            count++;
+        }
+
+        read_input.close();
+        write_input.close();
+
+        string command = "mv inputDS_"+to_string(i)+".dat Output/0/";
+        const char* file = (char*) command.c_str();
+        system(file);
+    }
 }
 
 void genetic_algorithm::createPopulations(int idIteration){
@@ -207,6 +231,30 @@ void genetic_algorithm::createPopulations(int idIteration){
     simulation(idIteration);
     fitness(idIteration);
     sort(begin(this->population), end(this->population), compare);
+
+    for(int i = 0; i < SIZE_POPULATION; i++){
+        ifstream read_input("Output/"+to_string(idIteration)+"/inputDS_"+to_string(i)+".dat", ios::in);
+        ofstream write_input("inputDS_"+to_string(i)+".dat", ios::out);
+        int count = 0;
+        string line;
+        while(!read_input.eof()){
+            getline(read_input, line);
+            if(count == 142){
+                vector<string> v{split(line, ' ')};
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity << "   " << this->population[i].permeability_1 << "   " << this->population[i].permeability_2 << "   " << this->population[i].permeability_3 << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+            }else{
+                write_input << line << endl;
+            }
+            count++;
+        }
+
+        read_input.close();
+        write_input.close();
+
+        string command = "mv inputDS_"+to_string(i)+".dat Output/"+to_string(idIteration)+"/";
+        const char* file = (char*) command.c_str();
+        system(file);
+    }
 }
 
 void genetic_algorithm::fitness(int idIteration){

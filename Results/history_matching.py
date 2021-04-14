@@ -10,8 +10,8 @@ oil = []
 real_water = []
 real_oil = []
 
-inputFile_Water = open("../Output/49/vazaoAgua_1.dat", "r")
-inputFile_Oil = open("../Output/49/vazaoOleo_1.dat", "r")
+inputFile_Water = open("../Output/1/vazaoAgua_1.dat", "r")
+inputFile_Oil = open("../Output/1/vazaoOleo_1.dat", "r")
 
 count = 0
 for line in inputFile_Water:
@@ -61,36 +61,31 @@ output.write("R² Error Water: "+str(r2_score(real_oil, oil))+"\n")
 
 output.close()
 
-for i in range(2):
-    if(i == 0):
-        instances = []
+values = [[real_water, water],[real_oil, oil]]
+count = 0
+for value in values:
+    instances = []
+    
+    for j in range(len(real_water)):
+        instances.append(j)
 
-        for j in range(len(real_water)):
-            instances.append(j)
+    if(count == 0):
+        plt.title("Water Flow")
+    else:
+        plt.title("Oil Flow")
+    plt.ylabel("Error Rate (Log Scale)")
+    plt.xlabel("Time")
+    plt.yscale('log')
+    #plt.xscale('log')
 
-        plt.ylabel("Error Rate (Log Scale)")
-        plt.xlabel("Time")
-        plt.yscale('log')
-        #plt.xscale('log')
-
-        plt.plot(instances, real_water, color='red', label ='Real')
-        plt.plot(instances, water, color='purple', label ='Predict')
-        plt.legend(loc = 'upper right')
-        #plt.show()
+    plt.plot(instances, value[0], color='red', label ='Real')
+    plt.plot(instances, value[1], color='purple', label ='Predict')
+    plt.legend(loc = 'upper right')
+    #plt.show()
+    if(count == 0):
         plt.savefig("Matching Water - Linhas.png")
-    elif(i == 1):
-        instances = []
-
-        for j in range(len(real_oil)):
-            instances.append(j)
-
-        plt.ylabel("Error Rate (Log Scale)")
-        plt.xlabel("Time")
-        plt.yscale('log')
-        #plt.xscale('log')
-
-        plt.plot(instances, real_oil, color='red', label ='Real')
-        plt.plot(instances, oil, color='purple', label ='Predict')
-        plt.legend(loc = 'upper right')
-        #plt.show()
+    else:
         plt.savefig("Matching Oil - Linhas.png")
+    plt.clf()
+
+    count = count + 1
