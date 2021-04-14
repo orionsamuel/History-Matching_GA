@@ -261,11 +261,7 @@ void genetic_algorithm::fitness(int idIteration){
 
         this->population[i].error_rank = rank;
 
-        string error = to_string(rank);
-
-        cout << error << endl;
-
-        //write_error.write << scientific << to_string(rank) << endl;
+        write_error << scientific << rank << endl;
 
     }
 
