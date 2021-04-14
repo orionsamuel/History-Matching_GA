@@ -10,8 +10,8 @@ oil = []
 real_water = []
 real_oil = []
 
-inputFile_Water = open("../Output/1/vazaoAgua_1.dat", "r")
-inputFile_Oil = open("../Output/1/vazaoOleo_1.dat", "r")
+inputFile_Water = open("Output_Simulation/vazaoAgua_0.dat", "r")
+inputFile_Oil = open("Output_Simulation/vazaoOleo_0.dat", "r")
 
 count = 0
 for line in inputFile_Water:

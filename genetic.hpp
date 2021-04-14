@@ -29,8 +29,8 @@ class genetic_algorithm: public functions{
     ~genetic_algorithm();
 
     void init();
-    void readDataset();
-    void createPopulations(int idIteration);
+    void firstPopulation();
+    void otherPopulations(int idIteration);
     void fitness(int idIteration);
     void crossover();
     void mutation(); 

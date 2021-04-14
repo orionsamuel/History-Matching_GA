@@ -4,17 +4,17 @@ from matplotlib import pyplot as plt
 
 error = []
 
-for i in range(50):
-    inputFile = open("Output/"+str(i)+"/vazaoOleo_1.dat")
+for i in range(15):
+    inputFile = open("Output/"+str(i)+"/error.txt")
     count = 0
     for line in inputFile:
-        if(count == 14):
+        if(count == 0):
             error.append(float(line))
         count = count + 1
 
 population = []
     
-for j in range(50):
+for j in range(15):
     population.append(j)
 
 plt.figure(figsize=(10, 4), dpi=300)

@@ -38,15 +38,15 @@ void genetic_algorithm::init(){
         this->real_results[i].oil = stod(v2[i]);
     }
 
-    readDataset();
+    firstPopulation();
     int count = 1;
     while(this->population[0].error_rank > 2.000000E-06){
-        createPopulations(count);
+        otherPopulations(count);
         count++;
     }
 }
 
-void genetic_algorithm::readDataset(){
+void genetic_algorithm::firstPopulation(){
     DIR* dp = opendir("Output/0");
 
     if(dp == NULL){
@@ -181,7 +181,7 @@ void genetic_algorithm::readDataset(){
     }
 }
 
-void genetic_algorithm::createPopulations(int idIteration){
+void genetic_algorithm::otherPopulations(int idIteration){
     crossover();
 
     string command = "Output/"+to_string(idIteration);
