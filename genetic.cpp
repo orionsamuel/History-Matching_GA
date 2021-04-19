@@ -40,7 +40,7 @@ void genetic_algorithm::init(){
 
     firstPopulation();
     int count = 1;
-    while(this->population[0].error_rank > 2.000000E-06){
+    while(count < 10){
         otherPopulations(count);
         count++;
     }
@@ -156,6 +156,14 @@ void genetic_algorithm::firstPopulation(){
     fitness(0);
     sort(begin(this->population), end(this->population), compare);
 
+    ofstream write_error("Output/0/error.txt", ios::out);
+    
+    for(int i = 0; i < SIZE_POPULATION; i++){
+        write_error << scientific << this->population[i].error_rank << endl;
+    }
+
+    write_error.close();
+
     for(int i = 0; i < SIZE_POPULATION; i++){
         ifstream read_input("Output/0/inputDS_"+to_string(i)+".dat", ios::in);
         ofstream write_input("inputDS_"+to_string(i)+".dat", ios::out);
@@ -232,6 +240,14 @@ void genetic_algorithm::otherPopulations(int idIteration){
     fitness(idIteration);
     sort(begin(this->population), end(this->population), compare);
 
+    ofstream write_error("Output/"+to_string(idIteration)+"/error.txt", ios::out);
+    
+    for(int i = 0; i < SIZE_POPULATION; i++){
+        write_error << scientific << this->population[i].error_rank << endl;
+    }
+
+    write_error.close();
+
     for(int i = 0; i < SIZE_POPULATION; i++){
         ifstream read_input("Output/"+to_string(idIteration)+"/inputDS_"+to_string(i)+".dat", ios::in);
         ofstream write_input("inputDS_"+to_string(i)+".dat", ios::out);
@@ -258,7 +274,6 @@ void genetic_algorithm::otherPopulations(int idIteration){
 }
 
 void genetic_algorithm::fitness(int idIteration){
-    ofstream write_error("Output/"+to_string(idIteration)+"/error.txt", ios::out);
 
     for(int i = 0; i < SIZE_POPULATION; i++){
         double rank;
@@ -291,6 +306,22 @@ void genetic_algorithm::fitness(int idIteration){
             simulate_results[j].oil = stod(v2[j]);
         }
 
+        /*for(int j = 0; j < N_METRICS; j++){
+            if(j == 0){
+                for(int k = 0; k < v.size(); k++){
+                    rank = sqrt(pow(((this->real_results[k].water - simulate_results[k].water) / this->real_results[k].water), 2)) / v.size() * 100;
+                }
+                rank *= WATER_WEIGHT;
+            }else if(j == 1){
+                for(int k = 0; k < v.size(); k++){
+                    rank = sqrt(pow(((this->real_results[k].oil - simulate_results[k].oil) / this->real_results[k].oil), 2)) / v.size() * 100;
+                }
+                rank *= OIL_WEIGHT;
+            }
+        }
+
+        rank /= 2;*/
+
         for(int j = 0; j < N_METRICS; j++){
             if(j == 0){
                 for(int k = 0; k < v.size(); k++){
@@ -308,12 +339,7 @@ void genetic_algorithm::fitness(int idIteration){
         rank = sqrt((rank / (v.size() * 2)));
 
         this->population[i].error_rank = rank;
-
-        write_error << scientific << rank << endl;
-
     }
-
-    write_error.close();
 }
 
 void genetic_algorithm::crossover(){

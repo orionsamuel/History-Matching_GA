@@ -13,12 +13,65 @@ from sklearn.metrics import mean_absolute_percentage_error
 def init(n):
     #read_files_simulation("../../Output/344/344.csv", n)
     simulation(n)
+    #error = real_error(n)
     '''create_dataset(n)
     objective_function(n)
     target_test, target_pred = read_dataset("real_simulation.csv",
                                             "../../Output/344/344.csv")
     calc_error(target_test, target_pred)
     plot_chart(target_test, target_pred)'''
+
+def real_error(n):
+    water_result = []
+    realWater = []
+    oil_result = []
+    realOil = []
+    error_result = []
+    
+    real_result_water = open("../Input/resultadoVazaoAgua.dat", "r")
+    real_result_oil =  open("../Input/resultadoVazaoOleo.dat", "r")
+
+    for line in real_result_water:
+        found = line.split(" ")
+        realWater.append(float(found[3]))
+
+    for line in real_result_oil:
+        found = line.split(" ")
+        realOil.append(float(found[3]))
+
+    real_result_water.close()
+    real_result_oil.close()
+    
+    for i in range(n):
+        water = []
+        oil = []
+        
+        inputFile_Water = open("../Output/10/vazaoAgua_"
+                               +str(i)+".dat", "r")
+        inputFile_Oil = open("../Output/10/vazaoOleo_"
+                             +str(i)+".dat", "r")
+        for line in inputFile_Water:
+            found = line.split(" ")
+            water.append(float(found[3]))
+
+        water_result.append(water)
+
+        inputFile_Water.close()
+
+        for line in inputFile_Oil:
+            found = line.split(" ")
+            oil.append(float(found[3]))
+
+        oil_result.append(oil)
+        inputFile_Oil.close()
+        
+        rank = mean_absolute_percentage_error(realWater,water_result[i]) * 0.6
+        rank = rank + mean_absolute_percentage_error(realOil,oil_result[i]) * 0.4
+        rank = rank / 2
+
+        error_result.append(rank)
+
+    return error_result
 
 def read_files_simulation(path, n):
     dataset = pd.read_csv(path)
@@ -62,7 +115,7 @@ def simulation(n):
     os.system("rm -f output_simulation")
     for i in range(n):
         print("Executando a simulação: "+str(i))
-        os.system("cp ../Output/14/inputDS_"+str(i)+".dat "
+        os.system("cp ../Output/9/inputDS_"+str(i)+".dat "
                   +"../../Codigo_Bifasico_Slab/simulacoes/dev/inputDS.dat")
         os.system("./../../Codigo_Bifasico_Slab"
                   +"/rodarSimulador.sh >> output_simulation 2>>"
@@ -195,7 +248,7 @@ def plot_chart(target_test, target_pred):
     plt.savefig("History Matching - Linhas.png")
 
 if __name__ == '__main__':
-    init(1)
+    init(100)
 
 
 
