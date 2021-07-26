@@ -40,10 +40,10 @@ void genetic_algorithm::init(){
 
     firstPopulation();
     int count = 1;
-    while(count < 10){
+    /*while(count < N_GENERATIONS){
         otherPopulations(count);
         count++;
-    }
+    }*/
 }
 
 void genetic_algorithm::firstPopulation(){
@@ -69,9 +69,13 @@ void genetic_algorithm::firstPopulation(){
         getline(read_input, line);
         if(count == 0){
             write_output << line << endl;
-        }else if(count < 4501){
+        }else if(count < 1801){
             vector<string> v{split(line, ',')};
-            dataset.push_back({stod(v[0]), stod(v[1]), stod(v[2]), stod(v[3]), stod(v[4])});
+            dataset[0].porosity[0];
+            dataset.push_back({{stod(v[0]),stod(v[4]),stod(v[8]),stod(v[12]),stod(v[16])}, 
+            {stod(v[1]),stod(v[5]),stod(v[9]),stod(v[13]),stod(v[17])}, 
+            {stod(v[2]),stod(v[6]),stod(v[10]),stod(v[14]),stod(v[18])}, 
+            {stod(v[3]),stod(v[7]),stod(v[11]),stod(v[15]),stod(v[19])}, stod(v[20])});
         }
         count++;        
     }
@@ -81,14 +85,24 @@ void genetic_algorithm::firstPopulation(){
     sort(begin(dataset), end(dataset), compare);
 
     for(int i = 0; i < SIZE_POPULATION; i++){
-        write_output << scientific << dataset[i].porosity << "," << dataset[i].permeability_1 << "," << dataset[i].permeability_2 << "," << dataset[i].permeability_3 << "," << dataset[i].error_rank << endl;
+        write_output << scientific << dataset[i].porosity[0] << "," 
+        << dataset[i].permeability_1[0] << "," << dataset[i].permeability_2[0] 
+        << "," << dataset[i].permeability_3[0] << "," << dataset[i].porosity[1] 
+        << "," << dataset[i].permeability_1[1] << "," << dataset[i].permeability_2[1] 
+        << "," << dataset[i].permeability_3[1] << "," << dataset[i].porosity[2] << "," 
+        << dataset[i].permeability_1[2] << "," << dataset[i].permeability_2[2] 
+        << "," << dataset[i].permeability_3[2] << "," << dataset[i].porosity[3] << "," 
+        << dataset[i].permeability_1[3] << "," << dataset[i].permeability_2[3] 
+        << "," << dataset[i].permeability_3[3] << "," << dataset[i].porosity[4] << "," 
+        << dataset[i].permeability_1[4] << "," << dataset[i].permeability_2[4] 
+        << "," << dataset[i].permeability_3[4] << "," << dataset[i].error_rank << endl;
     }
 
     write_output.close();
 
     ifstream read_csv("Output/0/0.csv", ios::in);
 
-    string decimal;
+    string decimal[2];
     line = "";
     
     //Pega a casa decimal da permeabilidade da menor taxa de erro, para gerar os valores mínimos e máximos de permeabilidade
@@ -97,8 +111,10 @@ void genetic_algorithm::firstPopulation(){
         getline(read_csv, line);
         if(count == 1){
             vector<string> v{split(line, ',')};
-            decimal = v[1][10];
-            decimal += v[1][11];
+            decimal[0] = v[1][10];
+            decimal[0] += v[1][11];
+            decimal[1] += v[9][10];
+            decimal[1] += v[9][11];
             cout << endl;
         }
 
@@ -107,11 +123,17 @@ void genetic_algorithm::firstPopulation(){
 
     read_csv.close();
     
-    string minPermeability = "1.000000e-"+decimal;
-    string maxPermeability = "4.000000e-"+decimal;
+    string minPermeability[2];
+    string maxPermeability[2];
+    minPermeability[0] = "1.000000e-"+decimal[0];
+    maxPermeability[0] = "4.000000e-"+decimal[0];
+    minPermeability[1] = "1.000000e-"+decimal[1];
+    maxPermeability[1] = "4.000000e-"+decimal[1];
 
-    this->min_permeability = stod(minPermeability);
-    this->max_permeability = stod(maxPermeability);
+    this->min_permeability[0] = stod(minPermeability[0]);
+    this->max_permeability[0] = stod(maxPermeability[0]);
+    this->min_permeability[1] = stod(minPermeability[1]);
+    this->max_permeability[1] = stod(maxPermeability[1]);
 
     system("rm Output/0/0.csv");
 
@@ -122,10 +144,26 @@ void genetic_algorithm::firstPopulation(){
     }
 
     for(int i = 0; i < SIZE_POPULATION; i++){
-        this->population[i].porosity = rand_double(MIN_POROSITY, MAX_POROSITY);
-        this->population[i].permeability_1 = rand_double(this->min_permeability, this->max_permeability);
-        this->population[i].permeability_2 = rand_double(this->min_permeability, this->max_permeability);
-        this->population[i].permeability_3 = rand_double(this->min_permeability, this->max_permeability);
+        this->population[i].porosity[0] = rand_double(MIN_POROSITY, MAX_POROSITY);
+        this->population[i].porosity[1] = dataset[i].porosity[1];
+        this->population[i].porosity[2] = rand_double(MIN_POROSITY, MAX_POROSITY);
+        this->population[i].porosity[3] = rand_double(MIN_POROSITY, MAX_POROSITY);
+        this->population[i].porosity[4] = rand_double(MIN_POROSITY, MAX_POROSITY);
+        this->population[i].permeability_1[0] = rand_double(this->min_permeability[0], this->max_permeability[0]);
+        this->population[i].permeability_1[1] = dataset[i].permeability_1[1];
+        this->population[i].permeability_1[2] = rand_double(this->min_permeability[1], this->max_permeability[1]);
+        this->population[i].permeability_1[3] = rand_double(this->min_permeability[1], this->max_permeability[1]);
+        this->population[i].permeability_1[4] = rand_double(this->min_permeability[0], this->max_permeability[0]);
+        this->population[i].permeability_2[0] = rand_double(this->min_permeability[0], this->max_permeability[0]);
+        this->population[i].permeability_2[1] = dataset[i].permeability_2[1];
+        this->population[i].permeability_2[2] = rand_double(this->min_permeability[1], this->max_permeability[1]);
+        this->population[i].permeability_2[3] = rand_double(this->min_permeability[1], this->max_permeability[1]);
+        this->population[i].permeability_2[4] = rand_double(this->min_permeability[0], this->max_permeability[0]);
+        this->population[i].permeability_3[0] = rand_double(this->min_permeability[0], this->max_permeability[0]);
+        this->population[i].permeability_3[1] = dataset[i].permeability_3[1];
+        this->population[i].permeability_3[2] = rand_double(this->min_permeability[1], this->max_permeability[1]);
+        this->population[i].permeability_3[3] = rand_double(this->min_permeability[1], this->max_permeability[1]);
+        this->population[i].permeability_3[4] = rand_double(this->min_permeability[0], this->max_permeability[0]);
     }
 
     for(int i = 0; i < SIZE_POPULATION; i++){
@@ -137,7 +175,19 @@ void genetic_algorithm::firstPopulation(){
             getline(read_input, line);
             if(count == 142){
                 vector<string> v{split(line, ' ')};
-                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity << "   " << this->population[i].permeability_1 << "   " << this->population[i].permeability_2 << "   " << this->population[i].permeability_3 << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[0] << "   " << this->population[i].permeability_1[0] << "   " << this->population[i].permeability_2[0] << "   " << this->population[i].permeability_3[0] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+            }else if(count == 143){
+                vector<string> v{split(line, ' ')};
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[1] << "   " << this->population[i].permeability_1[1] << "   " << this->population[i].permeability_2[1] << "   " << this->population[i].permeability_3[1] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+            }else if(count == 144){
+                vector<string> v{split(line, ' ')};
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[2] << "   " << this->population[i].permeability_1[2] << "   " << this->population[i].permeability_2[2] << "   " << this->population[i].permeability_3[2] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+            }else if(count == 145){
+                vector<string> v{split(line, ' ')};
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[3] << "   " << this->population[i].permeability_1[3] << "   " << this->population[i].permeability_2[3] << "   " << this->population[i].permeability_3[3] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+            }else if(count == 146){
+                vector<string> v{split(line, ' ')};
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[4] << "   " << this->population[i].permeability_1[4] << "   " << this->population[i].permeability_2[4] << "   " << this->population[i].permeability_3[4] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
             }else{
                 write_input << line << endl;
             }
@@ -173,7 +223,19 @@ void genetic_algorithm::firstPopulation(){
             getline(read_input, line);
             if(count == 142){
                 vector<string> v{split(line, ' ')};
-                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity << "   " << this->population[i].permeability_1 << "   " << this->population[i].permeability_2 << "   " << this->population[i].permeability_3 << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[0] << "   " << this->population[i].permeability_1[0] << "   " << this->population[i].permeability_2[0] << "   " << this->population[i].permeability_3[0] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+            }else if(count == 143){
+                vector<string> v{split(line, ' ')};
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[1] << "   " << this->population[i].permeability_1[1] << "   " << this->population[i].permeability_2[1] << "   " << this->population[i].permeability_3[1] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+            }else if(count == 144){
+                vector<string> v{split(line, ' ')};
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[2] << "   " << this->population[i].permeability_1[2] << "   " << this->population[i].permeability_2[2] << "   " << this->population[i].permeability_3[2] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+            }else if(count == 145){
+                vector<string> v{split(line, ' ')};
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[3] << "   " << this->population[i].permeability_1[3] << "   " << this->population[i].permeability_2[3] << "   " << this->population[i].permeability_3[3] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+            }else if(count == 146){
+                vector<string> v{split(line, ' ')};
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[4] << "   " << this->population[i].permeability_1[4] << "   " << this->population[i].permeability_2[4] << "   " << this->population[i].permeability_3[4] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
             }else{
                 write_input << line << endl;
             }
@@ -190,7 +252,7 @@ void genetic_algorithm::firstPopulation(){
 }
 
 void genetic_algorithm::otherPopulations(int idIteration){
-    crossover();
+    //crossover();
 
     string command = "Output/"+to_string(idIteration);
     const char* file = (char*) command.c_str();
@@ -221,7 +283,19 @@ void genetic_algorithm::otherPopulations(int idIteration){
             getline(read_input, line);
             if(count == 142){
                 vector<string> v{split(line, ' ')};
-                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity << "   " << this->population[i].permeability_1 << "   " << this->population[i].permeability_2 << "   " << this->population[i].permeability_3 << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[0] << "   " << this->population[i].permeability_1[0] << "   " << this->population[i].permeability_2[0] << "   " << this->population[i].permeability_3[0] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+            }else if(count == 143){
+                vector<string> v{split(line, ' ')};
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[1] << "   " << this->population[i].permeability_1[1] << "   " << this->population[i].permeability_2[1] << "   " << this->population[i].permeability_3[1] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+            }else if(count == 144){
+                vector<string> v{split(line, ' ')};
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[2] << "   " << this->population[i].permeability_1[2] << "   " << this->population[i].permeability_2[2] << "   " << this->population[i].permeability_3[2] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+            }else if(count == 145){
+                vector<string> v{split(line, ' ')};
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[3] << "   " << this->population[i].permeability_1[3] << "   " << this->population[i].permeability_2[3] << "   " << this->population[i].permeability_3[3] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+            }else if(count == 146){
+                vector<string> v{split(line, ' ')};
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[4] << "   " << this->population[i].permeability_1[4] << "   " << this->population[i].permeability_2[4] << "   " << this->population[i].permeability_3[4] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
             }else{
                 write_input << line << endl;
             }
@@ -257,7 +331,19 @@ void genetic_algorithm::otherPopulations(int idIteration){
             getline(read_input, line);
             if(count == 142){
                 vector<string> v{split(line, ' ')};
-                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity << "   " << this->population[i].permeability_1 << "   " << this->population[i].permeability_2 << "   " << this->population[i].permeability_3 << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[0] << "   " << this->population[i].permeability_1[0] << "   " << this->population[i].permeability_2[0] << "   " << this->population[i].permeability_3[0] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+            }else if(count == 143){
+                vector<string> v{split(line, ' ')};
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[1] << "   " << this->population[i].permeability_1[1] << "   " << this->population[i].permeability_2[1] << "   " << this->population[i].permeability_3[1] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+            }else if(count == 144){
+                vector<string> v{split(line, ' ')};
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[2] << "   " << this->population[i].permeability_1[2] << "   " << this->population[i].permeability_2[2] << "   " << this->population[i].permeability_3[2] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+            }else if(count == 145){
+                vector<string> v{split(line, ' ')};
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[3] << "   " << this->population[i].permeability_1[3] << "   " << this->population[i].permeability_2[3] << "   " << this->population[i].permeability_3[3] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+            }else if(count == 146){
+                vector<string> v{split(line, ' ')};
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[4] << "   " << this->population[i].permeability_1[4] << "   " << this->population[i].permeability_2[4] << "   " << this->population[i].permeability_3[4] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
             }else{
                 write_input << line << endl;
             }
@@ -306,22 +392,6 @@ void genetic_algorithm::fitness(int idIteration){
             simulate_results[j].oil = stod(v2[j]);
         }
 
-        /*for(int j = 0; j < N_METRICS; j++){
-            if(j == 0){
-                for(int k = 0; k < v.size(); k++){
-                    rank = sqrt(pow(((this->real_results[k].water - simulate_results[k].water) / this->real_results[k].water), 2)) / v.size() * 100;
-                }
-                rank *= WATER_WEIGHT;
-            }else if(j == 1){
-                for(int k = 0; k < v.size(); k++){
-                    rank = sqrt(pow(((this->real_results[k].oil - simulate_results[k].oil) / this->real_results[k].oil), 2)) / v.size() * 100;
-                }
-                rank *= OIL_WEIGHT;
-            }
-        }
-
-        rank /= 2;*/
-
         for(int j = 0; j < N_METRICS; j++){
             if(j == 0){
                 for(int k = 0; k < v.size(); k++){
@@ -344,10 +414,12 @@ void genetic_algorithm::fitness(int idIteration){
 
 void genetic_algorithm::crossover(){
     for(int i = 0; i < crossover_rate; i++){
-        this->children[i].porosity = 0;
-        this->children[i].permeability_1 = 0;
-        this->children[i].permeability_2 = 0;
-        this->children[i].permeability_3 = 0;
+        for(int j = 0; j < 5; j++){
+            this->children[i].porosity[j] = 0;
+            this->children[i].permeability_1[j] = 0;
+            this->children[i].permeability_2[j] = 0;
+            this->children[i].permeability_3[j] = 0;
+        }
     }
 
     //Escolhe o ponto de corte
@@ -355,65 +427,69 @@ void genetic_algorithm::crossover(){
     if(percent == 0){
         int count = 0;
         while(count < crossover_rate){
-            this->children[count].porosity = this->population[count].porosity;
-            this->children[count].permeability_1 = this->population[count + 1].permeability_1;
-            this->children[count].permeability_2 = this->population[count + 1].permeability_2;
-            this->children[count].permeability_3 = this->population[count + 1].permeability_3;
+            for(int i = 0; i < 5; i++){
+                this->children[count].porosity[i] = this->population[count].porosity[i];
+                this->children[count].permeability_1[i] = this->population[count + 1].permeability_1[i];
+                this->children[count].permeability_2[i] = this->population[count + 1].permeability_2[i];
+                this->children[count].permeability_3[i] = this->population[count + 1].permeability_3[i];
 
-            this->children[count + 1].porosity = this->population[count + 1].porosity;
-            this->children[count + 1].permeability_1 = this->population[count].permeability_1;
-            this->children[count + 1].permeability_2 = this->population[count].permeability_2;
-            this->children[count + 1].permeability_3 = this->population[count].permeability_3;
-
+                this->children[count + 1].porosity[i] = this->population[count + 1].porosity[i];
+                this->children[count + 1].permeability_1[i] = this->population[count].permeability_1[i];
+                this->children[count + 1].permeability_2[i] = this->population[count].permeability_2[i];
+                this->children[count + 1].permeability_3[i] = this->population[count].permeability_3[i];
+            }
             count = count + 2;
         }
     }else if(percent == 1){
         int count = 0;
         while(count < crossover_rate){
-            this->children[count].porosity = this->population[count].porosity;
-            this->children[count].permeability_1 = this->population[count].permeability_1;
-            this->children[count].permeability_2 = this->population[count + 1].permeability_2;
-            this->children[count].permeability_3 = this->population[count + 1].permeability_3;
+            for(int i = 0; i < 5; i++){
+                this->children[count].porosity[i] = this->population[count].porosity[i];
+                this->children[count].permeability_1[i] = this->population[count].permeability_1[i];
+                this->children[count].permeability_2[i] = this->population[count + 1].permeability_2[i];
+                this->children[count].permeability_3[i] = this->population[count + 1].permeability_3[i];
 
-            this->children[count + 1].porosity = this->population[count + 1].porosity;
-            this->children[count + 1].permeability_1 = this->population[count + 1].permeability_1;
-            this->children[count + 1].permeability_2 = this->population[count].permeability_2;
-            this->children[count + 1].permeability_3 = this->population[count].permeability_3;
-
+                this->children[count + 1].porosity[i] = this->population[count + 1].porosity[i];
+                this->children[count + 1].permeability_1[i] = this->population[count + 1].permeability_1[i];
+                this->children[count + 1].permeability_2[i] = this->population[count].permeability_2[i];
+                this->children[count + 1].permeability_3[i] = this->population[count].permeability_3[i];
+            }
             count = count + 2;
         }
     }else if(percent == 2){
         int count = 0;
         while(count < crossover_rate){
-            this->children[count].porosity = this->population[count].porosity;
-            this->children[count].permeability_1 = this->population[count].permeability_1;
-            this->children[count].permeability_2 = this->population[count].permeability_2;
-            this->children[count].permeability_3 = this->population[count + 1].permeability_3;
+            for(int i = 0; i < 5; i++){
+                this->children[count].porosity[i] = this->population[count].porosity[i];
+                this->children[count].permeability_1[i] = this->population[count].permeability_1[i];
+                this->children[count].permeability_2[i] = this->population[count].permeability_2[i];
+                this->children[count].permeability_3[i] = this->population[count + 1].permeability_3[i];
 
-            this->children[count + 1].porosity = this->population[count + 1].porosity;
-            this->children[count + 1].permeability_1 = this->population[count + 1].permeability_1;
-            this->children[count + 1].permeability_2 = this->population[count + 1].permeability_2;
-            this->children[count + 1].permeability_3 = this->population[count].permeability_3;
-
+                this->children[count + 1].porosity[i] = this->population[count + 1].porosity[i];
+                this->children[count + 1].permeability_1[i] = this->population[count + 1].permeability_1[i];
+                this->children[count + 1].permeability_2[i] = this->population[count + 1].permeability_2[i];
+                this->children[count + 1].permeability_3[i] = this->population[count].permeability_3[i];
+            }
             count = count + 2;
         }
     }
 
-    mutation();
+    //mutation();
 
     int count = 0;
     for(int i = (SIZE_POPULATION - crossover_rate); i < SIZE_POPULATION; i++){
-        this->population[i].porosity = this->children[count].porosity;
-        this->population[i].permeability_1 = this->children[count].permeability_1;
-        this->population[i].permeability_2 = this->children[count].permeability_2;
-        this->population[i].permeability_3 = this->children[count].permeability_3;
-
+        for(int j = 0; j < 5; j++){
+            this->population[i].porosity[j] = this->children[count].porosity[j];
+            this->population[i].permeability_1[j] = this->children[count].permeability_1[j];
+            this->population[i].permeability_2[j] = this->children[count].permeability_2[j];
+            this->population[i].permeability_3[j] = this->children[count].permeability_3[j];
+        }
         count++;
     }
     
 }
 
-void genetic_algorithm::mutation(){
+/*void genetic_algorithm::mutation(){
      for(int i = 0; i < mutation_rate; i++){
         int percent = rand() % 3;
         int tunning = rand() % 2;
@@ -468,4 +544,4 @@ void genetic_algorithm::mutation(){
             }
         }
     }
-}
+}*/

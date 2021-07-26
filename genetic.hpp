@@ -21,8 +21,8 @@ class genetic_algorithm: public functions{
     individual children[((SIZE_POPULATION * CROSSOVER_RATE) / 100)];
     int crossover_rate = ((SIZE_POPULATION * CROSSOVER_RATE) / 100);
     int mutation_rate = ((((SIZE_POPULATION * CROSSOVER_RATE) / 100) * MUTATION_RATE) / 100);
-    double min_permeability = 0;
-    double max_permeability = 0;
+    double min_permeability[2] = {0,0};
+    double max_permeability[2] = {0,0};
 
     public:
     genetic_algorithm();

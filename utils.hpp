@@ -1,8 +1,8 @@
 struct individual{
-    double porosity;
-    double permeability_1;
-    double permeability_2;
-    double permeability_3;
+    double porosity[5];
+    double permeability_1[5];
+    double permeability_2[5];
+    double permeability_3[5];
     double error_rank;
 };
 
@@ -12,7 +12,7 @@ struct result{
 };
 
 #define SIZE_POPULATION 100
-#define N_GENERATIONS 50
+#define N_GENERATIONS 10
 
 #define CROSSOVER_RATE 40
 #define MUTATION_RATE 50
