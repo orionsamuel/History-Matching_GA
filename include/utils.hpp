@@ -11,7 +11,7 @@ struct result{
     double oil;
 };
 
-#define SIZE_POPULATION 100
+#define SIZE_POPULATION 10
 #define N_GENERATIONS 3
 
 #define CROSSOVER_RATE 40
