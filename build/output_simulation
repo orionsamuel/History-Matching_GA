@@ -1,0 +1,996 @@
+
+ diretorio do experimento.: /home/samuel/Documentos/PPgSC/Doutorado/Proposta_Doutorado/History_Matching_Oil/Simuladores_Black_Oil/Codigo_Bifasico_Slab/simulacoes/dev/
+
+ nome do executavel.......: /home/samuel/Documentos/PPgSC/Doutorado/Proposta_Doutorado/History_Matching_Oil/Simuladores_Black_Oil/Codigo_Bifasico_Slab/bin/simulador.exe
+
+ numero de threads .......: 8
+
+ numero de processos......: 8
+
+ comando .................: (export  OMP_NUM_THREADS=8 ; cd /home/samuel/Documentos/PPgSC/Doutorado/Proposta_Doutorado/History_Matching_Oil/Simuladores_Black_Oil/Codigo_Bifasico_Slab/simulacoes/dev/; time /home/samuel/Documentos/PPgSC/Doutorado/Proposta_Doutorado/History_Matching_Oil/Simuladores_Black_Oil/Codigo_Bifasico_Slab/bin/simulador.exe |tee -a tela.txt)
+ ++++  em subroutine inicializarMPI(myid_, num_procs_, mpi_comm_)
+ em subroutine inicializarMPI, myid= 0, numprocs= 1, mpi_comm= 0
+  +++inputDS.dat         
+  call preprocessadorDS ()
+ iprtin                                                       1
+ tipo_arq_saida                                               0
+ nsd                                                          2
+ numnp                                                      790
+ numel                                                     1473
+ numel_bordas                                               105
+ nen                                                          3
+ npint                                                        3
+ nlvectP                                                      1
+ nlvectF                                                      0
+ nlvectT                                                      1
+ Solvers disponiveis:
+                       SKYLINE
+                       HYPRE
+ call leituraGeracaoCoordenadasDS
+ call leituraGeracaoConectividadesDS           3        1473
+ call leituraGeracaoConectividadesDS(bordas)         105           2
+ call leituraCoordenadasCentroidesDS
+ call leituraVolumesElementosDS
+ call leituraConectividadeNodaisFacesDS
+ call leituraAreaDasFacesDS
+ call leituraCoordenadasCentroidesDasFacesDS
+ call leituraConectividadeFaciaisElementosDS
+ call leituraElementosVizinhosDS
+ call leituraConectividadesDeFacesDS
+ call leituraVetoresNormaisAsFacesDS
+ call leituraCodigosCondContornoDS(idPotencial/Fluxo)
+ call leituraValoresCondContornoFacesDS
+ call leituraCodigosCondContornoDS(saturacao)
+ call leituraValoresCondContornoFacesDS
+ call leituraCodigosCondContornoDS(saturacao)
+ call leituraValoresCondContornoFacesDS
+ call leituraParamNumericosPropFisicaDS()
+  call processamento ()
+ DELTAT=   250.00000000000000     
+ em montarEstrutDadosSistEqAlqVelocidadePressao,  criar estruturas de dados,  tempo de parede =    7.8125000000000000E-003
+Informacao do sistema de equacoes 
+
+
+ e q u a t i o n    s y s t e m    d a t a              
+
+      number of equations . . . . . . . . . . . . (neq    ) =       3666
+
+      number of terms in left-hand-side matrix  . (nalhs  ) =    3102701
+
+      mean half bandwidth . . . . . . . . . . . . (meanbw ) =        846
+
+      memoria necessaria para a matriz do sistema (Mbytes)  =   0.25E+02
+
+      Solver escolhido                                      = skyline
+ 
+ =========================== TEMPO ===========================
+ tempo   250.00000000000000      passo de tempo           1
+ =============================================================
+ 
+ 
+ *** Início do método iterativo de Picard ***
+ 
+ Velocidade e Pressao - Formulacao Mista(RT0)
+ Tempo de montagem do sistema de equacoes   1.5625000000000000E-002
+ 
+ Resolvendo velocidade e pressao
+ direto skyline
+ Tempo de solver:   2.1562500000000000     
+ 
+ Convergiu com            1 iteração(ões)
+ 
+ *** Fim do método iterativo de Picard ***
+ 
+ Fluxo.. - RT0   6.7002252730574446E-002  -6.9018899896379021E-002
+ Pressão - RT0   996680.16061035742        103640.67519238395     
+ Resolvendo Problema Hiperbólico
+ Velocidade Máxima=    1.5908770957758473     
+ Micropasso temporal calculado................   5.2083333333333330     
+ Número de micropassos temporais..............          48
+ Tempo para o computo do problema hiperbólico:  0.78125000000000000     
+ saturacoes     0.20000000000000001       0.64486967638407866     
+ 
+ Dados Físicos
+ Permeabilidade   1.0892184999999999E-015   3.2880290000000003E-012
+ Vazão.........
+ Borda esquerda....  -7.7498231175738930     
+ Borda direita.....   7.7498231175586625     
+ Borda frente......   0.0000000000000000     
+ Borda atras.......   0.0000000000000000     
+ Borda topo........   0.0000000000000000     
+ Borda base........   0.0000000000000000     
+ Borda poco 1......   0.0000000000000000     
+ Borda poco 2......   0.0000000000000000     
+ 
+ =========================== TEMPO ===========================
+ tempo   500.00000000000000      passo de tempo           2
+ =============================================================
+ 
+ 
+ *** Início do método iterativo de Picard ***
+ 
+ Velocidade e Pressao - Formulacao Mista(RT0)
+ Tempo de montagem do sistema de equacoes   7.8125000000000000E-003
+ 
+ Resolvendo velocidade e pressao
+ direto skyline
+ Tempo de solver:   2.1250000000000000     
+ 
+ Convergiu com            1 iteração(ões)
+ 
+ *** Fim do método iterativo de Picard ***
+ 
+ Fluxo.. - RT0   6.6699333216372780E-002  -6.8707358007166236E-002
+ Pressão - RT0   998085.43972976785        103624.17780653776     
+ Resolvendo Problema Hiperbólico
+ Velocidade Máxima=    1.5836872475503505     
+ Micropasso temporal calculado................   5.3191489361702127     
+ Número de micropassos temporais..............          47
+ Tempo para o computo do problema hiperbólico:  0.92187500000000000     
+ saturacoes     0.20000000000000001       0.68075260915747460     
+ 
+ Dados Físicos
+ Permeabilidade   1.0892184999999999E-015   3.2880290000000003E-012
+ Vazão.........
+ Borda esquerda....  -7.7147074343031461     
+ Borda direita.....   7.7147074342755095     
+ Borda frente......   0.0000000000000000     
+ Borda atras.......   0.0000000000000000     
+ Borda topo........   0.0000000000000000     
+ Borda base........   0.0000000000000000     
+ Borda poco 1......   0.0000000000000000     
+ Borda poco 2......   0.0000000000000000     
+ 
+ =========================== TEMPO ===========================
+ tempo   750.00000000000000      passo de tempo           3
+ =============================================================
+ 
+ 
+ *** Início do método iterativo de Picard ***
+ 
+ Velocidade e Pressao - Formulacao Mista(RT0)
+ Tempo de montagem do sistema de equacoes   7.8125000000000000E-003
+ 
+ Resolvendo velocidade e pressao
+ direto skyline
+ Tempo de solver:   2.1250000000000000     
+ 
+ Convergiu com            1 iteração(ões)
+ 
+ *** Fim do método iterativo de Picard ***
+ 
+ Fluxo.. - RT0   6.6852043506486311E-002  -6.8868678236367095E-002
+ Pressão - RT0   998346.39028815005        103632.15309731168     
+ Resolvendo Problema Hiperbólico
+ Velocidade Máxima=    1.5873344741668953     
+ Micropasso temporal calculado................   5.2083333333333330     
+ Número de micropassos temporais..............          48
+ Tempo para o computo do problema hiperbólico:   1.0781250000000000     
+ saturacoes     0.20000000000000001       0.69917548156347298     
+ 
+ Dados Físicos
+ Permeabilidade   1.0892184999999999E-015   3.2880290000000003E-012
+ Vazão.........
+ Borda esquerda....  -7.7317012300893797     
+ Borda direita.....   7.7317012300638472     
+ Borda frente......   0.0000000000000000     
+ Borda atras.......   0.0000000000000000     
+ Borda topo........   0.0000000000000000     
+ Borda base........   0.0000000000000000     
+ Borda poco 1......   0.0000000000000000     
+ Borda poco 2......   0.0000000000000000     
+ 
+ =========================== TEMPO ===========================
+ tempo   1000.0000000000000      passo de tempo           4
+ =============================================================
+ 
+ 
+ *** Início do método iterativo de Picard ***
+ 
+ Velocidade e Pressao - Formulacao Mista(RT0)
+ Tempo de montagem do sistema de equacoes   7.8125000000000000E-003
+ 
+ Resolvendo velocidade e pressao
+ direto skyline
+ Tempo de solver:   2.1250000000000000     
+ 
+ Convergiu com            1 iteração(ões)
+ 
+ *** Fim do método iterativo de Picard ***
+ 
+ Fluxo.. - RT0   6.7070818763226195E-002  -6.9205852770897663E-002
+ Pressão - RT0   998463.75465580379        103632.95777823062     
+ Resolvendo Problema Hiperbólico
+ Velocidade Máxima=    1.5932033487512316     
+ Micropasso temporal calculado................   5.2083333333333330     
+ Número de micropassos temporais..............          48
+
+ diretorio do experimento.: /home/samuel/Documentos/PPgSC/Doutorado/Proposta_Doutorado/History_Matching_Oil/Simuladores_Black_Oil/Codigo_Bifasico_Slab/simulacoes/dev/
+
+ nome do executavel.......: /home/samuel/Documentos/PPgSC/Doutorado/Proposta_Doutorado/History_Matching_Oil/Simuladores_Black_Oil/Codigo_Bifasico_Slab/bin/simulador.exe
+
+ numero de threads .......: 8
+
+ numero de processos......: 8
+
+ comando .................: (export  OMP_NUM_THREADS=8 ; cd /home/samuel/Documentos/PPgSC/Doutorado/Proposta_Doutorado/History_Matching_Oil/Simuladores_Black_Oil/Codigo_Bifasico_Slab/simulacoes/dev/; time /home/samuel/Documentos/PPgSC/Doutorado/Proposta_Doutorado/History_Matching_Oil/Simuladores_Black_Oil/Codigo_Bifasico_Slab/bin/simulador.exe |tee -a tela.txt)
+ ++++  em subroutine inicializarMPI(myid_, num_procs_, mpi_comm_)
+ em subroutine inicializarMPI, myid= 0, numprocs= 1, mpi_comm= 0
+  +++inputDS.dat         
+  call preprocessadorDS ()
+ iprtin                                                       1
+ tipo_arq_saida                                               0
+ nsd                                                          2
+ numnp                                                      790
+ numel                                                     1473
+ numel_bordas                                               105
+ nen                                                          3
+ npint                                                        3
+ nlvectP                                                      1
+ nlvectF                                                      0
+ nlvectT                                                      1
+ Solvers disponiveis:
+                       SKYLINE
+                       HYPRE
+ call leituraGeracaoCoordenadasDS
+ call leituraGeracaoConectividadesDS           3        1473
+ call leituraGeracaoConectividadesDS(bordas)         105           2
+ call leituraCoordenadasCentroidesDS
+ call leituraVolumesElementosDS
+ call leituraConectividadeNodaisFacesDS
+ call leituraAreaDasFacesDS
+ call leituraCoordenadasCentroidesDasFacesDS
+ call leituraConectividadeFaciaisElementosDS
+ call leituraElementosVizinhosDS
+ call leituraConectividadesDeFacesDS
+ call leituraVetoresNormaisAsFacesDS
+ call leituraCodigosCondContornoDS(idPotencial/Fluxo)
+ call leituraValoresCondContornoFacesDS
+ call leituraCodigosCondContornoDS(saturacao)
+ call leituraValoresCondContornoFacesDS
+ call leituraCodigosCondContornoDS(saturacao)
+ call leituraValoresCondContornoFacesDS
+ call leituraParamNumericosPropFisicaDS()
+  call processamento ()
+ DELTAT=   250.00000000000000     
+ em montarEstrutDadosSistEqAlqVelocidadePressao,  criar estruturas de dados,  tempo de parede =    7.8125000000000000E-003
+Informacao do sistema de equacoes 
+
+
+ e q u a t i o n    s y s t e m    d a t a              
+
+      number of equations . . . . . . . . . . . . (neq    ) =       3666
+
+      number of terms in left-hand-side matrix  . (nalhs  ) =    3102701
+
+      mean half bandwidth . . . . . . . . . . . . (meanbw ) =        846
+
+      memoria necessaria para a matriz do sistema (Mbytes)  =   0.25E+02
+
+      Solver escolhido                                      = skyline
+ 
+ =========================== TEMPO ===========================
+ tempo   250.00000000000000      passo de tempo           1
+ =============================================================
+ 
+ 
+ *** Início do método iterativo de Picard ***
+ 
+ Velocidade e Pressao - Formulacao Mista(RT0)
+ Tempo de montagem do sistema de equacoes   1.5625000000000000E-002
+ 
+ Resolvendo velocidade e pressao
+ direto skyline
+
+ diretorio do experimento.: /home/samuel/Documentos/PPgSC/Doutorado/Proposta_Doutorado/History_Matching_Oil/Simuladores_Black_Oil/Codigo_Bifasico_Slab/simulacoes/dev/
+
+ nome do executavel.......: /home/samuel/Documentos/PPgSC/Doutorado/Proposta_Doutorado/History_Matching_Oil/Simuladores_Black_Oil/Codigo_Bifasico_Slab/bin/simulador.exe
+
+ numero de threads .......: 8
+
+ numero de processos......: 8
+
+ comando .................: (export  OMP_NUM_THREADS=8 ; cd /home/samuel/Documentos/PPgSC/Doutorado/Proposta_Doutorado/History_Matching_Oil/Simuladores_Black_Oil/Codigo_Bifasico_Slab/simulacoes/dev/; time /home/samuel/Documentos/PPgSC/Doutorado/Proposta_Doutorado/History_Matching_Oil/Simuladores_Black_Oil/Codigo_Bifasico_Slab/bin/simulador.exe |tee -a tela.txt)
+ ++++  em subroutine inicializarMPI(myid_, num_procs_, mpi_comm_)
+ em subroutine inicializarMPI, myid= 0, numprocs= 1, mpi_comm= 0
+  +++inputDS.dat         
+  call preprocessadorDS ()
+ iprtin                                                       1
+ tipo_arq_saida                                               0
+ nsd                                                          2
+ numnp                                                      790
+ numel                                                     1473
+ numel_bordas                                               105
+ nen                                                          3
+ npint                                                        3
+ nlvectP                                                      1
+ nlvectF                                                      0
+ nlvectT                                                      1
+ Solvers disponiveis:
+                       SKYLINE
+                       HYPRE
+ call leituraGeracaoCoordenadasDS
+ call leituraGeracaoConectividadesDS           3        1473
+ call leituraGeracaoConectividadesDS(bordas)         105           2
+ call leituraCoordenadasCentroidesDS
+ call leituraVolumesElementosDS
+ call leituraConectividadeNodaisFacesDS
+ call leituraAreaDasFacesDS
+ call leituraCoordenadasCentroidesDasFacesDS
+ call leituraConectividadeFaciaisElementosDS
+ call leituraElementosVizinhosDS
+ call leituraConectividadesDeFacesDS
+ call leituraVetoresNormaisAsFacesDS
+ call leituraCodigosCondContornoDS(idPotencial/Fluxo)
+ call leituraValoresCondContornoFacesDS
+ call leituraCodigosCondContornoDS(saturacao)
+ call leituraValoresCondContornoFacesDS
+ call leituraCodigosCondContornoDS(saturacao)
+ call leituraValoresCondContornoFacesDS
+ call leituraParamNumericosPropFisicaDS()
+  call processamento ()
+ DELTAT=   250.00000000000000     
+ em montarEstrutDadosSistEqAlqVelocidadePressao,  criar estruturas de dados,  tempo de parede =    7.8125000000000000E-003
+Informacao do sistema de equacoes 
+
+
+ e q u a t i o n    s y s t e m    d a t a              
+
+      number of equations . . . . . . . . . . . . (neq    ) =       3666
+
+      number of terms in left-hand-side matrix  . (nalhs  ) =    3102701
+
+      mean half bandwidth . . . . . . . . . . . . (meanbw ) =        846
+
+      memoria necessaria para a matriz do sistema (Mbytes)  =   0.25E+02
+
+      Solver escolhido                                      = skyline
+ 
+ =========================== TEMPO ===========================
+ tempo   250.00000000000000      passo de tempo           1
+ =============================================================
+ 
+ 
+ *** Início do método iterativo de Picard ***
+ 
+ Velocidade e Pressao - Formulacao Mista(RT0)
+ Tempo de montagem do sistema de equacoes   7.8125000000000000E-003
+ 
+ Resolvendo velocidade e pressao
+ direto skyline
+ Tempo de solver:   2.2109375000000000     
+ 
+ Convergiu com            1 iteração(ões)
+ 
+ *** Fim do método iterativo de Picard ***
+ 
+ Fluxo.. - RT0   6.7002252730574446E-002  -6.9018899896379021E-002
+ Pressão - RT0   996680.16061035742        103640.67519238395     
+ Resolvendo Problema Hiperbólico
+ Velocidade Máxima=    1.5908770957758473     
+ Micropasso temporal calculado................   5.2083333333333330     
+ Número de micropassos temporais..............          48
+ Tempo para o computo do problema hiperbólico:  0.78906250000000000     
+ saturacoes     0.20000000000000001       0.64486967638407866     
+ 
+ Dados Físicos
+ Permeabilidade   1.0892184999999999E-015   3.2880290000000003E-012
+ Vazão.........
+ Borda esquerda....  -7.7498231175738930     
+ Borda direita.....   7.7498231175586625     
+ Borda frente......   0.0000000000000000     
+ Borda atras.......   0.0000000000000000     
+ Borda topo........   0.0000000000000000     
+ Borda base........   0.0000000000000000     
+ Borda poco 1......   0.0000000000000000     
+ Borda poco 2......   0.0000000000000000     
+ 
+ =========================== TEMPO ===========================
+ tempo   500.00000000000000      passo de tempo           2
+ =============================================================
+ 
+ 
+ *** Início do método iterativo de Picard ***
+ 
+ Velocidade e Pressao - Formulacao Mista(RT0)
+ Tempo de montagem do sistema de equacoes   7.8125000000000000E-003
+ 
+ Resolvendo velocidade e pressao
+ direto skyline
+ Tempo de solver:   2.1484375000000000     
+ 
+ Convergiu com            1 iteração(ões)
+ 
+ *** Fim do método iterativo de Picard ***
+ 
+ Fluxo.. - RT0   6.6699333216372780E-002  -6.8707358007166236E-002
+ Pressão - RT0   998085.43972976785        103624.17780653776     
+ Resolvendo Problema Hiperbólico
+ Velocidade Máxima=    1.5836872475503505     
+ Micropasso temporal calculado................   5.3191489361702127     
+ Número de micropassos temporais..............          47
+ Tempo para o computo do problema hiperbólico:  0.97656250000000000     
+ saturacoes     0.20000000000000001       0.68075260915747460     
+ 
+ Dados Físicos
+ Permeabilidade   1.0892184999999999E-015   3.2880290000000003E-012
+ Vazão.........
+ Borda esquerda....  -7.7147074343031461     
+ Borda direita.....   7.7147074342755095     
+ Borda frente......   0.0000000000000000     
+ Borda atras.......   0.0000000000000000     
+ Borda topo........   0.0000000000000000     
+ Borda base........   0.0000000000000000     
+ Borda poco 1......   0.0000000000000000     
+ Borda poco 2......   0.0000000000000000     
+ 
+ =========================== TEMPO ===========================
+ tempo   750.00000000000000      passo de tempo           3
+ =============================================================
+ 
+ 
+ *** Início do método iterativo de Picard ***
+ 
+ Velocidade e Pressao - Formulacao Mista(RT0)
+ Tempo de montagem do sistema de equacoes   0.0000000000000000     
+ 
+ Resolvendo velocidade e pressao
+ direto skyline
+ Tempo de solver:   2.3125000000000000     
+ 
+ Convergiu com            1 iteração(ões)
+ 
+ *** Fim do método iterativo de Picard ***
+ 
+ Fluxo.. - RT0   6.6852043506486311E-002  -6.8868678236367095E-002
+ Pressão - RT0   998346.39028815005        103632.15309731168     
+ Resolvendo Problema Hiperbólico
+ Velocidade Máxima=    1.5873344741668953     
+ Micropasso temporal calculado................   5.2083333333333330     
+ Número de micropassos temporais..............          48
+ Tempo para o computo do problema hiperbólico:   1.2109375000000000     
+ saturacoes     0.20000000000000001       0.69917548156347298     
+ 
+ Dados Físicos
+ Permeabilidade   1.0892184999999999E-015   3.2880290000000003E-012
+ Vazão.........
+ Borda esquerda....  -7.7317012300893797     
+ Borda direita.....   7.7317012300638472     
+ Borda frente......   0.0000000000000000     
+ Borda atras.......   0.0000000000000000     
+ Borda topo........   0.0000000000000000     
+ Borda base........   0.0000000000000000     
+ Borda poco 1......   0.0000000000000000     
+ Borda poco 2......   0.0000000000000000     
+ 
+ =========================== TEMPO ===========================
+ tempo   1000.0000000000000      passo de tempo           4
+ =============================================================
+ 
+ 
+ *** Início do método iterativo de Picard ***
+ 
+ Velocidade e Pressao - Formulacao Mista(RT0)
+ Tempo de montagem do sistema de equacoes   0.0000000000000000     
+ 
+ Resolvendo velocidade e pressao
+ direto skyline
+ Tempo de solver:   2.3593750000000000     
+ 
+ Convergiu com            1 iteração(ões)
+ 
+ *** Fim do método iterativo de Picard ***
+ 
+ Fluxo.. - RT0   6.7070818763226195E-002  -6.9205852770897663E-002
+ Pressão - RT0   998463.75465580379        103632.95777823062     
+ Resolvendo Problema Hiperbólico
+ Velocidade Máxima=    1.5932033487512316     
+ Micropasso temporal calculado................   5.2083333333333330     
+ Número de micropassos temporais..............          48
+ Tempo para o computo do problema hiperbólico:   1.3046875000000000     
+ saturacoes     0.19999999999538673       0.71105006133937165     
+ 
+ Dados Físicos
+ Permeabilidade   1.0892184999999999E-015   3.2880290000000003E-012
+ Vazão.........
+ Borda esquerda....  -7.7340430043138353     
+ Borda direita.....   7.7340430042940174     
+ Borda frente......   0.0000000000000000     
+ Borda atras.......   0.0000000000000000     
+ Borda topo........   0.0000000000000000     
+ Borda base........   0.0000000000000000     
+ Borda poco 1......   0.0000000000000000     
+ Borda poco 2......   0.0000000000000000     
+ 
+ =========================== TEMPO ===========================
+ tempo   1250.0000000000000      passo de tempo           5
+ =============================================================
+ 
+ 
+ *** Início do método iterativo de Picard ***
+ 
+ Velocidade e Pressao - Formulacao Mista(RT0)
+ Tempo de montagem do sistema de equacoes   7.8125000000000000E-003
+ 
+ Resolvendo velocidade e pressao
+ direto skyline
+ Tempo de solver:   2.2031250000000000     
+ 
+ Convergiu com            1 iteração(ões)
+ 
+ *** Fim do método iterativo de Picard ***
+ 
+ Fluxo.. - RT0   6.7914045027223313E-002  -7.0363235480173661E-002
+ Pressão - RT0   998529.26509859005        103649.51114200609     
+ Resolvendo Problema Hiperbólico
+ Velocidade Máxima=    1.6150114595354881     
+ Micropasso temporal calculado................   5.2083333333333330     
+ Número de micropassos temporais..............          48
+ Tempo para o computo do problema hiperbólico:   1.4218750000000000     
+ saturacoes     0.19999999998400794       0.71961974721998856     
+ 
+ Dados Físicos
+ Permeabilidade   1.0892184999999999E-015   3.2880290000000003E-012
+ Vazão.........
+ Borda esquerda....  -7.7709196395222602     
+ Borda direita.....   7.7709196395095752     
+ Borda frente......   0.0000000000000000     
+ Borda atras.......   0.0000000000000000     
+ Borda topo........   0.0000000000000000     
+ Borda base........   0.0000000000000000     
+ Borda poco 1......   0.0000000000000000     
+ Borda poco 2......   0.0000000000000000     
+ 
+ =========================== TEMPO ===========================
+ tempo   1500.0000000000000      passo de tempo           6
+ =============================================================
+ 
+ 
+ *** Início do método iterativo de Picard ***
+ 
+ Velocidade e Pressao - Formulacao Mista(RT0)
+ Tempo de montagem do sistema de equacoes   7.8125000000000000E-003
+ 
+ Resolvendo velocidade e pressao
+ direto skyline
+ Tempo de solver:   2.2343750000000000     
+ 
+ Convergiu com            1 iteração(ões)
+ 
+ *** Fim do método iterativo de Picard ***
+ 
+ Fluxo.. - RT0   6.9177669272500353E-002  -7.2566422931408359E-002
+ Pressão - RT0   998572.47156775312        103662.41074714299     
+ Resolvendo Problema Hiperbólico
+ Velocidade Máxima=    1.6496798673388016     
+ Micropasso temporal calculado................   5.1020408163265305     
+ Número de micropassos temporais..............          49
+ Tempo para o computo do problema hiperbólico:   1.6953125000000000     
+ saturacoes     0.19999999997175841       0.72619218743192571     
+ 
+ Dados Físicos
+ Permeabilidade   1.0892184999999999E-015   3.2880290000000003E-012
+ Vazão.........
+ Borda esquerda....  -7.8002370523767066     
+ Borda direita.....   7.8002370523678071     
+ Borda frente......   0.0000000000000000     
+ Borda atras.......   0.0000000000000000     
+ Borda topo........   0.0000000000000000     
+ Borda base........   0.0000000000000000     
+ Borda poco 1......   0.0000000000000000     
+ Borda poco 2......   0.0000000000000000     
+ 
+ =========================== TEMPO ===========================
+ tempo   1750.0000000000000      passo de tempo           7
+ =============================================================
+ 
+ 
+ *** Início do método iterativo de Picard ***
+ 
+ Velocidade e Pressao - Formulacao Mista(RT0)
+ Tempo de montagem do sistema de equacoes   7.8125000000000000E-003
+ 
+ Resolvendo velocidade e pressao
+ direto skyline
+ Tempo de solver:   2.1875000000000000     
+ 
+ Convergiu com            1 iteração(ões)
+ 
+ *** Fim do método iterativo de Picard ***
+ 
+ Fluxo.. - RT0   7.4148825169605526E-002  -7.7736340652922356E-002
+ Pressão - RT0   998625.93459473073        103616.32820837438     
+ Resolvendo Problema Hiperbólico
+ Velocidade Máxima=    1.8041534182380374     
+ Micropasso temporal calculado................   4.6296296296296298     
+ Número de micropassos temporais..............          54
+ Tempo para o computo do problema hiperbólico:   2.0625000000000000     
+ saturacoes     0.19999999995910991       0.73137223375285065     
+ 
+ Dados Físicos
+ Permeabilidade   1.0892184999999999E-015   3.2880290000000003E-012
+ Vazão.........
+ Borda esquerda....  -7.7010342301542263     
+ Borda direita.....   7.7010342301378278     
+ Borda frente......   0.0000000000000000     
+ Borda atras.......   0.0000000000000000     
+ Borda topo........   0.0000000000000000     
+ Borda base........   0.0000000000000000     
+ Borda poco 1......   0.0000000000000000     
+ Borda poco 2......   0.0000000000000000     
+ 
+ =========================== TEMPO ===========================
+ tempo   2000.0000000000000      passo de tempo           8
+ =============================================================
+ 
+ 
+ *** Início do método iterativo de Picard ***
+ 
+ Velocidade e Pressao - Formulacao Mista(RT0)
+ Tempo de montagem do sistema de equacoes   7.8125000000000000E-003
+ 
+ Resolvendo velocidade e pressao
+ direto skyline
+ Tempo de solver:   2.3203125000000000     
+ 
+ Convergiu com            1 iteração(ões)
+ 
+ *** Fim do método iterativo de Picard ***
+ 
+ Fluxo.. - RT0   5.4190021370710537E-002  -5.3610655060795834E-002
+ Pressão - RT0   998722.73128472595        103444.00803840294     
+ Resolvendo Problema Hiperbólico
+ Velocidade Máxima=    1.2506290155689375     
+ Micropasso temporal calculado................   6.5789473684210522     
+ Número de micropassos temporais..............          38
+ Tempo para o computo do problema hiperbólico:   1.6093750000000000     
+ saturacoes     0.19999999994587053       0.73543987421685064     
+ 
+ Dados Físicos
+ Permeabilidade   1.0892184999999999E-015   3.2880290000000003E-012
+ Vazão.........
+ Borda esquerda....  -7.3031443528739919     
+ Borda direita.....   7.3031443528584514     
+ Borda frente......   0.0000000000000000     
+ Borda atras.......   0.0000000000000000     
+ Borda topo........   0.0000000000000000     
+ Borda base........   0.0000000000000000     
+ Borda poco 1......   0.0000000000000000     
+ Borda poco 2......   0.0000000000000000     
+ 
+ =========================== TEMPO ===========================
+ tempo   2250.0000000000000      passo de tempo           9
+ =============================================================
+ 
+ 
+ *** Início do método iterativo de Picard ***
+ 
+ Velocidade e Pressao - Formulacao Mista(RT0)
+ Tempo de montagem do sistema de equacoes   7.8125000000000000E-003
+ 
+ Resolvendo velocidade e pressao
+ direto skyline
+ Tempo de solver:   2.2968750000000000     
+ 
+ Convergiu com            1 iteração(ões)
+ 
+ *** Fim do método iterativo de Picard ***
+ 
+ Fluxo.. - RT0   4.9018653973868204E-002  -4.9720272446152167E-002
+ Pressão - RT0   998767.48190897540        103331.30148663696     
+ Resolvendo Problema Hiperbólico
+ Velocidade Máxima=    1.1442773597717781     
+ Micropasso temporal calculado................   7.3529411764705879     
+ Número de micropassos temporais..............          34
+ Tempo para o computo do problema hiperbólico:   1.5234375000000000     
+ saturacoes     0.19999999993114090       0.73883094721265263     
+ 
+ Dados Físicos
+ Permeabilidade   1.0892184999999999E-015   3.2880290000000003E-012
+ Vazão.........
+ Borda esquerda....  -7.1548236613729532     
+ Borda direita.....   7.1548236613533502     
+ Borda frente......   0.0000000000000000     
+ Borda atras.......   0.0000000000000000     
+ Borda topo........   0.0000000000000000     
+ Borda base........   0.0000000000000000     
+ Borda poco 1......   0.0000000000000000     
+ Borda poco 2......   0.0000000000000000     
+ 
+ =========================== TEMPO ===========================
+ tempo   2500.0000000000000      passo de tempo          10
+ =============================================================
+ 
+ 
+ *** Início do método iterativo de Picard ***
+ 
+ Velocidade e Pressao - Formulacao Mista(RT0)
+ Tempo de montagem do sistema de equacoes   0.0000000000000000     
+ 
+ Resolvendo velocidade e pressao
+ direto skyline
+ Tempo de solver:   2.1875000000000000     
+ 
+ Convergiu com            1 iteração(ões)
+ 
+ *** Fim do método iterativo de Picard ***
+ 
+ Fluxo.. - RT0   4.9161363521790929E-002  -4.9669552482938015E-002
+ Pressão - RT0   998778.47950989939        103318.37318964658     
+ Resolvendo Problema Hiperbólico
+ Velocidade Máxima=    1.1513815093238973     
+ Micropasso temporal calculado................   7.1428571428571432     
+ Número de micropassos temporais..............          35
+ Tempo para o computo do problema hiperbólico:   1.6640625000000000     
+ saturacoes     0.19999999991623821       0.74177707800589965     
+ 
+ Dados Físicos
+ Permeabilidade   1.0892184999999999E-015   3.2880290000000003E-012
+ Vazão.........
+ Borda esquerda....  -7.1795624161103673     
+ Borda direita.....   7.1795624161052070     
+ Borda frente......   0.0000000000000000     
+ Borda atras.......   0.0000000000000000     
+ Borda topo........   0.0000000000000000     
+ Borda base........   0.0000000000000000     
+ Borda poco 1......   0.0000000000000000     
+ Borda poco 2......   0.0000000000000000     
+ 
+ =========================== TEMPO ===========================
+ tempo   2750.0000000000000      passo de tempo          11
+ =============================================================
+ 
+ 
+ *** Início do método iterativo de Picard ***
+ 
+ Velocidade e Pressao - Formulacao Mista(RT0)
+ Tempo de montagem do sistema de equacoes   7.8125000000000000E-003
+ 
+ Resolvendo velocidade e pressao
+ direto skyline
+ Tempo de solver:   2.3125000000000000     
+ 
+ Convergiu com            1 iteração(ões)
+ 
+ *** Fim do método iterativo de Picard ***
+ 
+ Fluxo.. - RT0   5.0560818548225556E-002  -5.1696325945092186E-002
+ Pressão - RT0   998775.12653798424        103377.30402795787     
+ Resolvendo Problema Hiperbólico
+ Velocidade Máxima=    1.2021685585274116     
+ Micropasso temporal calculado................   6.9444444444444446     
+ Número de micropassos temporais..............          36
+ Tempo para o computo do problema hiperbólico:   1.8359375000000000     
+ saturacoes     0.19999999990125245       0.74439298895371109     
+ 
+ Dados Físicos
+ Permeabilidade   1.0892184999999999E-015   3.2880290000000003E-012
+ Vazão.........
+ Borda esquerda....  -7.2762536226906436     
+ Borda direita.....   7.2762536226790200     
+ Borda frente......   0.0000000000000000     
+ Borda atras.......   0.0000000000000000     
+ Borda topo........   0.0000000000000000     
+ Borda base........   0.0000000000000000     
+ Borda poco 1......   0.0000000000000000     
+ Borda poco 2......   0.0000000000000000     
+ 
+ =========================== TEMPO ===========================
+ tempo   3000.0000000000000      passo de tempo          12
+ =============================================================
+ 
+ 
+ *** Início do método iterativo de Picard ***
+ 
+ Velocidade e Pressao - Formulacao Mista(RT0)
+ Tempo de montagem do sistema de equacoes   7.8125000000000000E-003
+ 
+ Resolvendo velocidade e pressao
+ direto skyline
+ Tempo de solver:   2.2656250000000000     
+ 
+ Convergiu com            1 iteração(ões)
+ 
+ *** Fim do método iterativo de Picard ***
+ 
+ Fluxo.. - RT0   5.3159030759920123E-002  -5.4205110080396926E-002
+ Pressão - RT0   998765.62337945157        103690.50518418741     
+ Resolvendo Problema Hiperbólico
+ Velocidade Máxima=    1.2642112178357905     
+ Micropasso temporal calculado................   6.5789473684210522     
+ Número de micropassos temporais..............          38
+ Tempo para o computo do problema hiperbólico:   1.9765625000000000     
+ saturacoes     0.19999999988626563       0.74674582509415144     
+ 
+ Dados Físicos
+ Permeabilidade   1.0892184999999999E-015   3.2880290000000003E-012
+ Vazão.........
+ Borda esquerda....  -7.4017780517398633     
+ Borda direita.....   7.4017780517199414     
+ Borda frente......   0.0000000000000000     
+ Borda atras.......   0.0000000000000000     
+ Borda topo........   0.0000000000000000     
+ Borda base........   0.0000000000000000     
+ Borda poco 1......   0.0000000000000000     
+ Borda poco 2......   0.0000000000000000     
+ 
+ =========================== TEMPO ===========================
+ tempo   3250.0000000000000      passo de tempo          13
+ =============================================================
+ 
+ 
+ *** Início do método iterativo de Picard ***
+ 
+ Velocidade e Pressao - Formulacao Mista(RT0)
+ Tempo de montagem do sistema de equacoes   7.8125000000000000E-003
+ 
+ Resolvendo velocidade e pressao
+ direto skyline
+ Tempo de solver:   2.2812500000000000     
+ 
+ Convergiu com            1 iteração(ões)
+ 
+ *** Fim do método iterativo de Picard ***
+ 
+ Fluxo.. - RT0   5.5899852716968845E-002  -5.6967834686878938E-002
+ Pressão - RT0   998738.39870980452        104378.68936763491     
+ Resolvendo Problema Hiperbólico
+ Velocidade Máxima=    1.3294438527288877     
+ Micropasso temporal calculado................   6.2500000000000000     
+ Número de micropassos temporais..............          40
+ Tempo para o computo do problema hiperbólico:   2.2265625000000000     
+ saturacoes     0.19999999987126496       0.74890492759251925     
+ 
+ Dados Físicos
+ Permeabilidade   1.0892184999999999E-015   3.2880290000000003E-012
+ Vazão.........
+ Borda esquerda....  -7.6289594706620267     
+ Borda direita.....   7.6289594706401429     
+ Borda frente......   0.0000000000000000     
+ Borda atras.......   0.0000000000000000     
+ Borda topo........   0.0000000000000000     
+ Borda base........   0.0000000000000000     
+ Borda poco 1......   0.0000000000000000     
+ Borda poco 2......   0.0000000000000000     
+ 
+ =========================== TEMPO ===========================
+ tempo   3500.0000000000000      passo de tempo          14
+ =============================================================
+ 
+ 
+ *** Início do método iterativo de Picard ***
+ 
+ Velocidade e Pressao - Formulacao Mista(RT0)
+ Tempo de montagem do sistema de equacoes   7.8125000000000000E-003
+ 
+ Resolvendo velocidade e pressao
+ direto skyline
+ Tempo de solver:   2.3593750000000000     
+ 
+ Convergiu com            1 iteração(ões)
+ 
+ *** Fim do método iterativo de Picard ***
+ 
+ Fluxo.. - RT0   5.8574866575942727E-002  -5.9665597053832627E-002
+ Pressão - RT0   998707.92188851186        104880.48835817147     
+ Resolvendo Problema Hiperbólico
+ Velocidade Máxima=    1.3928847181757360     
+ Micropasso temporal calculado................   5.9523809523809526     
+ Número de micropassos temporais..............          42
+ Tempo para o computo do problema hiperbólico:   2.1953125000000000     
+ saturacoes     0.19999999985623843       0.75089933500800488     
+ 
+ Dados Físicos
+ Permeabilidade   1.0892184999999999E-015   3.2880290000000003E-012
+ Vazão.........
+ Borda esquerda....  -7.8736800387033616     
+ Borda direita.....   7.8736800386829016     
+ Borda frente......   0.0000000000000000     
+ Borda atras.......   0.0000000000000000     
+ Borda topo........   0.0000000000000000     
+ Borda base........   0.0000000000000000     
+ Borda poco 1......   0.0000000000000000     
+ Borda poco 2......   0.0000000000000000     
+ 
+ =========================== TEMPO ===========================
+ tempo   3750.0000000000000      passo de tempo          15
+ =============================================================
+ 
+ 
+ *** Início do método iterativo de Picard ***
+ 
+ Velocidade e Pressao - Formulacao Mista(RT0)
+ Tempo de montagem do sistema de equacoes   7.8125000000000000E-003
+ 
+ Resolvendo velocidade e pressao
+ direto skyline
+ Tempo de solver:   2.3437500000000000     
+ 
+ Convergiu com            1 iteração(ões)
+ 
+ *** Fim do método iterativo de Picard ***
+ 
+ Fluxo.. - RT0   6.1060523412284545E-002  -6.2199438697177638E-002
+ Pressão - RT0   998676.23704073078        104731.88891729171     
+ Resolvendo Problema Hiperbólico
+ Velocidade Máxima=    1.4518372180465426     
+ Micropasso temporal calculado................   5.6818181818181817     
+ Número de micropassos temporais..............          44
+ Tempo para o computo do problema hiperbólico:   2.3281250000000000     
+ saturacoes     0.19999999984117686       0.75274959536592767     
+ 
+ Dados Físicos
+ Permeabilidade   1.0892184999999999E-015   3.2880290000000003E-012
+ Vazão.........
+ Borda esquerda....  -8.1242749893419397     
+ Borda direita.....   8.1242749893069881     
+ Borda frente......   0.0000000000000000     
+ Borda atras.......   0.0000000000000000     
+ Borda topo........   0.0000000000000000     
+ Borda base........   0.0000000000000000     
+ Borda poco 1......   0.0000000000000000     
+ Borda poco 2......   0.0000000000000000     
+ 
+ =========================== TEMPO ===========================
+ tempo   4000.0000000000000      passo de tempo          16
+ =============================================================
+ 
+ 
+ *** Início do método iterativo de Picard ***
+ 
+ Velocidade e Pressao - Formulacao Mista(RT0)
+ Tempo de montagem do sistema de equacoes   7.8125000000000000E-003
+ 
+ Resolvendo velocidade e pressao
+ direto skyline
+ Tempo de solver:   2.2500000000000000     
+ 
+ Convergiu com            1 iteração(ões)
+ 
+ *** Fim do método iterativo de Picard ***
+ 
+ Fluxo.. - RT0   6.3380880529436481E-002  -6.4587749154011109E-002
+ Pressão - RT0   998646.41044095485        104724.42296618917     
+ Resolvendo Problema Hiperbólico
+ Velocidade Máxima=    1.5071448573794199     
+ Micropasso temporal calculado................   5.5555555555555554     
+ Número de micropassos temporais..............          45
+ Tempo para o computo do problema hiperbólico:   2.3750000000000000     
+ saturacoes     0.19999999982607175       0.75446908359605136     
+ 
+ Dados Físicos
+ Permeabilidade   1.0892184999999999E-015   3.2880290000000003E-012
+ Vazão.........
+ Borda esquerda....  -8.3621721693471081     
+ Borda direita.....   8.3621721693407984     
+ Borda frente......   0.0000000000000000     
+ Borda atras.......   0.0000000000000000     
+ Borda topo........   0.0000000000000000     
+ Borda base........   0.0000000000000000     
+ Borda poco 1......   0.0000000000000000     
+ Borda poco 2......   0.0000000000000000     
+ 
+ =========================== TEMPO ===========================
+ tempo   4250.0000000000000      passo de tempo          17
+ =============================================================
+ 
+ 
+ *** Início do método iterativo de Picard ***
+ 
+ Velocidade e Pressao - Formulacao Mista(RT0)
+ Tempo de montagem do sistema de equacoes   7.8125000000000000E-003
+ 
+ Resolvendo velocidade e pressao
+ direto skyline
+ Tempo de solver:   2.1953125000000000     
+ 
+ Convergiu com            1 iteração(ões)
+ 
+ *** Fim do método iterativo de Picard ***
+ 
+ Fluxo.. - RT0   6.5589587204218813E-002  -6.6860517911579279E-002
+ Pressão - RT0   998617.89916623419        104719.12745675015     
+ Resolvendo Problema Hiperbólico
+ Velocidade Máxima=    1.5597645441568189     
+ Micropasso temporal calculado................   5.3191489361702127     
+ Número de micropassos temporais..............          47

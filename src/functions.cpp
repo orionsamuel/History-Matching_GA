@@ -4,14 +4,14 @@ void functions::simulation(int idIteration){
     system("rm -f ../Output/output_simulation");
     for(int i = 0; i < SIZE_POPULATION; i++){
         cout << "Executando a simulação no indivíduo " << i << " da iteração " << idIteration << endl;
-        string command = "cp ../Output/"+to_string(idIteration)+"/inputDS_"+to_string(i)+".dat ../Codigo_Bifasico_Slab/simulacoes/dev/inputDS.dat";
+        string command = "cp ../Output/"+to_string(idIteration)+"/inputDS_"+to_string(i)+".dat ../../Codigo_Bifasico_Slab/simulacoes/dev/inputDS.dat";
         const char* file = (char*) command.c_str();
         system(file);
         system("./../../Codigo_Bifasico_Slab/rodarSimulador.sh >> output_simulation 2>> ../Output/output_simulation");
-        command = "cp ../../Codigo_Bifasico_Slab/simulacoes/dev/out/resultadoVazaoAgua.dat Output/"+to_string(idIteration)+"/vazaoAgua_"+to_string(i)+".dat";
+        command = "cp ../../Codigo_Bifasico_Slab/simulacoes/dev/out/resultadoVazaoAgua.dat ../Output/"+to_string(idIteration)+"/vazaoAgua_"+to_string(i)+".dat";
         file = (char*) command.c_str();
         system(file);
-        command = "cp ../../Codigo_Bifasico_Slab/simulacoes/dev/out/resultadoVazaoOleo.dat Output/"+to_string(idIteration)+"/vazaoOleo_"+to_string(i)+".dat";
+        command = "cp ../../Codigo_Bifasico_Slab/simulacoes/dev/out/resultadoVazaoOleo.dat ../Output/"+to_string(idIteration)+"/vazaoOleo_"+to_string(i)+".dat";
         file = (char*) command.c_str();
         system(file);
     }
