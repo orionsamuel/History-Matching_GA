@@ -1,4 +1,4 @@
-#include "genetic.hpp"
+#include "../include/genetic.hpp"
 
 genetic_algorithm::genetic_algorithm(){
     srand (time(0));
@@ -9,10 +9,10 @@ genetic_algorithm::~genetic_algorithm(){
 }
 
 void genetic_algorithm::init(){    
-    system("rm -r -f Output/*");
+    system("rm -r -f ../Output/*");
 
-    ifstream result_water("Input/resultadoVazaoAgua.dat", ios::in);
-    ifstream result_oil("Input/resultadoVazaoOleo.dat", ios::in);
+    ifstream result_water("../Input/resultadoVazaoAgua.dat", ios::in);
+    ifstream result_oil("../Input/resultadoVazaoOleo.dat", ios::in);
 
     string line, line2, content, content2;
 
@@ -47,19 +47,19 @@ void genetic_algorithm::init(){
 }
 
 void genetic_algorithm::firstPopulation(){
-    DIR* dp = opendir("Output/0");
+    DIR* dp = opendir("../Output/0");
 
     if(dp == NULL){
-        system("mkdir Output/0");
+        system("mkdir ../Output/0");
     }else{
-        system("rm -f Output/0/*");
+        system("rm -f ../Output/0/*");
     }
 
     vector<individual> dataset;
 
     //Leitura do dataset e criação do arquivo da população 0
-    ifstream read_input("Dataset/history_matching.csv", ios::in);
-    ofstream write_output("Output/0/0.csv", ios::out);
+    ifstream read_input("../Dataset/history_matching.csv", ios::in);
+    ofstream write_output("../Output/0/0.csv", ios::out);
 
     string line;
 
@@ -100,7 +100,7 @@ void genetic_algorithm::firstPopulation(){
 
     write_output.close();
 
-    ifstream read_csv("Output/0/0.csv", ios::in);
+    ifstream read_csv("../Output/0/0.csv", ios::in);
 
     string decimal[2];
     line = "";
@@ -135,10 +135,10 @@ void genetic_algorithm::firstPopulation(){
     this->min_permeability[1] = stod(minPermeability[1]);
     this->max_permeability[1] = stod(maxPermeability[1]);
 
-    system("rm Output/0/0.csv");
+    system("rm ../Output/0/0.csv");
 
     for(int i = 0; i < SIZE_POPULATION; i++){
-        string command = "cp Input/inputDS.dat Output/0/inputDS_"+to_string(i)+".dat";
+        string command = "cp ../Input/inputDS.dat Output/0/inputDS_"+to_string(i)+".dat";
         const char* file = (char*) command.c_str();
         system(file);
     }
@@ -167,8 +167,8 @@ void genetic_algorithm::firstPopulation(){
     }
 
     for(int i = 0; i < SIZE_POPULATION; i++){
-        ifstream read_input("Output/0/inputDS_"+to_string(i)+".dat", ios::in);
-        ofstream write_input("inputDS_"+to_string(i)+".dat", ios::out);
+        ifstream read_input("../Output/0/inputDS_"+to_string(i)+".dat", ios::in);
+        ofstream write_input("../inputDS_"+to_string(i)+".dat", ios::out);
         int count = 0;
         line = "";
         while(!read_input.eof()){
@@ -197,7 +197,7 @@ void genetic_algorithm::firstPopulation(){
         read_input.close();
         write_input.close();
 
-        string command = "mv inputDS_"+to_string(i)+".dat Output/0/";
+        string command = "mv ../inputDS_"+to_string(i)+".dat Output/0/";
         const char* file = (char*) command.c_str();
         system(file);
     }
@@ -206,7 +206,7 @@ void genetic_algorithm::firstPopulation(){
     fitness(0);
     sort(begin(this->population), end(this->population), compare);
 
-    ofstream write_error("Output/0/error.txt", ios::out);
+    ofstream write_error("../Output/0/error.txt", ios::out);
     
     for(int i = 0; i < SIZE_POPULATION; i++){
         write_error << scientific << this->population[i].error_rank << endl;
@@ -215,8 +215,8 @@ void genetic_algorithm::firstPopulation(){
     write_error.close();
 
     for(int i = 0; i < SIZE_POPULATION; i++){
-        ifstream read_input("Output/0/inputDS_"+to_string(i)+".dat", ios::in);
-        ofstream write_input("inputDS_"+to_string(i)+".dat", ios::out);
+        ifstream read_input("../Output/0/inputDS_"+to_string(i)+".dat", ios::in);
+        ofstream write_input("../inputDS_"+to_string(i)+".dat", ios::out);
         int count = 0;
         line = "";
         while(!read_input.eof()){
@@ -245,7 +245,7 @@ void genetic_algorithm::firstPopulation(){
         read_input.close();
         write_input.close();
 
-        string command = "mv inputDS_"+to_string(i)+".dat Output/0/";
+        string command = "mv ../inputDS_"+to_string(i)+".dat Output/0/";
         const char* file = (char*) command.c_str();
         system(file);
     }
@@ -254,29 +254,29 @@ void genetic_algorithm::firstPopulation(){
 void genetic_algorithm::otherPopulations(int idIteration){
     //crossover();
 
-    string command = "Output/"+to_string(idIteration);
+    string command = "../Output/"+to_string(idIteration);
     const char* file = (char*) command.c_str();
     DIR* dp = opendir(file);
 
     if(dp == NULL){
-        command = "mkdir Output/"+to_string(idIteration);
+        command = "mkdir ../Output/"+to_string(idIteration);
         file = (char*) command.c_str();
         system(file);
     }else{
-        command = "rm -f Output/"+to_string(idIteration)+"/*";
+        command = "rm -f ../Output/"+to_string(idIteration)+"/*";
         file = (char*) command.c_str();
         system(file);
     }
 
     for(int i = 0; i < SIZE_POPULATION; i++){
-        string command = "cp Input/inputDS.dat Output/"+to_string(idIteration)+"/inputDS_"+to_string(i)+".dat";
+        string command = "cp ../Input/inputDS.dat Output/"+to_string(idIteration)+"/inputDS_"+to_string(i)+".dat";
         const char* file = (char*) command.c_str();
         system(file);
     }
 
     for(int i = 0; i < SIZE_POPULATION; i++){
-        ifstream read_input("Output/"+to_string(idIteration)+"/inputDS_"+to_string(i)+".dat", ios::in);
-        ofstream write_input("inputDS_"+to_string(i)+".dat", ios::out);
+        ifstream read_input("../Output/"+to_string(idIteration)+"/inputDS_"+to_string(i)+".dat", ios::in);
+        ofstream write_input("../inputDS_"+to_string(i)+".dat", ios::out);
         int count = 0;
         string line;
         while(!read_input.eof()){
@@ -305,7 +305,7 @@ void genetic_algorithm::otherPopulations(int idIteration){
         read_input.close();
         write_input.close();
 
-        string command = "mv inputDS_"+to_string(i)+".dat Output/"+to_string(idIteration)+"/";
+        string command = "mv ../inputDS_"+to_string(i)+".dat Output/"+to_string(idIteration)+"/";
         const char* file = (char*) command.c_str();
         system(file);
     }
@@ -314,7 +314,7 @@ void genetic_algorithm::otherPopulations(int idIteration){
     fitness(idIteration);
     sort(begin(this->population), end(this->population), compare);
 
-    ofstream write_error("Output/"+to_string(idIteration)+"/error.txt", ios::out);
+    ofstream write_error("../Output/"+to_string(idIteration)+"/error.txt", ios::out);
     
     for(int i = 0; i < SIZE_POPULATION; i++){
         write_error << scientific << this->population[i].error_rank << endl;
@@ -323,8 +323,8 @@ void genetic_algorithm::otherPopulations(int idIteration){
     write_error.close();
 
     for(int i = 0; i < SIZE_POPULATION; i++){
-        ifstream read_input("Output/"+to_string(idIteration)+"/inputDS_"+to_string(i)+".dat", ios::in);
-        ofstream write_input("inputDS_"+to_string(i)+".dat", ios::out);
+        ifstream read_input("../Output/"+to_string(idIteration)+"/inputDS_"+to_string(i)+".dat", ios::in);
+        ofstream write_input("../inputDS_"+to_string(i)+".dat", ios::out);
         int count = 0;
         string line;
         while(!read_input.eof()){
@@ -353,7 +353,7 @@ void genetic_algorithm::otherPopulations(int idIteration){
         read_input.close();
         write_input.close();
 
-        string command = "mv inputDS_"+to_string(i)+".dat Output/"+to_string(idIteration)+"/";
+        string command = "mv ../inputDS_"+to_string(i)+".dat Output/"+to_string(idIteration)+"/";
         const char* file = (char*) command.c_str();
         system(file);
     }
@@ -364,8 +364,8 @@ void genetic_algorithm::fitness(int idIteration){
     for(int i = 0; i < SIZE_POPULATION; i++){
         double rank;
 
-        ifstream result_water("Output/"+to_string(idIteration)+"/vazaoAgua_"+to_string(i)+".dat", ios::in);
-        ifstream result_oil("Output/"+to_string(idIteration)+"/vazaoOleo_"+to_string(i)+".dat", ios::in);
+        ifstream result_water("../Output/"+to_string(idIteration)+"/vazaoAgua_"+to_string(i)+".dat", ios::in);
+        ifstream result_oil("../Output/"+to_string(idIteration)+"/vazaoOleo_"+to_string(i)+".dat", ios::in);
 
         string line, line2, content, content2;
 

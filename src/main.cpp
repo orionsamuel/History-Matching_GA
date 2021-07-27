@@ -1,5 +1,5 @@
 #include <iostream>
-#include "genetic.hpp"
+#include "../include/genetic.hpp"
 
 int main(){
     genetic_algorithm ga;
