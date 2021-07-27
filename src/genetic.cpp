@@ -138,7 +138,7 @@ void genetic_algorithm::firstPopulation(){
     system("rm ../Output/0/0.csv");
 
     for(int i = 0; i < SIZE_POPULATION; i++){
-        string command = "cp ../Input/inputDS.dat Output/0/inputDS_"+to_string(i)+".dat";
+        string command = "cp ../Input/inputDS.dat ../Output/0/inputDS_"+to_string(i)+".dat";
         const char* file = (char*) command.c_str();
         system(file);
     }
@@ -197,7 +197,7 @@ void genetic_algorithm::firstPopulation(){
         read_input.close();
         write_input.close();
 
-        string command = "mv ../inputDS_"+to_string(i)+".dat Output/0/";
+        string command = "mv ../inputDS_"+to_string(i)+".dat ../Output/0/";
         const char* file = (char*) command.c_str();
         system(file);
     }
@@ -245,7 +245,7 @@ void genetic_algorithm::firstPopulation(){
         read_input.close();
         write_input.close();
 
-        string command = "mv ../inputDS_"+to_string(i)+".dat Output/0/";
+        string command = "mv ../inputDS_"+to_string(i)+".dat ../Output/0/";
         const char* file = (char*) command.c_str();
         system(file);
     }
@@ -269,7 +269,7 @@ void genetic_algorithm::otherPopulations(int idIteration){
     }
 
     for(int i = 0; i < SIZE_POPULATION; i++){
-        string command = "cp ../Input/inputDS.dat Output/"+to_string(idIteration)+"/inputDS_"+to_string(i)+".dat";
+        string command = "cp ../Input/inputDS.dat ../Output/"+to_string(idIteration)+"/inputDS_"+to_string(i)+".dat";
         const char* file = (char*) command.c_str();
         system(file);
     }
@@ -305,7 +305,7 @@ void genetic_algorithm::otherPopulations(int idIteration){
         read_input.close();
         write_input.close();
 
-        string command = "mv ../inputDS_"+to_string(i)+".dat Output/"+to_string(idIteration)+"/";
+        string command = "mv ../inputDS_"+to_string(i)+".dat ../Output/"+to_string(idIteration)+"/";
         const char* file = (char*) command.c_str();
         system(file);
     }
@@ -353,7 +353,7 @@ void genetic_algorithm::otherPopulations(int idIteration){
         read_input.close();
         write_input.close();
 
-        string command = "mv ../inputDS_"+to_string(i)+".dat Output/"+to_string(idIteration)+"/";
+        string command = "mv ../inputDS_"+to_string(i)+".dat ../Output/"+to_string(idIteration)+"/";
         const char* file = (char*) command.c_str();
         system(file);
     }
