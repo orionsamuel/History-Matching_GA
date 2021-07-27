@@ -9,6 +9,11 @@ genetic_algorithm::~genetic_algorithm(){
 }
 
 void genetic_algorithm::init(){    
+    DIR* dp = opendir("../Output/");
+
+    if(dp == NULL){
+        system("mkdir ../Output/");
+    }
     system("rm -r -f ../Output/*");
 
     ifstream result_water("../Input/resultadoVazaoAgua.dat", ios::in);
