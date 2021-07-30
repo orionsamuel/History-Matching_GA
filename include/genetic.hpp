@@ -16,7 +16,7 @@ using namespace std;
 
 class genetic_algorithm: public functions{
     private:
-    individual population[SIZE_POPULATION];
+    vector<individual> population;
     result* real_results;
     individual children[((SIZE_POPULATION * CROSSOVER_RATE) / 100)];
     int crossover_rate = ((SIZE_POPULATION * CROSSOVER_RATE) / 100);

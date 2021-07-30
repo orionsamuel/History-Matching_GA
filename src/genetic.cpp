@@ -76,7 +76,6 @@ void genetic_algorithm::firstPopulation(){
             write_output << line << endl;
         }else if(count < 1801){
             vector<string> v{split(line, ',')};
-            dataset[0].porosity[0];
             dataset.push_back({{stod(v[0]),stod(v[4]),stod(v[8]),stod(v[12]),stod(v[16])}, 
             {stod(v[1]),stod(v[5]),stod(v[9]),stod(v[13]),stod(v[17])}, 
             {stod(v[2]),stod(v[6]),stod(v[10]),stod(v[14]),stod(v[18])}, 
@@ -149,37 +148,8 @@ void genetic_algorithm::firstPopulation(){
     }
 
     for(int i = 0; i < SIZE_POPULATION; i++){
-        for(int j = 0; j < 5; j++){
-            this->population[i].porosity[j] = dataset[i].porosity[j];
-            this->population[i].permeability_1[j] = dataset[i].permeability_1[j];
-            this->population[i].permeability_2[j] = dataset[i].permeability_2[j];
-            this->population[i].permeability_3[j] = dataset[i].permeability_3[j];
-            this->population[i].error_rank = dataset[i].error_rank;
-        }
+        population.push_back(dataset[i]);
     }
-
-    /*for(int i = 0; i < SIZE_POPULATION; i++){
-        this->population[i].porosity[0] = rand_double(MIN_POROSITY, MAX_POROSITY);
-        this->population[i].porosity[1] = dataset[i].porosity[1];
-        this->population[i].porosity[2] = rand_double(MIN_POROSITY, MAX_POROSITY);
-        this->population[i].porosity[3] = rand_double(MIN_POROSITY, MAX_POROSITY);
-        this->population[i].porosity[4] = rand_double(MIN_POROSITY, MAX_POROSITY);
-        this->population[i].permeability_1[0] = rand_double(this->min_permeability[0], this->max_permeability[0]);
-        this->population[i].permeability_1[1] = dataset[i].permeability_1[1];
-        this->population[i].permeability_1[2] = rand_double(this->min_permeability[1], this->max_permeability[1]);
-        this->population[i].permeability_1[3] = rand_double(this->min_permeability[1], this->max_permeability[1]);
-        this->population[i].permeability_1[4] = rand_double(this->min_permeability[0], this->max_permeability[0]);
-        this->population[i].permeability_2[0] = rand_double(this->min_permeability[0], this->max_permeability[0]);
-        this->population[i].permeability_2[1] = dataset[i].permeability_2[1];
-        this->population[i].permeability_2[2] = rand_double(this->min_permeability[1], this->max_permeability[1]);
-        this->population[i].permeability_2[3] = rand_double(this->min_permeability[1], this->max_permeability[1]);
-        this->population[i].permeability_2[4] = rand_double(this->min_permeability[0], this->max_permeability[0]);
-        this->population[i].permeability_3[0] = rand_double(this->min_permeability[0], this->max_permeability[0]);
-        this->population[i].permeability_3[1] = dataset[i].permeability_3[1];
-        this->population[i].permeability_3[2] = rand_double(this->min_permeability[1], this->max_permeability[1]);
-        this->population[i].permeability_3[3] = rand_double(this->min_permeability[1], this->max_permeability[1]);
-        this->population[i].permeability_3[4] = rand_double(this->min_permeability[0], this->max_permeability[0]);
-    }*/
 
     for(int i = 0; i < SIZE_POPULATION; i++){
         ifstream read_input("../Output/0/inputDS_"+to_string(i)+".dat", ios::in);
@@ -216,10 +186,6 @@ void genetic_algorithm::firstPopulation(){
         const char* file = (char*) command.c_str();
         system(file);
     }
-
-    /*simulation(0);
-    fitness(0);
-    sort(begin(this->population), end(this->population), compare);*/
 
     ofstream write_error("../Output/0/error.txt", ios::out);
     
@@ -229,41 +195,6 @@ void genetic_algorithm::firstPopulation(){
 
     write_error.close();
 
-    /*for(int i = 0; i < SIZE_POPULATION; i++){
-        ifstream read_input("../Output/0/inputDS_"+to_string(i)+".dat", ios::in);
-        ofstream write_input("../inputDS_"+to_string(i)+".dat", ios::out);
-        int count = 0;
-        line = "";
-        while(!read_input.eof()){
-            getline(read_input, line);
-            if(count == 142){
-                vector<string> v{split(line, ' ')};
-                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[0] << "   " << this->population[i].permeability_1[0] << "   " << this->population[i].permeability_2[0] << "   " << this->population[i].permeability_3[0] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
-            }else if(count == 143){
-                vector<string> v{split(line, ' ')};
-                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[1] << "   " << this->population[i].permeability_1[1] << "   " << this->population[i].permeability_2[1] << "   " << this->population[i].permeability_3[1] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
-            }else if(count == 144){
-                vector<string> v{split(line, ' ')};
-                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[2] << "   " << this->population[i].permeability_1[2] << "   " << this->population[i].permeability_2[2] << "   " << this->population[i].permeability_3[2] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
-            }else if(count == 145){
-                vector<string> v{split(line, ' ')};
-                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[3] << "   " << this->population[i].permeability_1[3] << "   " << this->population[i].permeability_2[3] << "   " << this->population[i].permeability_3[3] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
-            }else if(count == 146){
-                vector<string> v{split(line, ' ')};
-                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[4] << "   " << this->population[i].permeability_1[4] << "   " << this->population[i].permeability_2[4] << "   " << this->population[i].permeability_3[4] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
-            }else{
-                write_input << line << endl;
-            }
-            count++;
-        }
-
-        read_input.close();
-        write_input.close();
-
-        string command = "mv ../inputDS_"+to_string(i)+".dat ../Output/0/";
-        const char* file = (char*) command.c_str();
-        system(file);
-    }*/
 }
 
 void genetic_algorithm::otherPopulations(int idIteration){
@@ -288,15 +219,20 @@ void genetic_algorithm::otherPopulations(int idIteration){
         file = (char*) command.c_str();
         system(file);
     }
-        
 
     for(int i = 0; i < SIZE_POPULATION; i++){
+        string command = "cp ../Output/"+to_string(idIteration-1)+"/inputDS_"+to_string(i)+".dat ../Output/"+to_string(idIteration)+"/inputDS_"+to_string(i)+".dat";
+        const char* file = (char*) command.c_str();
+        system(file);
+    }  
+
+    for(int i = SIZE_POPULATION; i < (SIZE_POPULATION + ((SIZE_POPULATION * CROSSOVER_RATE) / 100)); i++){
         string command = "cp ../Input/inputDS.dat ../Output/"+to_string(idIteration)+"/inputDS_"+to_string(i)+".dat";
         const char* file = (char*) command.c_str();
         system(file);
     }
 
-    for(int i = 0; i < SIZE_POPULATION; i++){
+    for(int i = SIZE_POPULATION; i < (SIZE_POPULATION + ((SIZE_POPULATION * CROSSOVER_RATE) / 100)); i++){
         ifstream read_input("../Output/"+to_string(idIteration)+"/inputDS_"+to_string(i)+".dat", ios::in);
         ofstream write_input("../inputDS_"+to_string(i)+".dat", ios::out);
         int count = 0;
@@ -344,6 +280,20 @@ void genetic_algorithm::otherPopulations(int idIteration){
 
     write_error.close();
 
+    string removeDat = "rm -f ../Output/"+to_string(idIteration)+"/*.dat";
+    const char* remDat = (char*) removeDat.c_str();
+    system(remDat);
+
+    for(int i = 0; i < SIZE_POPULATION; i++){
+        string command = "cp ../Input/inputDS.dat ../Output/"+to_string(idIteration)+"/inputDS_"+to_string(i)+".dat";
+        const char* file = (char*) command.c_str();
+        system(file);
+    }
+
+    for(int i = SIZE_POPULATION; i < (SIZE_POPULATION + ((SIZE_POPULATION * CROSSOVER_RATE) / 100)); i++){
+        this->population.pop_back();
+    }
+
     for(int i = 0; i < SIZE_POPULATION; i++){
         ifstream read_input("../Output/"+to_string(idIteration)+"/inputDS_"+to_string(i)+".dat", ios::in);
         ofstream write_input("../inputDS_"+to_string(i)+".dat", ios::out);
@@ -383,7 +333,7 @@ void genetic_algorithm::otherPopulations(int idIteration){
 
 void genetic_algorithm::fitness(int idIteration){
 
-    for(int i = 0; i < SIZE_POPULATION; i++){
+    for(int i = SIZE_POPULATION; i < (SIZE_POPULATION + ((SIZE_POPULATION * CROSSOVER_RATE) / 100)); i++){
         double rank;
 
         ifstream result_water("../Output/"+to_string(idIteration)+"/agua/vazaoAgua_"+to_string(i)+".dat", ios::in);
@@ -498,17 +448,10 @@ void genetic_algorithm::crossover(){
 
     mutation();
 
-    int count = 0;
-    for(int i = (SIZE_POPULATION - crossover_rate); i < SIZE_POPULATION; i++){
-        for(int j = 0; j < 5; j++){
-            this->population[i].porosity[j] = this->children[count].porosity[j];
-            this->population[i].permeability_1[j] = this->children[count].permeability_1[j];
-            this->population[i].permeability_2[j] = this->children[count].permeability_2[j];
-            this->population[i].permeability_3[j] = this->children[count].permeability_3[j];
-        }
-        count++;
+    for(int i = 0; i < ((SIZE_POPULATION * CROSSOVER_RATE) / 100); i++){
+        this->population.push_back(children[i]);
     }
-    
+
 }
 
 void genetic_algorithm::mutation(){

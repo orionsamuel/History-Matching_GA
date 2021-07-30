@@ -2,7 +2,7 @@
 
 void functions::simulation(int idIteration){
     system("rm -f ../Output/output_simulation");
-    for(int i = 0; i < SIZE_POPULATION; i++){
+    for(int i = SIZE_POPULATION; i < (SIZE_POPULATION + ((SIZE_POPULATION * CROSSOVER_RATE) / 100)); i++){
         cout << "Executando a simulação no indivíduo " << i << " da iteração " << idIteration << endl;
         string command = "cp ../Output/"+to_string(idIteration)+"/inputDS_"+to_string(i)+".dat ../../Codigo_Bifasico_Slab/simulacoes/dev/inputDS.dat";
         const char* file = (char*) command.c_str();
