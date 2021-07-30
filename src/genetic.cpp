@@ -131,9 +131,9 @@ void genetic_algorithm::firstPopulation(){
     string minPermeability[2];
     string maxPermeability[2];
     minPermeability[0] = "1.000000e-"+decimal[0];
-    maxPermeability[0] = "4.000000e-"+decimal[0];
+    maxPermeability[0] = "3.000000e-"+decimal[0];
     minPermeability[1] = "1.000000e-"+decimal[1];
-    maxPermeability[1] = "4.000000e-"+decimal[1];
+    maxPermeability[1] = "3.000000e-"+decimal[1];
 
     this->min_permeability[0] = stod(minPermeability[0]);
     this->max_permeability[0] = stod(maxPermeability[0]);
@@ -149,6 +149,16 @@ void genetic_algorithm::firstPopulation(){
     }
 
     for(int i = 0; i < SIZE_POPULATION; i++){
+        for(int j = 0; j < 5; j++){
+            this->population[i].porosity[j] = dataset[i].porosity[j];
+            this->population[i].permeability_1[j] = dataset[i].permeability_1[j];
+            this->population[i].permeability_2[j] = dataset[i].permeability_2[j];
+            this->population[i].permeability_3[j] = dataset[i].permeability_3[j];
+            this->population[i].error_rank = dataset[i].error_rank;
+        }
+    }
+
+    /*for(int i = 0; i < SIZE_POPULATION; i++){
         this->population[i].porosity[0] = rand_double(MIN_POROSITY, MAX_POROSITY);
         this->population[i].porosity[1] = dataset[i].porosity[1];
         this->population[i].porosity[2] = rand_double(MIN_POROSITY, MAX_POROSITY);
@@ -169,7 +179,7 @@ void genetic_algorithm::firstPopulation(){
         this->population[i].permeability_3[2] = rand_double(this->min_permeability[1], this->max_permeability[1]);
         this->population[i].permeability_3[3] = rand_double(this->min_permeability[1], this->max_permeability[1]);
         this->population[i].permeability_3[4] = rand_double(this->min_permeability[0], this->max_permeability[0]);
-    }
+    }*/
 
     for(int i = 0; i < SIZE_POPULATION; i++){
         ifstream read_input("../Output/0/inputDS_"+to_string(i)+".dat", ios::in);
@@ -207,9 +217,9 @@ void genetic_algorithm::firstPopulation(){
         system(file);
     }
 
-    simulation(0);
+    /*simulation(0);
     fitness(0);
-    sort(begin(this->population), end(this->population), compare);
+    sort(begin(this->population), end(this->population), compare);*/
 
     ofstream write_error("../Output/0/error.txt", ios::out);
     
@@ -219,7 +229,7 @@ void genetic_algorithm::firstPopulation(){
 
     write_error.close();
 
-    for(int i = 0; i < SIZE_POPULATION; i++){
+    /*for(int i = 0; i < SIZE_POPULATION; i++){
         ifstream read_input("../Output/0/inputDS_"+to_string(i)+".dat", ios::in);
         ofstream write_input("../inputDS_"+to_string(i)+".dat", ios::out);
         int count = 0;
@@ -253,11 +263,11 @@ void genetic_algorithm::firstPopulation(){
         string command = "mv ../inputDS_"+to_string(i)+".dat ../Output/0/";
         const char* file = (char*) command.c_str();
         system(file);
-    }
+    }*/
 }
 
 void genetic_algorithm::otherPopulations(int idIteration){
-    //crossover();
+    crossover();
 
     string command = "../Output/"+to_string(idIteration);
     const char* file = (char*) command.c_str();
@@ -265,13 +275,20 @@ void genetic_algorithm::otherPopulations(int idIteration){
 
     if(dp == NULL){
         command = "mkdir ../Output/"+to_string(idIteration);
+        string command2 = "mkdir ../Output/"+to_string(idIteration)+"/agua";
+        string command3 = "mkdir ../Output/"+to_string(idIteration)+"/oleo";
         file = (char*) command.c_str();
+        const char* file2 = (char*) command2.c_str();
+        const char* file3 = (char*) command3.c_str();
         system(file);
+        system(file2);
+        system(file3);
     }else{
         command = "rm -f ../Output/"+to_string(idIteration)+"/*";
         file = (char*) command.c_str();
         system(file);
     }
+        
 
     for(int i = 0; i < SIZE_POPULATION; i++){
         string command = "cp ../Input/inputDS.dat ../Output/"+to_string(idIteration)+"/inputDS_"+to_string(i)+".dat";
@@ -369,8 +386,8 @@ void genetic_algorithm::fitness(int idIteration){
     for(int i = 0; i < SIZE_POPULATION; i++){
         double rank;
 
-        ifstream result_water("../Output/"+to_string(idIteration)+"/vazaoAgua_"+to_string(i)+".dat", ios::in);
-        ifstream result_oil("../Output/"+to_string(idIteration)+"/vazaoOleo_"+to_string(i)+".dat", ios::in);
+        ifstream result_water("../Output/"+to_string(idIteration)+"/agua/vazaoAgua_"+to_string(i)+".dat", ios::in);
+        ifstream result_oil("../Output/"+to_string(idIteration)+"/oleo/vazaoOleo_"+to_string(i)+".dat", ios::in);
 
         string line, line2, content, content2;
 

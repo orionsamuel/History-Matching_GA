@@ -14,7 +14,7 @@ struct result{
 #define SIZE_POPULATION 10
 #define N_GENERATIONS 3
 
-#define CROSSOVER_RATE 40
+#define CROSSOVER_RATE 80
 #define MUTATION_RATE 50
 
 #define MIN_POROSITY 1.0000000E-01

@@ -2,7 +2,7 @@ GCC = g++
 GCC_FLAGS = -I include -std=c++11 -g
 EXECUTABLE = exec
 
-all: $(EXECUTABLE)
+all: clean $(EXECUTABLE)
 
 $(EXECUTABLE): functions.o genetic.o main.o
 	$(GCC) $(GCC_FLAGS) -o build/$(EXECUTABLE) main.o genetic.o functions.o 
@@ -18,4 +18,4 @@ functions.o: src/functions.cpp include/functions.hpp include/utils.hpp
 
 clean:
 	rm -f *.o
-	rm $(EXECUTABLE)
+	rm -f build/$(EXECUTABLE)
