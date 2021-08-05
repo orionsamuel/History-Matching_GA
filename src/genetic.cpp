@@ -13,8 +13,9 @@ void genetic_algorithm::init(){
 
     if(dp == NULL){
         system("mkdir ../Output/");
+    }else{
+        system("rm -r -f ../Output/*");
     }
-    system("rm -r -f ../Output/*");
 
     ifstream result_water("../Input/resultadoVazaoAgua.dat", ios::in);
     ifstream result_oil("../Input/resultadoVazaoOleo.dat", ios::in);
@@ -55,9 +56,19 @@ void genetic_algorithm::firstPopulation(){
     DIR* dp = opendir("../Output/0");
 
     if(dp == NULL){
-        system("mkdir ../Output/0");
+        string command = "mkdir ../Output/0";
+        string command2 = "mkdir ../Output/0/agua";
+        string command3 = "mkdir ../Output/0/oleo";
+        const char* file = (char*) command.c_str();
+        const char* file2 = (char*) command2.c_str();
+        const char* file3 = (char*) command3.c_str();
+        system(file);
+        system(file2);
+        system(file3);
     }else{
-        system("rm -f ../Output/0/*");
+        string command = "rm -f ../Output/0/*";
+        const char* file = (char*) command.c_str();
+        system(file);
     }
 
     vector<individual> dataset;
@@ -67,14 +78,14 @@ void genetic_algorithm::firstPopulation(){
     ofstream write_output("../Output/0/0.csv", ios::out);
 
     string line;
-
+    
     //Passando os valores contidos no arquivo para um vector do tipo individuo
     int count = 0;
     while(!read_input.eof()){
         getline(read_input, line);
         if(count == 0){
             write_output << line << endl;
-        }else if(count < 1801){
+        }else if(count < 301){
             vector<string> v{split(line, ',')};
             dataset.push_back({{stod(v[0]),stod(v[4]),stod(v[8]),stod(v[12]),stod(v[16])}, 
             {stod(v[1]),stod(v[5]),stod(v[9]),stod(v[13]),stod(v[17])}, 
@@ -83,9 +94,9 @@ void genetic_algorithm::firstPopulation(){
         }
         count++;        
     }
-
+    
     read_input.close();
-
+    
     sort(begin(dataset), end(dataset), compare);
 
     for(int i = 0; i < SIZE_POPULATION; i++){
@@ -149,6 +160,30 @@ void genetic_algorithm::firstPopulation(){
 
     for(int i = 0; i < SIZE_POPULATION; i++){
         population.push_back(dataset[i]);
+        population[i].error_rank = 0;
+    }
+
+    for(int i = 0; i < SIZE_POPULATION; i++){
+        this->population[i].porosity[0] = rand_double(MIN_POROSITY, MAX_POROSITY);
+        this->population[i].porosity[1] = dataset[i].porosity[1];
+        this->population[i].porosity[2] = rand_double(MIN_POROSITY, MAX_POROSITY);
+        this->population[i].porosity[3] = rand_double(MIN_POROSITY, MAX_POROSITY);
+        this->population[i].porosity[4] = rand_double(MIN_POROSITY, MAX_POROSITY);
+        this->population[i].permeability_1[0] = rand_double(this->min_permeability[0], this->max_permeability[0]);
+        this->population[i].permeability_1[1] = dataset[i].permeability_1[1];
+        this->population[i].permeability_1[2] = rand_double(this->min_permeability[1], this->max_permeability[1]);
+        this->population[i].permeability_1[3] = rand_double(this->min_permeability[1], this->max_permeability[1]);
+        this->population[i].permeability_1[4] = rand_double(this->min_permeability[0], this->max_permeability[0]);
+        this->population[i].permeability_2[0] = rand_double(this->min_permeability[0], this->max_permeability[0]);
+        this->population[i].permeability_2[1] = dataset[i].permeability_2[1];
+        this->population[i].permeability_2[2] = rand_double(this->min_permeability[1], this->max_permeability[1]);
+        this->population[i].permeability_2[3] = rand_double(this->min_permeability[1], this->max_permeability[1]);
+        this->population[i].permeability_2[4] = rand_double(this->min_permeability[0], this->max_permeability[0]);
+        this->population[i].permeability_3[0] = rand_double(this->min_permeability[0], this->max_permeability[0]);
+        this->population[i].permeability_3[1] = dataset[i].permeability_3[1];
+        this->population[i].permeability_3[2] = rand_double(this->min_permeability[1], this->max_permeability[1]);
+        this->population[i].permeability_3[3] = rand_double(this->min_permeability[1], this->max_permeability[1]);
+        this->population[i].permeability_3[4] = rand_double(this->min_permeability[0], this->max_permeability[0]);
     }
 
     for(int i = 0; i < SIZE_POPULATION; i++){
@@ -187,6 +222,10 @@ void genetic_algorithm::firstPopulation(){
         system(file);
     }
 
+    simulation(0);
+    fitness(0);
+    sort(begin(this->population), end(this->population), compare);
+
     ofstream write_error("../Output/0/error.txt", ios::out);
     
     for(int i = 0; i < SIZE_POPULATION; i++){
@@ -194,6 +233,42 @@ void genetic_algorithm::firstPopulation(){
     }
 
     write_error.close();
+
+    for(int i = 0; i < SIZE_POPULATION; i++){
+        ifstream read_input("../Output/0/inputDS_"+to_string(i)+".dat", ios::in);
+        ofstream write_input("../inputDS_"+to_string(i)+".dat", ios::out);
+        int count = 0;
+        line = "";
+        while(!read_input.eof()){
+            getline(read_input, line);
+            if(count == 142){
+                vector<string> v{split(line, ' ')};
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[0] << "   " << this->population[i].permeability_1[0] << "   " << this->population[i].permeability_2[0] << "   " << this->population[i].permeability_3[0] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+            }else if(count == 143){
+                vector<string> v{split(line, ' ')};
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[1] << "   " << this->population[i].permeability_1[1] << "   " << this->population[i].permeability_2[1] << "   " << this->population[i].permeability_3[1] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+            }else if(count == 144){
+                vector<string> v{split(line, ' ')};
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[2] << "   " << this->population[i].permeability_1[2] << "   " << this->population[i].permeability_2[2] << "   " << this->population[i].permeability_3[2] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+            }else if(count == 145){
+                vector<string> v{split(line, ' ')};
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[3] << "   " << this->population[i].permeability_1[3] << "   " << this->population[i].permeability_2[3] << "   " << this->population[i].permeability_3[3] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+            }else if(count == 146){
+                vector<string> v{split(line, ' ')};
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[4] << "   " << this->population[i].permeability_1[4] << "   " << this->population[i].permeability_2[4] << "   " << this->population[i].permeability_3[4] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+            }else{
+                write_input << line << endl;
+            }
+            count++;
+        }
+
+        read_input.close();
+        write_input.close();
+
+        string command = "mv ../inputDS_"+to_string(i)+".dat ../Output/0/";
+        const char* file = (char*) command.c_str();
+        system(file);
+    }
 
 }
 
@@ -332,55 +407,106 @@ void genetic_algorithm::otherPopulations(int idIteration){
 }
 
 void genetic_algorithm::fitness(int idIteration){
+    if(idIteration == 0){
+        for(int i = 0; i < SIZE_POPULATION; i++){
+            double rank;
 
-    for(int i = SIZE_POPULATION; i < (SIZE_POPULATION + ((SIZE_POPULATION * CROSSOVER_RATE) / 100)); i++){
-        double rank;
+            ifstream result_water("../Output/"+to_string(idIteration)+"/agua/vazaoAgua_"+to_string(i)+".dat", ios::in);
+            ifstream result_oil("../Output/"+to_string(idIteration)+"/oleo/vazaoOleo_"+to_string(i)+".dat", ios::in);
 
-        ifstream result_water("../Output/"+to_string(idIteration)+"/agua/vazaoAgua_"+to_string(i)+".dat", ios::in);
-        ifstream result_oil("../Output/"+to_string(idIteration)+"/oleo/vazaoOleo_"+to_string(i)+".dat", ios::in);
+            string line, line2, content, content2;
 
-        string line, line2, content, content2;
+            while(!result_water.eof() && !result_oil.eof()){
+                getline(result_water, line);
+                getline(result_oil, line2);
 
-        while(!result_water.eof() && !result_oil.eof()){
-            getline(result_water, line);
-            getline(result_oil, line2);
+                content += line;
+                content += " ";
+                content2 += line2;
+                content2 += " ";
+            }
 
-            content += line;
-            content += " ";
-            content2 += line2;
-            content2 += " ";
+            result_water.close();
+            result_oil.close();
+
+            vector<string> v{split(content, ' ')};
+            vector<string> v2{split(content2, ' ')};
+
+            result simulate_results[v.size()];
+
+            for(int j = 0; j < v.size(); j++){
+                simulate_results[j].water = stod(v[j]);
+                simulate_results[j].oil = stod(v2[j]);
+            }
+
+            for(int j = 0; j < N_METRICS; j++){
+                if(j == 0){
+                    for(int k = 0; k < v.size(); k++){
+                        rank += pow((this->real_results[k].water - simulate_results[k].water),2);
+                    }
+                    rank *= WATER_WEIGHT;
+                }else if(j == 1){
+                    for(int k = 0; k < v.size(); k++){
+                        rank += pow((this->real_results[k].oil - simulate_results[k].oil),2);
+                    }
+                    rank *= OIL_WEIGHT;
+                }           
+            }
+
+            rank = sqrt((rank / (v.size() * 2)));
+
+            this->population[i].error_rank = rank;
         }
+    }else{
+        for(int i = SIZE_POPULATION; i < (SIZE_POPULATION + ((SIZE_POPULATION * CROSSOVER_RATE) / 100)); i++){
+            double rank;
 
-        result_water.close();
-        result_oil.close();
+            ifstream result_water("../Output/"+to_string(idIteration)+"/agua/vazaoAgua_"+to_string(i)+".dat", ios::in);
+            ifstream result_oil("../Output/"+to_string(idIteration)+"/oleo/vazaoOleo_"+to_string(i)+".dat", ios::in);
 
-        vector<string> v{split(content, ' ')};
-        vector<string> v2{split(content2, ' ')};
+            string line, line2, content, content2;
 
-        result simulate_results[v.size()];
+            while(!result_water.eof() && !result_oil.eof()){
+                getline(result_water, line);
+                getline(result_oil, line2);
 
-        for(int j = 0; j < v.size(); j++){
-            simulate_results[j].water = stod(v[j]);
-            simulate_results[j].oil = stod(v2[j]);
+                content += line;
+                content += " ";
+                content2 += line2;
+                content2 += " ";
+            }
+
+            result_water.close();
+            result_oil.close();
+
+            vector<string> v{split(content, ' ')};
+            vector<string> v2{split(content2, ' ')};
+
+            result simulate_results[v.size()];
+
+            for(int j = 0; j < v.size(); j++){
+                simulate_results[j].water = stod(v[j]);
+                simulate_results[j].oil = stod(v2[j]);
+            }
+
+            for(int j = 0; j < N_METRICS; j++){
+                if(j == 0){
+                    for(int k = 0; k < v.size(); k++){
+                        rank += pow((this->real_results[k].water - simulate_results[k].water),2);
+                    }
+                    rank *= WATER_WEIGHT;
+                }else if(j == 1){
+                    for(int k = 0; k < v.size(); k++){
+                        rank += pow((this->real_results[k].oil - simulate_results[k].oil),2);
+                    }
+                    rank *= OIL_WEIGHT;
+                }           
+            }
+
+            rank = sqrt((rank / (v.size() * 2)));
+
+            this->population[i].error_rank = rank;
         }
-
-        for(int j = 0; j < N_METRICS; j++){
-            if(j == 0){
-                for(int k = 0; k < v.size(); k++){
-                    rank += pow((this->real_results[k].water - simulate_results[k].water),2);
-                }
-                rank *= WATER_WEIGHT;
-            }else if(j == 1){
-                for(int k = 0; k < v.size(); k++){
-                    rank += pow((this->real_results[k].oil - simulate_results[k].oil),2);
-                }
-                rank *= OIL_WEIGHT;
-            }           
-        }
-
-        rank = sqrt((rank / (v.size() * 2)));
-
-        this->population[i].error_rank = rank;
     }
 }
 
@@ -448,7 +574,7 @@ void genetic_algorithm::crossover(){
 
     mutation();
 
-    for(int i = 0; i < ((SIZE_POPULATION * CROSSOVER_RATE) / 100); i++){
+    for(int i = 0; i < this->crossover_rate; i++){
         this->population.push_back(children[i]);
     }
 
@@ -466,10 +592,10 @@ void genetic_algorithm::mutation(){
 
         if(percent == 0){
             for(int j = 0; j < 5; j++){
-                valuePorosity = ((this->children[i].porosity[j] * 5) / 100);
-                valuePermeability_1 = ((this->children[i].permeability_1[j] * 5) / 100);
-                valuePermeability_2 = ((this->children[i].permeability_2[j] * 5) / 100);
-                valuePermeability_3 = ((this->children[i].permeability_2[j] * 5) / 100);
+                valuePorosity = ((this->children[i].porosity[j] * 80) / 100);
+                valuePermeability_1 = ((this->children[i].permeability_1[j] * 80) / 100);
+                valuePermeability_2 = ((this->children[i].permeability_2[j] * 80) / 100);
+                valuePermeability_3 = ((this->children[i].permeability_3[j] * 80) / 100);
                 if(j == 1){
                     break;
                 }else if((j == 0) || (j == 4)){
@@ -500,10 +626,10 @@ void genetic_algorithm::mutation(){
             }
         }else if(percent == 1){
             for(int j = 0; j < 5; j++){
-                valuePorosity = ((this->children[i].porosity[j] * 10) / 100);
-                valuePermeability_1 = ((this->children[i].permeability_1[j] * 10) / 100);
-                valuePermeability_2 = ((this->children[i].permeability_2[j] * 10) / 100);
-                valuePermeability_3 = ((this->children[i].permeability_2[j] * 10) / 100);
+                valuePorosity = ((this->children[i].porosity[j] * 90) / 100);
+                valuePermeability_1 = ((this->children[i].permeability_1[j] * 90) / 100);
+                valuePermeability_2 = ((this->children[i].permeability_2[j] * 90) / 100);
+                valuePermeability_3 = ((this->children[i].permeability_3[j] * 90) / 100);
                 if(j == 1){
                     break;
                 }else if((j == 0) || (j == 4)){
@@ -513,7 +639,7 @@ void genetic_algorithm::mutation(){
                         this->children[i].permeability_2[j] = min(this->max_permeability[0], (this->children[i].permeability_2[j] + valuePermeability_2));
                         this->children[i].permeability_3[j] = min(this->max_permeability[0], (this->children[i].permeability_3[j] + valuePermeability_3));
                     }else{
-                        this->children[i].porosity[j] = max(MIN_POROSITY, (this->children[i].porosity[j] + valuePorosity));
+                        this->children[i].porosity[j] = max(MIN_POROSITY, (this->children[i].porosity[j] - valuePorosity));
                         this->children[i].permeability_1[j] = max(this->min_permeability[0], (this->children[i].permeability_1[j] - valuePermeability_1));
                         this->children[i].permeability_2[j] = max(this->min_permeability[0], (this->children[i].permeability_2[j] - valuePermeability_2));
                         this->children[i].permeability_3[j] = max(this->min_permeability[0], (this->children[i].permeability_3[j] - valuePermeability_3));
@@ -525,7 +651,7 @@ void genetic_algorithm::mutation(){
                         this->children[i].permeability_2[j] = min(this->max_permeability[1], (this->children[i].permeability_2[j] + valuePermeability_2));
                         this->children[i].permeability_3[j] = min(this->max_permeability[1], (this->children[i].permeability_3[j] + valuePermeability_3));
                     }else{
-                        this->children[i].porosity[j] = max(MIN_POROSITY, (this->children[i].porosity[j] + valuePorosity));
+                        this->children[i].porosity[j] = max(MIN_POROSITY, (this->children[i].porosity[j] - valuePorosity));
                         this->children[i].permeability_1[j] = max(this->min_permeability[1], (this->children[i].permeability_1[j] - valuePermeability_1));
                         this->children[i].permeability_2[j] = max(this->min_permeability[1], (this->children[i].permeability_2[j] - valuePermeability_2));
                         this->children[i].permeability_3[j] = max(this->min_permeability[1], (this->children[i].permeability_3[j] - valuePermeability_3));
@@ -536,10 +662,10 @@ void genetic_algorithm::mutation(){
             
         }else if(percent == 2){
             for(int j = 0; j < 5; j++){
-                valuePorosity = ((this->children[i].porosity[j] * 20) / 100);
-                valuePermeability_1 = ((this->children[i].permeability_1[j] * 20) / 100);
-                valuePermeability_2 = ((this->children[i].permeability_2[j] * 20) / 100);
-                valuePermeability_3 = ((this->children[i].permeability_2[j] * 20) / 100);
+                valuePorosity = ((this->children[i].porosity[j] * 100) / 100);
+                valuePermeability_1 = ((this->children[i].permeability_1[j] * 100) / 100);
+                valuePermeability_2 = ((this->children[i].permeability_2[j] * 100) / 100);
+                valuePermeability_3 = ((this->children[i].permeability_3[j] * 100) / 100);
                 if(j == 1){
                     break;
                 }else if((j == 0) || (j == 4)){
@@ -549,19 +675,19 @@ void genetic_algorithm::mutation(){
                         this->children[i].permeability_2[j] = min(this->max_permeability[0], (this->children[i].permeability_2[j] + valuePermeability_2));
                         this->children[i].permeability_3[j] = min(this->max_permeability[0], (this->children[i].permeability_3[j] + valuePermeability_3));
                     }else{
-                        this->children[i].porosity[j] = max(MIN_POROSITY, (this->children[i].porosity[j] + valuePorosity));
+                        this->children[i].porosity[j] = max(MIN_POROSITY, (this->children[i].porosity[j] - valuePorosity));
                         this->children[i].permeability_1[j] = max(this->min_permeability[0], (this->children[i].permeability_1[j] - valuePermeability_1));
                         this->children[i].permeability_2[j] = max(this->min_permeability[0], (this->children[i].permeability_2[j] - valuePermeability_2));
                         this->children[i].permeability_3[j] = max(this->min_permeability[0], (this->children[i].permeability_3[j] - valuePermeability_3));
                     }
                 }else if((j == 2) || (j == 3)){
-                    if(tunning = 0){
+                   if(tunning = 0){
                         this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosity));
                         this->children[i].permeability_1[j] = min(this->max_permeability[1], (this->children[i].permeability_1[j] + valuePermeability_1));
                         this->children[i].permeability_2[j] = min(this->max_permeability[1], (this->children[i].permeability_2[j] + valuePermeability_2));
                         this->children[i].permeability_3[j] = min(this->max_permeability[1], (this->children[i].permeability_3[j] + valuePermeability_3));
                     }else{
-                        this->children[i].porosity[j] = max(MIN_POROSITY, (this->children[i].porosity[j] + valuePorosity));
+                        this->children[i].porosity[j] = max(MIN_POROSITY, (this->children[i].porosity[j] - valuePorosity));
                         this->children[i].permeability_1[j] = max(this->min_permeability[1], (this->children[i].permeability_1[j] - valuePermeability_1));
                         this->children[i].permeability_2[j] = max(this->min_permeability[1], (this->children[i].permeability_2[j] - valuePermeability_2));
                         this->children[i].permeability_3[j] = max(this->min_permeability[1], (this->children[i].permeability_3[j] - valuePermeability_3));
