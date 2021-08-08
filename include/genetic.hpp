@@ -17,16 +17,12 @@ using namespace std;
 class genetic_algorithm: public functions{
     private:
     vector<individual> population;
-    vector<individual> dataset;
     result* real_results;
     individual children[((SIZE_POPULATION * CROSSOVER_RATE) / 100)];
     int crossover_rate = ((SIZE_POPULATION * CROSSOVER_RATE) / 100);
     int mutation_rate = ((((SIZE_POPULATION * CROSSOVER_RATE) / 100) * MUTATION_RATE) / 100);
-    double min_permeabilityD[2] = {0,0};
-    double max_permeabilityD[2] = {0,0};
-    int min_permeabilityI[2] = {0,0};
-    int max_permeabilityI[2] = {0,0};
-    string decimal[2];
+    double min_permeability[2] = {0,0};
+    double max_permeability[2] = {0,0};
 
     public:
     genetic_algorithm();

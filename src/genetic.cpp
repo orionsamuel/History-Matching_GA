@@ -277,26 +277,6 @@ void genetic_algorithm::firstPopulation(){
     fitness(0);
     sort(begin(this->population), end(this->population), compare);
 
-    ofstream data("../Dataset/dataset.csv", ios::app);
-
-    data << "Porosity_1" << "," << "Permeability_1.1" << "," << "Permeability_2.1"  << "," << "Permeability_3.1" << "Porosity_2" << "," << "Permeability_1.2" << "," << "Permeability_2.2"  << "," << "Permeability_3.2" << "Porosity_3" << "," << "Permeability_1.3" << "," << "Permeability_2.3"  << "," << "Permeability_3.3" << "Porosity_4" << "," << "Permeability_1.4" << "," << "Permeability_2.4"  << "," << "Permeability_3.4" << "Porosity_5" << "," << "Permeability_1.5" << "," << "Permeability_2.5"  << "," << "Permeability_3.5" << "," << "Error" << endl;
-
-    for(int i = 0; i < SIZE_POPULATION; i++){
-        data << this->population[i].porosity[0] << "," << (this->population[i].permeability_1[0] * 10e-15) << "," << (this->population[i].permeability_2[0] * 10e-15) << "," << (this->population[i].permeability_3[0] * 10e-15) << "," << this->population[i].porosity[1] << "," << this->population[i].permeability_1[1] << "," << this->population[i].permeability_2[1] << "," << this->population[i].permeability_3[1] << "," << this->population[i].porosity[2] << "," << (this->population[i].permeability_1[2] * 10e-15) << "," << (this->population[i].permeability_2[2] * 10e-15) << "," << (this->population[i].permeability_3[2] * 10e-15) << "," << this->population[i].porosity[3] << "," << (this->population[i].permeability_1[3] * 10e-15) << "," << (this->population[i].permeability_2[3] * 10e-15) << "," << (this->population[i].permeability_3[3] * 10e-15) << "," << this->population[i].porosity[4] << "," << (this->population[i].permeability_1[4] * 10e-15) << "," << (this->population[i].permeability_2[4] * 10e-15) << "," << (this->population[i].permeability_3[4] * 10e-15) << "," << this->population[i].error_rank << endl;
-    }
-
-    data.close();
-
-    ofstream data2("../Dataset/dataset2.csv", ios::app);
-
-    data2 << "Porosity_1" << "," << "Permeability_1.1" << "," << "Permeability_2.1"  << "," << "Permeability_3.1" << "Porosity_2" << "," << "Permeability_1.2" << "," << "Permeability_2.2"  << "," << "Permeability_3.2" << "Porosity_3" << "," << "Permeability_1.3" << "," << "Permeability_2.3"  << "," << "Permeability_3.3" << "Porosity_4" << "," << "Permeability_1.4" << "," << "Permeability_2.4"  << "," << "Permeability_3.4" << "Porosity_5" << "," << "Permeability_1.5" << "," << "Permeability_2.5"  << "," << "Permeability_3.5" << "," << "Error" << endl;
-
-    for(int i = 0; i < SIZE_POPULATION; i++){
-        data2 << this->population[i].porosity[0] << "," << this->population[i].permeability_1[0] << "," << this->population[i].permeability_2[0] << "," << this->population[i].permeability_3[0] << "," << this->population[i].porosity[1] << "," << (this->population[i].permeability_1[1] / 10e-15) << "," << (this->population[i].permeability_2[1] / 10e-15) << "," << (this->population[i].permeability_3[1] / 10e-15) << "," << this->population[i].porosity[2] << "," << this->population[i].permeability_1[2] << "," << this->population[i].permeability_2[2] << "," << this->population[i].permeability_3[2] << "," << this->population[i].porosity[3] << "," << this->population[i].permeability_1[3] << "," << this->population[i].permeability_2[3] << "," << this->population[i].permeability_3[3] << "," << this->population[i].porosity[4] << "," << this->population[i].permeability_1[4] << "," << this->population[i].permeability_2[4] << "," << this->population[i].permeability_3[4] << "," << this->population[i].error_rank << endl;
-    }
-
-    data2.close();
-
     ofstream write_error("../Output/0/error.txt", ios::out);
     
     for(int i = 0; i < SIZE_POPULATION; i++){
@@ -417,26 +397,6 @@ void genetic_algorithm::otherPopulations(int idIteration){
     simulation(idIteration);
     fitness(idIteration);
     sort(begin(this->population), end(this->population), compare);
-
-    ofstream data("../Dataset/dataset.csv", ios::app);
-
-    data << "Porosity_1" << "," << "Permeability_1.1" << "," << "Permeability_2.1"  << "," << "Permeability_3.1" << "Porosity_2" << "," << "Permeability_1.2" << "," << "Permeability_2.2"  << "," << "Permeability_3.2" << "Porosity_3" << "," << "Permeability_1.3" << "," << "Permeability_2.3"  << "," << "Permeability_3.3" << "Porosity_4" << "," << "Permeability_1.4" << "," << "Permeability_2.4"  << "," << "Permeability_3.4" << "Porosity_5" << "," << "Permeability_1.5" << "," << "Permeability_2.5"  << "," << "Permeability_3.5" << "," << "Error" << endl;
-
-    for(int i = 0; i < SIZE_POPULATION; i++){
-        data << this->population[i].porosity[0] << "," << (this->population[i].permeability_1[0] * 10e-15) << "," << (this->population[i].permeability_2[0] * 10e-15) << "," << (this->population[i].permeability_3[0] * 10e-15) << "," << this->population[i].porosity[1] << "," << this->population[i].permeability_1[1] << "," << this->population[i].permeability_2[1] << "," << this->population[i].permeability_3[1] << "," << this->population[i].porosity[2] << "," << (this->population[i].permeability_1[2] * 10e-15) << "," << (this->population[i].permeability_2[2] * 10e-15) << "," << (this->population[i].permeability_3[2] * 10e-15) << "," << this->population[i].porosity[3] << "," << (this->population[i].permeability_1[3] * 10e-15) << "," << (this->population[i].permeability_2[3] * 10e-15) << "," << (this->population[i].permeability_3[3] * 10e-15) << "," << this->population[i].porosity[4] << "," << (this->population[i].permeability_1[4] * 10e-15) << "," << (this->population[i].permeability_2[4] * 10e-15) << "," << (this->population[i].permeability_3[4] * 10e-15) << "," << this->population[i].error_rank << endl;
-    }
-
-    data.close();
-
-    ofstream data2("../Dataset/dataset2.csv", ios::app);
-
-    data2 << "Porosity_1" << "," << "Permeability_1.1" << "," << "Permeability_2.1"  << "," << "Permeability_3.1" << "Porosity_2" << "," << "Permeability_1.2" << "," << "Permeability_2.2"  << "," << "Permeability_3.2" << "Porosity_3" << "," << "Permeability_1.3" << "," << "Permeability_2.3"  << "," << "Permeability_3.3" << "Porosity_4" << "," << "Permeability_1.4" << "," << "Permeability_2.4"  << "," << "Permeability_3.4" << "Porosity_5" << "," << "Permeability_1.5" << "," << "Permeability_2.5"  << "," << "Permeability_3.5" << "," << "Error" << endl;
-
-    for(int i = 0; i < SIZE_POPULATION; i++){
-        data2 << this->population[i].porosity[0] << "," << this->population[i].permeability_1[0] << "," << this->population[i].permeability_2[0] << "," << this->population[i].permeability_3[0] << "," << this->population[i].porosity[1] << "," << (this->population[i].permeability_1[1] / 10e-15) << "," << (this->population[i].permeability_2[1] / 10e-15) << "," << (this->population[i].permeability_3[1] / 10e-15) << "," << this->population[i].porosity[2] << "," << this->population[i].permeability_1[2] << "," << this->population[i].permeability_2[2] << "," << this->population[i].permeability_3[2] << "," << this->population[i].porosity[3] << "," << this->population[i].permeability_1[3] << "," << this->population[i].permeability_2[3] << "," << this->population[i].permeability_3[3] << "," << this->population[i].porosity[4] << "," << this->population[i].permeability_1[4] << "," << this->population[i].permeability_2[4] << "," << this->population[i].permeability_3[4] << "," << this->population[i].error_rank << endl;
-    }
-
-    data2.close();
 
     ofstream write_error("../Output/"+to_string(idIteration)+"/error.txt", ios::out);
     

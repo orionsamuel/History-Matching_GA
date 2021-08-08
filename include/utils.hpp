@@ -11,14 +11,15 @@ struct result{
     double oil;
 };
 
-#define SIZE_POPULATION 100
-#define N_GENERATIONS 10
+#define SIZE_POPULATION 3
+#define N_GENERATIONS 5
 
 #define CROSSOVER_RATE 80
 #define MUTATION_RATE 50
 
-#define MIN_POROSITY 0.1
-#define MAX_POROSITY 0.3
+#define MIN_POROSITY 1.0000000E-01
+#define MAX_POROSITY 3.0000000E-01
+
 #define WATER_WEIGHT 0.6
 #define OIL_WEIGHT 0.5
 
