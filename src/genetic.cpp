@@ -53,6 +53,8 @@ void genetic_algorithm::init(){
 }
 
 void genetic_algorithm::firstPopulation(){
+    srand((unsigned)time(0));
+
     DIR* dp = opendir("../Output/0");
 
     if(dp == NULL){
@@ -70,8 +72,6 @@ void genetic_algorithm::firstPopulation(){
         const char* file = (char*) command.c_str();
         system(file);
     }
-
-    vector<individual> dataset;
 
     //Leitura do dataset e criação do arquivo da população 0
     ifstream read_input("../Dataset/history_matching.csv", ios::in);
@@ -117,7 +117,6 @@ void genetic_algorithm::firstPopulation(){
 
     ifstream read_csv("../Output/0/0.csv", ios::in);
 
-    string decimal[2];
     line = "";
     
     //Pega a casa decimal da permeabilidade da menor taxa de erro, para gerar os valores mínimos e máximos de permeabilidade
@@ -137,18 +136,33 @@ void genetic_algorithm::firstPopulation(){
     }
 
     read_csv.close();
-    
-    string minPermeability[2];
-    string maxPermeability[2];
-    minPermeability[0] = "1.000000e-"+decimal[0];
-    maxPermeability[0] = "3.000000e-"+decimal[0];
-    minPermeability[1] = "1.000000e-"+decimal[1];
-    maxPermeability[1] = "3.000000e-"+decimal[1];
 
-    this->min_permeability[0] = stod(minPermeability[0]);
-    this->max_permeability[0] = stod(maxPermeability[0]);
-    this->min_permeability[1] = stod(minPermeability[1]);
-    this->max_permeability[1] = stod(maxPermeability[1]);
+    //Pegando os valores dos expoentes de cada célula para achar os valores mínimos e máximos, fazendo a conversão para mD
+    
+    string cell15 = "1e-"+decimal[0];
+    string cell34 = "1e-"+decimal[1];
+
+    double cell_15 = stod(cell15);
+    double cell_34 = stod(cell34);
+
+    cell_15 = (cell_15 * 1) / 10e-15;
+    cell_34 = (cell_34 * 1) / 10e-15;
+
+    if(stod(decimal[0]) < 14){
+        this->min_permeabilityI[0] = cell_15 - (cell_15 * 0.2);
+        this->max_permeabilityI[0] = cell_15 + (cell_15 * 0.2);
+    }else{
+        this->min_permeabilityD[0] = cell_15 - (cell_15 * 0.2);
+        this->max_permeabilityD[0] = cell_15 + (cell_15 * 0.2);
+    }
+
+    if(stod(decimal[1]) < 14){
+        this->min_permeabilityI[1] = cell_34 - (cell_34 * 0.2);
+        this->max_permeabilityI[1] = cell_34 + (cell_34 * 0.2);
+    }else{
+        this->min_permeabilityD[1] = cell_34 - (cell_34 * 0.2);
+        this->max_permeabilityD[1] = cell_34 + (cell_34 * 0.2);
+    }
 
     system("rm ../Output/0/0.csv");
 
@@ -163,27 +177,64 @@ void genetic_algorithm::firstPopulation(){
         population[i].error_rank = 0;
     }
 
+    //Gerando os valores randômicos da primeira população
+    //Se o decimal for menor que 15, então os valores gerados serão inteiros, senão, serão doubles
+    //Também arredondando os valores double para duas casas decimais
     for(int i = 0; i < SIZE_POPULATION; i++){
         this->population[i].porosity[0] = rand_double(MIN_POROSITY, MAX_POROSITY);
+        this->population[i].porosity[0] = floor(this->population[i].porosity[0] * 100) / 100;
         this->population[i].porosity[1] = dataset[i].porosity[1];
         this->population[i].porosity[2] = rand_double(MIN_POROSITY, MAX_POROSITY);
+        this->population[i].porosity[2] = floor(this->population[i].porosity[2] * 100) / 100;
         this->population[i].porosity[3] = rand_double(MIN_POROSITY, MAX_POROSITY);
+        this->population[i].porosity[3] = floor(this->population[i].porosity[3] * 100) / 100;
         this->population[i].porosity[4] = rand_double(MIN_POROSITY, MAX_POROSITY);
-        this->population[i].permeability_1[0] = rand_double(this->min_permeability[0], this->max_permeability[0]);
+        this->population[i].porosity[4] = floor(this->population[i].porosity[4] * 100) / 100;
+        if(stod(decimal[0]) < 14){
+            this->population[i].permeability_1[0] = rand() % (this->max_permeabilityI[0]-this->min_permeabilityI[0]+1) + this->min_permeabilityI[0];
+            this->population[i].permeability_1[4] = rand() % (this->max_permeabilityI[0]-this->min_permeabilityI[0]+1) + this->min_permeabilityI[0];
+            this->population[i].permeability_2[0] = rand() % (this->max_permeabilityI[0]-this->min_permeabilityI[0]+1) + this->min_permeabilityI[0];
+            this->population[i].permeability_2[4] = rand() % (this->max_permeabilityI[0]-this->min_permeabilityI[0]+1) + this->min_permeabilityI[0];
+            this->population[i].permeability_3[0] = rand() % (this->max_permeabilityI[0]-this->min_permeabilityI[0]+1) + this->min_permeabilityI[0];
+            this->population[i].permeability_3[4] = rand() % (this->max_permeabilityI[0]-this->min_permeabilityI[0]+1) + this->min_permeabilityI[0];
+        }else{
+            this->population[i].permeability_1[0] = rand_double(this->min_permeabilityD[0], this->max_permeabilityD[0]);
+            this->population[i].permeability_1[0] = floor(this->population[i].permeability_1[0] * 100) /100;
+            this->population[i].permeability_1[4] = rand_double(this->min_permeabilityD[0], this->max_permeabilityD[0]);
+            this->population[i].permeability_1[4] = floor(this->population[i].permeability_1[4] * 100) /100;
+            this->population[i].permeability_2[0] = rand_double(this->min_permeabilityD[0], this->max_permeabilityD[0]);
+            this->population[i].permeability_2[0] = floor(this->population[i].permeability_2[0] * 100) /100;
+            this->population[i].permeability_2[4] = rand_double(this->min_permeabilityD[0], this->max_permeabilityD[0]);
+            this->population[i].permeability_2[4] = floor(this->population[i].permeability_2[4] * 100) /100;
+            this->population[i].permeability_3[0] = rand_double(this->min_permeabilityD[0], this->max_permeabilityD[0]);
+            this->population[i].permeability_3[0] = floor(this->population[i].permeability_3[0] * 100) /100;
+            this->population[i].permeability_3[4] = rand_double(this->min_permeabilityD[0], this->max_permeabilityD[0]);
+            this->population[i].permeability_3[4] = floor(this->population[i].permeability_3[4] * 100) /100;
+        }
+        if(stod(decimal[1]) < 14){
+            this->population[i].permeability_1[2] = rand() % (this->max_permeabilityI[1]-this->min_permeabilityI[1]+1) + this->min_permeabilityI[1];
+            this->population[i].permeability_1[3] = rand() % (this->max_permeabilityI[1]-this->min_permeabilityI[1]+1) + this->min_permeabilityI[1];
+            this->population[i].permeability_2[2] = rand() % (this->max_permeabilityI[1]-this->min_permeabilityI[1]+1) + this->min_permeabilityI[1];
+            this->population[i].permeability_2[3] = rand() % (this->max_permeabilityI[1]-this->min_permeabilityI[1]+1) + this->min_permeabilityI[1];
+            this->population[i].permeability_3[2] = rand() % (this->max_permeabilityI[1]-this->min_permeabilityI[1]+1) + this->min_permeabilityI[1];
+            this->population[i].permeability_3[3] = rand() % (this->max_permeabilityI[1]-this->min_permeabilityI[1]+1) + this->min_permeabilityI[1];
+        }else{
+            this->population[i].permeability_1[2] = rand_double(this->min_permeabilityD[0], this->max_permeabilityD[0]);
+            this->population[i].permeability_1[2] = floor(this->population[i].permeability_1[2] * 100) /100;
+            this->population[i].permeability_1[3] = rand_double(this->min_permeabilityD[0], this->max_permeabilityD[0]);
+            this->population[i].permeability_1[3] = floor(this->population[i].permeability_1[3] * 100) /100;
+            this->population[i].permeability_2[2] = rand_double(this->min_permeabilityD[0], this->max_permeabilityD[0]);
+            this->population[i].permeability_2[2] = floor(this->population[i].permeability_2[2] * 100) /100;
+            this->population[i].permeability_2[3] = rand_double(this->min_permeabilityD[0], this->max_permeabilityD[0]);
+            this->population[i].permeability_2[3] = floor(this->population[i].permeability_2[3] * 100) /100;
+            this->population[i].permeability_3[2] = rand_double(this->min_permeabilityD[0], this->max_permeabilityD[0]);
+            this->population[i].permeability_3[2] = floor(this->population[i].permeability_3[2] * 100) /100;
+            this->population[i].permeability_3[3] = rand_double(this->min_permeabilityD[0], this->max_permeabilityD[0]);
+            this->population[i].permeability_3[3] = floor(this->population[i].permeability_3[3] * 100) /100;
+        }
         this->population[i].permeability_1[1] = dataset[i].permeability_1[1];
-        this->population[i].permeability_1[2] = rand_double(this->min_permeability[1], this->max_permeability[1]);
-        this->population[i].permeability_1[3] = rand_double(this->min_permeability[1], this->max_permeability[1]);
-        this->population[i].permeability_1[4] = rand_double(this->min_permeability[0], this->max_permeability[0]);
-        this->population[i].permeability_2[0] = rand_double(this->min_permeability[0], this->max_permeability[0]);
         this->population[i].permeability_2[1] = dataset[i].permeability_2[1];
-        this->population[i].permeability_2[2] = rand_double(this->min_permeability[1], this->max_permeability[1]);
-        this->population[i].permeability_2[3] = rand_double(this->min_permeability[1], this->max_permeability[1]);
-        this->population[i].permeability_2[4] = rand_double(this->min_permeability[0], this->max_permeability[0]);
-        this->population[i].permeability_3[0] = rand_double(this->min_permeability[0], this->max_permeability[0]);
         this->population[i].permeability_3[1] = dataset[i].permeability_3[1];
-        this->population[i].permeability_3[2] = rand_double(this->min_permeability[1], this->max_permeability[1]);
-        this->population[i].permeability_3[3] = rand_double(this->min_permeability[1], this->max_permeability[1]);
-        this->population[i].permeability_3[4] = rand_double(this->min_permeability[0], this->max_permeability[0]);
     }
 
     for(int i = 0; i < SIZE_POPULATION; i++){
@@ -195,19 +246,19 @@ void genetic_algorithm::firstPopulation(){
             getline(read_input, line);
             if(count == 142){
                 vector<string> v{split(line, ' ')};
-                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[0] << "   " << this->population[i].permeability_1[0] << "   " << this->population[i].permeability_2[0] << "   " << this->population[i].permeability_3[0] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[0] << "   " << (this->population[i].permeability_1[0] * 10e-15) << "   " << (this->population[i].permeability_2[0] * 10e-15) << "   " << (this->population[i].permeability_3[0] * 10e-15) << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
             }else if(count == 143){
                 vector<string> v{split(line, ' ')};
                 write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[1] << "   " << this->population[i].permeability_1[1] << "   " << this->population[i].permeability_2[1] << "   " << this->population[i].permeability_3[1] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
             }else if(count == 144){
                 vector<string> v{split(line, ' ')};
-                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[2] << "   " << this->population[i].permeability_1[2] << "   " << this->population[i].permeability_2[2] << "   " << this->population[i].permeability_3[2] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[2] << "   " << (this->population[i].permeability_1[2] * 10e-15) << "   " << (this->population[i].permeability_2[2] * 10e-15) << "   " << (this->population[i].permeability_3[2] * 10e-15) << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
             }else if(count == 145){
                 vector<string> v{split(line, ' ')};
-                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[3] << "   " << this->population[i].permeability_1[3] << "   " << this->population[i].permeability_2[3] << "   " << this->population[i].permeability_3[3] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[3] << "   " << (this->population[i].permeability_1[3] * 10e-15) << "   " << (this->population[i].permeability_2[3] * 10e-15) << "   " << (this->population[i].permeability_3[3] * 10e-15) << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
             }else if(count == 146){
                 vector<string> v{split(line, ' ')};
-                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[4] << "   " << this->population[i].permeability_1[4] << "   " << this->population[i].permeability_2[4] << "   " << this->population[i].permeability_3[4] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[4] << "   " << (this->population[i].permeability_1[4] * 10e-15) << "   " << (this->population[i].permeability_2[4] * 10e-15) << "   " << (this->population[i].permeability_3[4] * 10e-15) << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
             }else{
                 write_input << line << endl;
             }
@@ -226,6 +277,26 @@ void genetic_algorithm::firstPopulation(){
     fitness(0);
     sort(begin(this->population), end(this->population), compare);
 
+    ofstream data("../Dataset/dataset.csv", ios::app);
+
+    data << "Porosity_1" << "," << "Permeability_1.1" << "," << "Permeability_2.1"  << "," << "Permeability_3.1" << "Porosity_2" << "," << "Permeability_1.2" << "," << "Permeability_2.2"  << "," << "Permeability_3.2" << "Porosity_3" << "," << "Permeability_1.3" << "," << "Permeability_2.3"  << "," << "Permeability_3.3" << "Porosity_4" << "," << "Permeability_1.4" << "," << "Permeability_2.4"  << "," << "Permeability_3.4" << "Porosity_5" << "," << "Permeability_1.5" << "," << "Permeability_2.5"  << "," << "Permeability_3.5" << "," << "Error" << endl;
+
+    for(int i = 0; i < SIZE_POPULATION; i++){
+        data << this->population[i].porosity[0] << "," << (this->population[i].permeability_1[0] * 10e-15) << "," << (this->population[i].permeability_2[0] * 10e-15) << "," << (this->population[i].permeability_3[0] * 10e-15) << "," << this->population[i].porosity[1] << "," << this->population[i].permeability_1[1] << "," << this->population[i].permeability_2[1] << "," << this->population[i].permeability_3[1] << "," << this->population[i].porosity[2] << "," << (this->population[i].permeability_1[2] * 10e-15) << "," << (this->population[i].permeability_2[2] * 10e-15) << "," << (this->population[i].permeability_3[2] * 10e-15) << "," << this->population[i].porosity[3] << "," << (this->population[i].permeability_1[3] * 10e-15) << "," << (this->population[i].permeability_2[3] * 10e-15) << "," << (this->population[i].permeability_3[3] * 10e-15) << "," << this->population[i].porosity[4] << "," << (this->population[i].permeability_1[4] * 10e-15) << "," << (this->population[i].permeability_2[4] * 10e-15) << "," << (this->population[i].permeability_3[4] * 10e-15) << "," << this->population[i].error_rank << endl;
+    }
+
+    data.close();
+
+    ofstream data2("../Dataset/dataset2.csv", ios::app);
+
+    data2 << "Porosity_1" << "," << "Permeability_1.1" << "," << "Permeability_2.1"  << "," << "Permeability_3.1" << "Porosity_2" << "," << "Permeability_1.2" << "," << "Permeability_2.2"  << "," << "Permeability_3.2" << "Porosity_3" << "," << "Permeability_1.3" << "," << "Permeability_2.3"  << "," << "Permeability_3.3" << "Porosity_4" << "," << "Permeability_1.4" << "," << "Permeability_2.4"  << "," << "Permeability_3.4" << "Porosity_5" << "," << "Permeability_1.5" << "," << "Permeability_2.5"  << "," << "Permeability_3.5" << "," << "Error" << endl;
+
+    for(int i = 0; i < SIZE_POPULATION; i++){
+        data2 << this->population[i].porosity[0] << "," << this->population[i].permeability_1[0] << "," << this->population[i].permeability_2[0] << "," << this->population[i].permeability_3[0] << "," << this->population[i].porosity[1] << "," << (this->population[i].permeability_1[1] / 10e-15) << "," << (this->population[i].permeability_2[1] / 10e-15) << "," << (this->population[i].permeability_3[1] / 10e-15) << "," << this->population[i].porosity[2] << "," << this->population[i].permeability_1[2] << "," << this->population[i].permeability_2[2] << "," << this->population[i].permeability_3[2] << "," << this->population[i].porosity[3] << "," << this->population[i].permeability_1[3] << "," << this->population[i].permeability_2[3] << "," << this->population[i].permeability_3[3] << "," << this->population[i].porosity[4] << "," << this->population[i].permeability_1[4] << "," << this->population[i].permeability_2[4] << "," << this->population[i].permeability_3[4] << "," << this->population[i].error_rank << endl;
+    }
+
+    data2.close();
+
     ofstream write_error("../Output/0/error.txt", ios::out);
     
     for(int i = 0; i < SIZE_POPULATION; i++){
@@ -243,19 +314,19 @@ void genetic_algorithm::firstPopulation(){
             getline(read_input, line);
             if(count == 142){
                 vector<string> v{split(line, ' ')};
-                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[0] << "   " << this->population[i].permeability_1[0] << "   " << this->population[i].permeability_2[0] << "   " << this->population[i].permeability_3[0] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[0] << "   " << (this->population[i].permeability_1[0] * 10e-15) << "   " << (this->population[i].permeability_2[0] * 10e-15) << "   " << (this->population[i].permeability_3[0] * 10e-15) << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
             }else if(count == 143){
                 vector<string> v{split(line, ' ')};
                 write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[1] << "   " << this->population[i].permeability_1[1] << "   " << this->population[i].permeability_2[1] << "   " << this->population[i].permeability_3[1] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
             }else if(count == 144){
                 vector<string> v{split(line, ' ')};
-                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[2] << "   " << this->population[i].permeability_1[2] << "   " << this->population[i].permeability_2[2] << "   " << this->population[i].permeability_3[2] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[2] << "   " << (this->population[i].permeability_1[2] * 10e-15) << "   " << (this->population[i].permeability_2[2] * 10e-15) << "   " << (this->population[i].permeability_3[2] * 10e-15) << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
             }else if(count == 145){
                 vector<string> v{split(line, ' ')};
-                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[3] << "   " << this->population[i].permeability_1[3] << "   " << this->population[i].permeability_2[3] << "   " << this->population[i].permeability_3[3] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[3] << "   " << (this->population[i].permeability_1[3] * 10e-15) << "   " << (this->population[i].permeability_2[3] * 10e-15) << "   " << (this->population[i].permeability_3[3] * 10e-15) << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
             }else if(count == 146){
                 vector<string> v{split(line, ' ')};
-                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[4] << "   " << this->population[i].permeability_1[4] << "   " << this->population[i].permeability_2[4] << "   " << this->population[i].permeability_3[4] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[4] << "   " << (this->population[i].permeability_1[4] * 10e-15) << "   " << (this->population[i].permeability_2[4] * 10e-15) << "   " << (this->population[i].permeability_3[4] * 10e-15) << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
             }else{
                 write_input << line << endl;
             }
@@ -301,13 +372,13 @@ void genetic_algorithm::otherPopulations(int idIteration){
         system(file);
     }  
 
-    for(int i = SIZE_POPULATION; i < (SIZE_POPULATION + ((SIZE_POPULATION * CROSSOVER_RATE) / 100)); i++){
+    for(int i = SIZE_POPULATION; i < (SIZE_POPULATION + this->crossover_rate); i++){
         string command = "cp ../Input/inputDS.dat ../Output/"+to_string(idIteration)+"/inputDS_"+to_string(i)+".dat";
         const char* file = (char*) command.c_str();
         system(file);
     }
 
-    for(int i = SIZE_POPULATION; i < (SIZE_POPULATION + ((SIZE_POPULATION * CROSSOVER_RATE) / 100)); i++){
+    for(int i = SIZE_POPULATION; i < (SIZE_POPULATION + this->crossover_rate); i++){
         ifstream read_input("../Output/"+to_string(idIteration)+"/inputDS_"+to_string(i)+".dat", ios::in);
         ofstream write_input("../inputDS_"+to_string(i)+".dat", ios::out);
         int count = 0;
@@ -316,19 +387,19 @@ void genetic_algorithm::otherPopulations(int idIteration){
             getline(read_input, line);
             if(count == 142){
                 vector<string> v{split(line, ' ')};
-                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[0] << "   " << this->population[i].permeability_1[0] << "   " << this->population[i].permeability_2[0] << "   " << this->population[i].permeability_3[0] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[0] << "   " << (this->population[i].permeability_1[0] * 10e-15) << "   " << (this->population[i].permeability_2[0] * 10e-15) << "   " << (this->population[i].permeability_3[0] * 10e-15) << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
             }else if(count == 143){
                 vector<string> v{split(line, ' ')};
                 write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[1] << "   " << this->population[i].permeability_1[1] << "   " << this->population[i].permeability_2[1] << "   " << this->population[i].permeability_3[1] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
             }else if(count == 144){
                 vector<string> v{split(line, ' ')};
-                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[2] << "   " << this->population[i].permeability_1[2] << "   " << this->population[i].permeability_2[2] << "   " << this->population[i].permeability_3[2] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[2] << "   " << (this->population[i].permeability_1[2] * 10e-15) << "   " << (this->population[i].permeability_2[2] * 10e-15) << "   " << (this->population[i].permeability_3[2] * 10e-15) << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
             }else if(count == 145){
                 vector<string> v{split(line, ' ')};
-                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[3] << "   " << this->population[i].permeability_1[3] << "   " << this->population[i].permeability_2[3] << "   " << this->population[i].permeability_3[3] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[3] << "   " << (this->population[i].permeability_1[3] * 10e-15) << "   " << (this->population[i].permeability_2[3] * 10e-15) << "   " << (this->population[i].permeability_3[3] * 10e-15) << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
             }else if(count == 146){
                 vector<string> v{split(line, ' ')};
-                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[4] << "   " << this->population[i].permeability_1[4] << "   " << this->population[i].permeability_2[4] << "   " << this->population[i].permeability_3[4] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[4] << "   " << (this->population[i].permeability_1[4] * 10e-15) << "   " << (this->population[i].permeability_2[4] * 10e-15) << "   " << (this->population[i].permeability_3[4] * 10e-15) << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
             }else{
                 write_input << line << endl;
             }
@@ -346,6 +417,26 @@ void genetic_algorithm::otherPopulations(int idIteration){
     simulation(idIteration);
     fitness(idIteration);
     sort(begin(this->population), end(this->population), compare);
+
+    ofstream data("../Dataset/dataset.csv", ios::app);
+
+    data << "Porosity_1" << "," << "Permeability_1.1" << "," << "Permeability_2.1"  << "," << "Permeability_3.1" << "Porosity_2" << "," << "Permeability_1.2" << "," << "Permeability_2.2"  << "," << "Permeability_3.2" << "Porosity_3" << "," << "Permeability_1.3" << "," << "Permeability_2.3"  << "," << "Permeability_3.3" << "Porosity_4" << "," << "Permeability_1.4" << "," << "Permeability_2.4"  << "," << "Permeability_3.4" << "Porosity_5" << "," << "Permeability_1.5" << "," << "Permeability_2.5"  << "," << "Permeability_3.5" << "," << "Error" << endl;
+
+    for(int i = 0; i < SIZE_POPULATION; i++){
+        data << this->population[i].porosity[0] << "," << (this->population[i].permeability_1[0] * 10e-15) << "," << (this->population[i].permeability_2[0] * 10e-15) << "," << (this->population[i].permeability_3[0] * 10e-15) << "," << this->population[i].porosity[1] << "," << this->population[i].permeability_1[1] << "," << this->population[i].permeability_2[1] << "," << this->population[i].permeability_3[1] << "," << this->population[i].porosity[2] << "," << (this->population[i].permeability_1[2] * 10e-15) << "," << (this->population[i].permeability_2[2] * 10e-15) << "," << (this->population[i].permeability_3[2] * 10e-15) << "," << this->population[i].porosity[3] << "," << (this->population[i].permeability_1[3] * 10e-15) << "," << (this->population[i].permeability_2[3] * 10e-15) << "," << (this->population[i].permeability_3[3] * 10e-15) << "," << this->population[i].porosity[4] << "," << (this->population[i].permeability_1[4] * 10e-15) << "," << (this->population[i].permeability_2[4] * 10e-15) << "," << (this->population[i].permeability_3[4] * 10e-15) << "," << this->population[i].error_rank << endl;
+    }
+
+    data.close();
+
+    ofstream data2("../Dataset/dataset2.csv", ios::app);
+
+    data2 << "Porosity_1" << "," << "Permeability_1.1" << "," << "Permeability_2.1"  << "," << "Permeability_3.1" << "Porosity_2" << "," << "Permeability_1.2" << "," << "Permeability_2.2"  << "," << "Permeability_3.2" << "Porosity_3" << "," << "Permeability_1.3" << "," << "Permeability_2.3"  << "," << "Permeability_3.3" << "Porosity_4" << "," << "Permeability_1.4" << "," << "Permeability_2.4"  << "," << "Permeability_3.4" << "Porosity_5" << "," << "Permeability_1.5" << "," << "Permeability_2.5"  << "," << "Permeability_3.5" << "," << "Error" << endl;
+
+    for(int i = 0; i < SIZE_POPULATION; i++){
+        data2 << this->population[i].porosity[0] << "," << this->population[i].permeability_1[0] << "," << this->population[i].permeability_2[0] << "," << this->population[i].permeability_3[0] << "," << this->population[i].porosity[1] << "," << (this->population[i].permeability_1[1] / 10e-15) << "," << (this->population[i].permeability_2[1] / 10e-15) << "," << (this->population[i].permeability_3[1] / 10e-15) << "," << this->population[i].porosity[2] << "," << this->population[i].permeability_1[2] << "," << this->population[i].permeability_2[2] << "," << this->population[i].permeability_3[2] << "," << this->population[i].porosity[3] << "," << this->population[i].permeability_1[3] << "," << this->population[i].permeability_2[3] << "," << this->population[i].permeability_3[3] << "," << this->population[i].porosity[4] << "," << this->population[i].permeability_1[4] << "," << this->population[i].permeability_2[4] << "," << this->population[i].permeability_3[4] << "," << this->population[i].error_rank << endl;
+    }
+
+    data2.close();
 
     ofstream write_error("../Output/"+to_string(idIteration)+"/error.txt", ios::out);
     
@@ -365,7 +456,7 @@ void genetic_algorithm::otherPopulations(int idIteration){
         system(file);
     }
 
-    for(int i = SIZE_POPULATION; i < (SIZE_POPULATION + ((SIZE_POPULATION * CROSSOVER_RATE) / 100)); i++){
+    for(int i = SIZE_POPULATION; i < (SIZE_POPULATION + this->crossover_rate); i++){
         this->population.pop_back();
     }
 
@@ -378,19 +469,19 @@ void genetic_algorithm::otherPopulations(int idIteration){
             getline(read_input, line);
             if(count == 142){
                 vector<string> v{split(line, ' ')};
-                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[0] << "   " << this->population[i].permeability_1[0] << "   " << this->population[i].permeability_2[0] << "   " << this->population[i].permeability_3[0] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[0] << "   " << (this->population[i].permeability_1[0] * 10e-15) << "   " << (this->population[i].permeability_2[0] * 10e-15) << "   " << (this->population[i].permeability_3[0] * 10e-15) << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
             }else if(count == 143){
                 vector<string> v{split(line, ' ')};
                 write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[1] << "   " << this->population[i].permeability_1[1] << "   " << this->population[i].permeability_2[1] << "   " << this->population[i].permeability_3[1] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
             }else if(count == 144){
                 vector<string> v{split(line, ' ')};
-                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[2] << "   " << this->population[i].permeability_1[2] << "   " << this->population[i].permeability_2[2] << "   " << this->population[i].permeability_3[2] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[2] << "   " << (this->population[i].permeability_1[2] * 10e-15) << "   " << (this->population[i].permeability_2[2] * 10e-15) << "   " << (this->population[i].permeability_3[2] * 10e-15) << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
             }else if(count == 145){
                 vector<string> v{split(line, ' ')};
-                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[3] << "   " << this->population[i].permeability_1[3] << "   " << this->population[i].permeability_2[3] << "   " << this->population[i].permeability_3[3] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[3] << "   " << (this->population[i].permeability_1[3] * 10e-15) << "   " << (this->population[i].permeability_2[3] * 10e-15) << "   " << (this->population[i].permeability_3[3] * 10e-15) << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
             }else if(count == 146){
                 vector<string> v{split(line, ' ')};
-                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[4] << "   " << this->population[i].permeability_1[4] << "   " << this->population[i].permeability_2[4] << "   " << this->population[i].permeability_3[4] << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
+                write_input << "         " << v[0] << "   " << scientific << this->population[i].porosity[4] << "   " << (this->population[i].permeability_1[4] * 10e-15) << "   " << (this->population[i].permeability_2[4] * 10e-15) << "   " << (this->population[i].permeability_3[4] * 10e-15) << "   " << v[5] << "   "  << v[6] << "   " << v[7] << "   " << v[8] << "   " << v[9] << endl;
             }else{
                 write_input << line << endl;
             }
@@ -404,6 +495,7 @@ void genetic_algorithm::otherPopulations(int idIteration){
         const char* file = (char*) command.c_str();
         system(file);
     }
+
 }
 
 void genetic_algorithm::fitness(int idIteration){
@@ -458,7 +550,7 @@ void genetic_algorithm::fitness(int idIteration){
             this->population[i].error_rank = rank;
         }
     }else{
-        for(int i = SIZE_POPULATION; i < (SIZE_POPULATION + ((SIZE_POPULATION * CROSSOVER_RATE) / 100)); i++){
+        for(int i = SIZE_POPULATION; i < (SIZE_POPULATION + this->crossover_rate); i++){
             double rank;
 
             ifstream result_water("../Output/"+to_string(idIteration)+"/agua/vazaoAgua_"+to_string(i)+".dat", ios::in);
@@ -517,6 +609,7 @@ void genetic_algorithm::crossover(){
             this->children[i].permeability_1[j] = 0;
             this->children[i].permeability_2[j] = 0;
             this->children[i].permeability_3[j] = 0;
+            this->children[i].error_rank = 0;
         }
     }
 
@@ -574,6 +667,20 @@ void genetic_algorithm::crossover(){
 
     mutation();
 
+    //Deixando os valores com apenas duas casas decimais
+    for(int i = 0; i < crossover_rate; i++){
+        for(int j = 0; j < 5; j++){
+            if(j == 1){
+                break;
+            }else{
+                this->children[i].porosity[j] = floor(this->children[i].porosity[j] * 100) / 100;
+                this->children[i].permeability_1[j] = floor(this->children[i].permeability_1[j] * 100) / 100;
+                this->children[i].permeability_2[j] = floor(this->children[i].permeability_2[j] * 100) / 100;
+                this->children[i].permeability_3[j] = floor(this->children[i].permeability_3[j] * 100) / 100;
+            }
+        }
+    }
+
     for(int i = 0; i < this->crossover_rate; i++){
         this->population.push_back(children[i]);
     }
@@ -581,116 +688,504 @@ void genetic_algorithm::crossover(){
 }
 
 void genetic_algorithm::mutation(){
-    double valuePorosity;
-    double valuePermeability_1;
-    double valuePermeability_2;
-    double valuePermeability_3;
+    int valuePorosityI;
+    int valuePermeability_1I;
+    int valuePermeability_2I;
+    int valuePermeability_3I;
 
-     for(int i = 0; i < mutation_rate; i++){
+    double valuePorosityD;
+    double valuePermeability_1D;
+    double valuePermeability_2D;
+    double valuePermeability_3D;
+
+    for(int i = 0; i < this->mutation_rate; i++){
         int percent = rand() % 3;
         int tunning = rand() % 2;
+        int gene = rand() % 4;
 
         if(percent == 0){
-            for(int j = 0; j < 5; j++){
-                valuePorosity = ((this->children[i].porosity[j] * 80) / 100);
-                valuePermeability_1 = ((this->children[i].permeability_1[j] * 80) / 100);
-                valuePermeability_2 = ((this->children[i].permeability_2[j] * 80) / 100);
-                valuePermeability_3 = ((this->children[i].permeability_3[j] * 80) / 100);
+            for( int j = 0; j < 5; j++){
                 if(j == 1){
                     break;
                 }else if((j == 0) || (j == 4)){
-                    if(tunning = 0){
-                        this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosity));
-                        this->children[i].permeability_1[j] = min(this->max_permeability[0], (this->children[i].permeability_1[j] + valuePermeability_1));
-                        this->children[i].permeability_2[j] = min(this->max_permeability[0], (this->children[i].permeability_2[j] + valuePermeability_2));
-                        this->children[i].permeability_3[j] = min(this->max_permeability[0], (this->children[i].permeability_3[j] + valuePermeability_3));
+                    if(stod(decimal[0]) < 14){
+                        valuePorosityI = ((this->children[i].porosity[j] * 5) / 100);
+                        valuePermeability_1I = ((this->children[i].permeability_1[j] * 5) / 100);
+                        valuePermeability_2I = ((this->children[i].permeability_2[j] * 5) / 100);
+                        valuePermeability_3I = ((this->children[i].permeability_3[j] * 5) / 100);
+                        if(tunning == 0){
+                            if(gene == 0){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityI));
+                            }else if(gene == 1){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_1[j] + valuePermeability_1I));
+                            }else if(gene == 2){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_1[j] + valuePermeability_1I));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_2[j] + valuePermeability_2I));
+                            }else if(gene == 3){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_1[j] + valuePermeability_1I));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_2[j] + valuePermeability_2I));
+                                this->children[i].permeability_3[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_3[j] + valuePermeability_3I));
+                            }
+                        }else{
+                            if(gene == 0){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityI));
+                            }else if(gene == 1){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_1[j] - valuePermeability_1I));
+                            }else if(gene == 2){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_1[j] - valuePermeability_1I));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_2[j] - valuePermeability_2I));
+                            }else if(gene == 3){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_1[j] - valuePermeability_1I));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_2[j] - valuePermeability_2I));
+                                this->children[i].permeability_3[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_3[j] - valuePermeability_3I));
+                            }
+                        }
                     }else{
-                        this->children[i].porosity[j] = max(MIN_POROSITY, (this->children[i].porosity[j] - valuePorosity));
-                        this->children[i].permeability_1[j] = max(this->min_permeability[0], (this->children[i].permeability_1[j] - valuePermeability_1));
-                        this->children[i].permeability_2[j] = max(this->min_permeability[0], (this->children[i].permeability_2[j] - valuePermeability_2));
-                        this->children[i].permeability_3[j] = max(this->min_permeability[0], (this->children[i].permeability_3[j] - valuePermeability_3));
+                        valuePorosityD = ((this->children[i].porosity[j] * 5) / 100);
+                        valuePermeability_1D = ((this->children[i].permeability_1[j] * 5) / 100);
+                        valuePermeability_2D = ((this->children[i].permeability_2[j] * 5) / 100);
+                        valuePermeability_3D = ((this->children[i].permeability_3[j] * 5) / 100);
+                        if(tunning == 0){
+                            if(gene == 0){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityD));
+                            }else if(gene == 1){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_1[j] + valuePermeability_1D));
+                            }else if(gene == 2){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_1[j] + valuePermeability_1D));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_2[j] + valuePermeability_2D));
+                            }else if(gene == 3){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_1[j] + valuePermeability_1D));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_2[j] + valuePermeability_2D));
+                                this->children[i].permeability_3[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_3[j] + valuePermeability_3D));
+                            }
+                        }else{
+                            if(gene == 0){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityD));
+                            }else if(gene == 1){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_1[j] - valuePermeability_1D));
+                            }else if(gene == 2){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_1[j] - valuePermeability_1D));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_2[j] - valuePermeability_2D));
+                            }else if(gene == 3){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_1[j] - valuePermeability_1D));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_2[j] - valuePermeability_2D));
+                                this->children[i].permeability_3[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_3[j] - valuePermeability_3D));
+                            }
+                        }
                     }
                 }else if((j == 2) || (j == 3)){
-                    if(tunning = 0){
-                        this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosity));
-                        this->children[i].permeability_1[j] = min(this->max_permeability[1], (this->children[i].permeability_1[j] + valuePermeability_1));
-                        this->children[i].permeability_2[j] = min(this->max_permeability[1], (this->children[i].permeability_2[j] + valuePermeability_2));
-                        this->children[i].permeability_3[j] = min(this->max_permeability[1], (this->children[i].permeability_3[j] + valuePermeability_3));
+                    if(stod(decimal[0]) < 14){
+                        valuePorosityI = ((this->children[i].porosity[j] * 5) / 100);
+                        valuePermeability_1I = ((this->children[i].permeability_1[j] * 5) / 100);
+                        valuePermeability_2I = ((this->children[i].permeability_2[j] * 5) / 100);
+                        valuePermeability_3I = ((this->children[i].permeability_3[j] * 5) / 100);
+                        if(tunning == 0){
+                            if(gene == 0){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityI));
+                            }else if(gene == 1){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_1[j] + valuePermeability_1I));
+                            }else if(gene == 2){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_1[j] + valuePermeability_1I));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_2[j] + valuePermeability_2I));
+                            }else if(gene == 3){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_1[j] + valuePermeability_1I));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_2[j] + valuePermeability_2I));
+                                this->children[i].permeability_3[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_3[j] + valuePermeability_3I));
+                            }
+                        }else{
+                            if(gene == 0){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityI));
+                            }else if(gene == 1){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_1[j] - valuePermeability_1I));
+                            }else if(gene == 2){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_1[j] - valuePermeability_1I));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_2[j] - valuePermeability_2I));
+                            }else if(gene == 3){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_1[j] - valuePermeability_1I));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_2[j] - valuePermeability_2I));
+                                this->children[i].permeability_3[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_3[j] - valuePermeability_3I));
+                            }
+                        }
                     }else{
-                        this->children[i].porosity[j] = max(MIN_POROSITY, (this->children[i].porosity[j] - valuePorosity));
-                        this->children[i].permeability_1[j] = max(this->min_permeability[1], (this->children[i].permeability_1[j] - valuePermeability_1));
-                        this->children[i].permeability_2[j] = max(this->min_permeability[1], (this->children[i].permeability_2[j] - valuePermeability_2));
-                        this->children[i].permeability_3[j] = max(this->min_permeability[1], (this->children[i].permeability_3[j] - valuePermeability_3));
+                        valuePorosityD = ((this->children[i].porosity[j] * 5) / 100);
+                        valuePermeability_1D = ((this->children[i].permeability_1[j] * 5) / 100);
+                        valuePermeability_2D = ((this->children[i].permeability_2[j] * 5) / 100);
+                        valuePermeability_3D = ((this->children[i].permeability_3[j] * 5) / 100);
+                        if(tunning == 0){
+                            if(gene == 0){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityD));
+                            }else if(gene == 1){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_1[j] + valuePermeability_1D));
+                            }else if(gene == 2){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_1[j] + valuePermeability_1D));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_2[j] + valuePermeability_2D));
+                            }else if(gene == 3){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_1[j] + valuePermeability_1D));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_2[j] + valuePermeability_2D));
+                                this->children[i].permeability_3[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_3[j] + valuePermeability_3D));
+                            }
+                        }else{
+                            if(gene == 0){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityD));
+                            }else if(gene == 1){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_1[j] - valuePermeability_1D));
+                            }else if(gene == 2){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_1[j] - valuePermeability_1D));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_2[j] - valuePermeability_2D));
+                            }else if(gene == 3){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_1[j] - valuePermeability_1D));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_2[j] - valuePermeability_2D));
+                                this->children[i].permeability_3[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_3[j] - valuePermeability_3D));
+                            }
+                        }
                     }
                 }
             }
         }else if(percent == 1){
-            for(int j = 0; j < 5; j++){
-                valuePorosity = ((this->children[i].porosity[j] * 90) / 100);
-                valuePermeability_1 = ((this->children[i].permeability_1[j] * 90) / 100);
-                valuePermeability_2 = ((this->children[i].permeability_2[j] * 90) / 100);
-                valuePermeability_3 = ((this->children[i].permeability_3[j] * 90) / 100);
+            for( int j = 0; j < 5; j++){
                 if(j == 1){
                     break;
                 }else if((j == 0) || (j == 4)){
-                    if(tunning = 0){
-                        this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosity));
-                        this->children[i].permeability_1[j] = min(this->max_permeability[0], (this->children[i].permeability_1[j] + valuePermeability_1));
-                        this->children[i].permeability_2[j] = min(this->max_permeability[0], (this->children[i].permeability_2[j] + valuePermeability_2));
-                        this->children[i].permeability_3[j] = min(this->max_permeability[0], (this->children[i].permeability_3[j] + valuePermeability_3));
+                    if(stod(decimal[0]) < 14){
+                        valuePorosityI = ((this->children[i].porosity[j] * 10) / 100);
+                        valuePermeability_1I = ((this->children[i].permeability_1[j] * 10) / 100);
+                        valuePermeability_2I = ((this->children[i].permeability_2[j] * 10) / 100);
+                        valuePermeability_3I = ((this->children[i].permeability_3[j] * 10) / 100);
+                        if(tunning == 0){
+                            if(gene == 0){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityI));
+                            }else if(gene == 1){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_1[j] + valuePermeability_1I));
+                            }else if(gene == 2){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_1[j] + valuePermeability_1I));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_2[j] + valuePermeability_2I));
+                            }else if(gene == 3){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_1[j] + valuePermeability_1I));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_2[j] + valuePermeability_2I));
+                                this->children[i].permeability_3[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_3[j] + valuePermeability_3I));
+                            }
+                        }else{
+                            if(gene == 0){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityI));
+                            }else if(gene == 1){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_1[j] - valuePermeability_1I));
+                            }else if(gene == 2){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_1[j] - valuePermeability_1I));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_2[j] - valuePermeability_2I));
+                            }else if(gene == 3){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_1[j] - valuePermeability_1I));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_2[j] - valuePermeability_2I));
+                                this->children[i].permeability_3[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_3[j] - valuePermeability_3I));
+                            }
+                        }
                     }else{
-                        this->children[i].porosity[j] = max(MIN_POROSITY, (this->children[i].porosity[j] - valuePorosity));
-                        this->children[i].permeability_1[j] = max(this->min_permeability[0], (this->children[i].permeability_1[j] - valuePermeability_1));
-                        this->children[i].permeability_2[j] = max(this->min_permeability[0], (this->children[i].permeability_2[j] - valuePermeability_2));
-                        this->children[i].permeability_3[j] = max(this->min_permeability[0], (this->children[i].permeability_3[j] - valuePermeability_3));
+                        valuePorosityD = ((this->children[i].porosity[j] * 10) / 100);
+                        valuePermeability_1D = ((this->children[i].permeability_1[j] * 10) / 100);
+                        valuePermeability_2D = ((this->children[i].permeability_2[j] * 10) / 100);
+                        valuePermeability_3D = ((this->children[i].permeability_3[j] * 10) / 100);
+                        if(tunning == 0){
+                            if(gene == 0){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityD));
+                            }else if(gene == 1){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_1[j] + valuePermeability_1D));
+                            }else if(gene == 2){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_1[j] + valuePermeability_1D));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_2[j] + valuePermeability_2D));
+                            }else if(gene == 3){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_1[j] + valuePermeability_1D));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_2[j] + valuePermeability_2D));
+                                this->children[i].permeability_3[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_3[j] + valuePermeability_3D));
+                            }
+                        }else{
+                            if(gene == 0){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityD));
+                            }else if(gene == 1){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_1[j] - valuePermeability_1D));
+                            }else if(gene == 2){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_1[j] - valuePermeability_1D));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_2[j] - valuePermeability_2D));
+                            }else if(gene == 3){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_1[j] - valuePermeability_1D));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_2[j] - valuePermeability_2D));
+                                this->children[i].permeability_3[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_3[j] - valuePermeability_3D));
+                            }
+                        }
                     }
                 }else if((j == 2) || (j == 3)){
-                    if(tunning = 0){
-                        this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosity));
-                        this->children[i].permeability_1[j] = min(this->max_permeability[1], (this->children[i].permeability_1[j] + valuePermeability_1));
-                        this->children[i].permeability_2[j] = min(this->max_permeability[1], (this->children[i].permeability_2[j] + valuePermeability_2));
-                        this->children[i].permeability_3[j] = min(this->max_permeability[1], (this->children[i].permeability_3[j] + valuePermeability_3));
+                    if(stod(decimal[0]) < 14){
+                        valuePorosityI = ((this->children[i].porosity[j] * 5) / 100);
+                        valuePermeability_1I = ((this->children[i].permeability_1[j] * 5) / 100);
+                        valuePermeability_2I = ((this->children[i].permeability_2[j] * 5) / 100);
+                        valuePermeability_3I = ((this->children[i].permeability_3[j] * 5) / 100);
+                        if(tunning == 0){
+                            if(gene == 0){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityI));
+                            }else if(gene == 1){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_1[j] + valuePermeability_1I));
+                            }else if(gene == 2){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_1[j] + valuePermeability_1I));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_2[j] + valuePermeability_2I));
+                            }else if(gene == 3){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_1[j] + valuePermeability_1I));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_2[j] + valuePermeability_2I));
+                                this->children[i].permeability_3[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_3[j] + valuePermeability_3I));
+                            }
+                        }else{
+                            if(gene == 0){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityI));
+                            }else if(gene == 1){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_1[j] - valuePermeability_1I));
+                            }else if(gene == 2){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_1[j] - valuePermeability_1I));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_2[j] - valuePermeability_2I));
+                            }else if(gene == 3){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_1[j] - valuePermeability_1I));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_2[j] - valuePermeability_2I));
+                                this->children[i].permeability_3[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_3[j] - valuePermeability_3I));
+                            }
+                        }
                     }else{
-                        this->children[i].porosity[j] = max(MIN_POROSITY, (this->children[i].porosity[j] - valuePorosity));
-                        this->children[i].permeability_1[j] = max(this->min_permeability[1], (this->children[i].permeability_1[j] - valuePermeability_1));
-                        this->children[i].permeability_2[j] = max(this->min_permeability[1], (this->children[i].permeability_2[j] - valuePermeability_2));
-                        this->children[i].permeability_3[j] = max(this->min_permeability[1], (this->children[i].permeability_3[j] - valuePermeability_3));
+                        valuePorosityD = ((this->children[i].porosity[j] * 5) / 100);
+                        valuePermeability_1D = ((this->children[i].permeability_1[j] * 5) / 100);
+                        valuePermeability_2D = ((this->children[i].permeability_2[j] * 5) / 100);
+                        valuePermeability_3D = ((this->children[i].permeability_3[j] * 5) / 100);
+                        if(tunning == 0){
+                            if(gene == 0){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityD));
+                            }else if(gene == 1){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_1[j] + valuePermeability_1D));
+                            }else if(gene == 2){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_1[j] + valuePermeability_1D));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_2[j] + valuePermeability_2D));
+                            }else if(gene == 3){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_1[j] + valuePermeability_1D));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_2[j] + valuePermeability_2D));
+                                this->children[i].permeability_3[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_3[j] + valuePermeability_3D));
+                            }
+                        }else{
+                            if(gene == 0){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityD));
+                            }else if(gene == 1){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_1[j] - valuePermeability_1D));
+                            }else if(gene == 2){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_1[j] - valuePermeability_1D));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_2[j] - valuePermeability_2D));
+                            }else if(gene == 3){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_1[j] - valuePermeability_1D));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_2[j] - valuePermeability_2D));
+                                this->children[i].permeability_3[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_3[j] - valuePermeability_3D));
+                            }
+                        }
                     }
                 }
             }
-            
-            
         }else if(percent == 2){
-            for(int j = 0; j < 5; j++){
-                valuePorosity = ((this->children[i].porosity[j] * 100) / 100);
-                valuePermeability_1 = ((this->children[i].permeability_1[j] * 100) / 100);
-                valuePermeability_2 = ((this->children[i].permeability_2[j] * 100) / 100);
-                valuePermeability_3 = ((this->children[i].permeability_3[j] * 100) / 100);
+            for( int j = 0; j < 5; j++){
                 if(j == 1){
                     break;
                 }else if((j == 0) || (j == 4)){
-                    if(tunning = 0){
-                        this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosity));
-                        this->children[i].permeability_1[j] = min(this->max_permeability[0], (this->children[i].permeability_1[j] + valuePermeability_1));
-                        this->children[i].permeability_2[j] = min(this->max_permeability[0], (this->children[i].permeability_2[j] + valuePermeability_2));
-                        this->children[i].permeability_3[j] = min(this->max_permeability[0], (this->children[i].permeability_3[j] + valuePermeability_3));
+                    if(stod(decimal[0]) < 14){
+                        valuePorosityI = ((this->children[i].porosity[j] * 20) / 100);
+                        valuePermeability_1I = ((this->children[i].permeability_1[j] * 20) / 100);
+                        valuePermeability_2I = ((this->children[i].permeability_2[j] * 20) / 100);
+                        valuePermeability_3I = ((this->children[i].permeability_3[j] * 20) / 100);
+                        if(tunning == 0){
+                            if(gene == 0){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityI));
+                            }else if(gene == 1){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_1[j] + valuePermeability_1I));
+                            }else if(gene == 2){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_1[j] + valuePermeability_1I));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_2[j] + valuePermeability_2I));
+                            }else if(gene == 3){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_1[j] + valuePermeability_1I));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_2[j] + valuePermeability_2I));
+                                this->children[i].permeability_3[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_3[j] + valuePermeability_3I));
+                            }
+                        }else{
+                            if(gene == 0){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityI));
+                            }else if(gene == 1){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_1[j] - valuePermeability_1I));
+                            }else if(gene == 2){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_1[j] - valuePermeability_1I));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_2[j] - valuePermeability_2I));
+                            }else if(gene == 3){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_1[j] - valuePermeability_1I));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_2[j] - valuePermeability_2I));
+                                this->children[i].permeability_3[j] = min(this->max_permeabilityI[0], (this->children[i].permeability_3[j] - valuePermeability_3I));
+                            }
+                        }
                     }else{
-                        this->children[i].porosity[j] = max(MIN_POROSITY, (this->children[i].porosity[j] - valuePorosity));
-                        this->children[i].permeability_1[j] = max(this->min_permeability[0], (this->children[i].permeability_1[j] - valuePermeability_1));
-                        this->children[i].permeability_2[j] = max(this->min_permeability[0], (this->children[i].permeability_2[j] - valuePermeability_2));
-                        this->children[i].permeability_3[j] = max(this->min_permeability[0], (this->children[i].permeability_3[j] - valuePermeability_3));
+                        valuePorosityD = ((this->children[i].porosity[j] * 20) / 100);
+                        valuePermeability_1D = ((this->children[i].permeability_1[j] * 20) / 100);
+                        valuePermeability_2D = ((this->children[i].permeability_2[j] * 20) / 100);
+                        valuePermeability_3D = ((this->children[i].permeability_3[j] * 20) / 100);
+                        if(tunning == 0){
+                            if(gene == 0){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityD));
+                            }else if(gene == 1){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_1[j] + valuePermeability_1D));
+                            }else if(gene == 2){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_1[j] + valuePermeability_1D));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_2[j] + valuePermeability_2D));
+                            }else if(gene == 3){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_1[j] + valuePermeability_1D));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_2[j] + valuePermeability_2D));
+                                this->children[i].permeability_3[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_3[j] + valuePermeability_3D));
+                            }
+                        }else{
+                            if(gene == 0){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityD));
+                            }else if(gene == 1){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_1[j] - valuePermeability_1D));
+                            }else if(gene == 2){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_1[j] - valuePermeability_1D));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_2[j] - valuePermeability_2D));
+                            }else if(gene == 3){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_1[j] - valuePermeability_1D));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_2[j] - valuePermeability_2D));
+                                this->children[i].permeability_3[j] = min(this->max_permeabilityD[0], (this->children[i].permeability_3[j] - valuePermeability_3D));
+                            }
+                        }
                     }
                 }else if((j == 2) || (j == 3)){
-                   if(tunning = 0){
-                        this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosity));
-                        this->children[i].permeability_1[j] = min(this->max_permeability[1], (this->children[i].permeability_1[j] + valuePermeability_1));
-                        this->children[i].permeability_2[j] = min(this->max_permeability[1], (this->children[i].permeability_2[j] + valuePermeability_2));
-                        this->children[i].permeability_3[j] = min(this->max_permeability[1], (this->children[i].permeability_3[j] + valuePermeability_3));
+                    if(stod(decimal[0]) < 14){
+                        valuePorosityI = ((this->children[i].porosity[j] * 5) / 100);
+                        valuePermeability_1I = ((this->children[i].permeability_1[j] * 5) / 100);
+                        valuePermeability_2I = ((this->children[i].permeability_2[j] * 5) / 100);
+                        valuePermeability_3I = ((this->children[i].permeability_3[j] * 5) / 100);
+                        if(tunning == 0){
+                            if(gene == 0){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityI));
+                            }else if(gene == 1){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_1[j] + valuePermeability_1I));
+                            }else if(gene == 2){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_1[j] + valuePermeability_1I));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_2[j] + valuePermeability_2I));
+                            }else if(gene == 3){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_1[j] + valuePermeability_1I));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_2[j] + valuePermeability_2I));
+                                this->children[i].permeability_3[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_3[j] + valuePermeability_3I));
+                            }
+                        }else{
+                            if(gene == 0){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityI));
+                            }else if(gene == 1){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_1[j] - valuePermeability_1I));
+                            }else if(gene == 2){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_1[j] - valuePermeability_1I));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_2[j] - valuePermeability_2I));
+                            }else if(gene == 3){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityI));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_1[j] - valuePermeability_1I));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_2[j] - valuePermeability_2I));
+                                this->children[i].permeability_3[j] = min(this->max_permeabilityI[1], (this->children[i].permeability_3[j] - valuePermeability_3I));
+                            }
+                        }
                     }else{
-                        this->children[i].porosity[j] = max(MIN_POROSITY, (this->children[i].porosity[j] - valuePorosity));
-                        this->children[i].permeability_1[j] = max(this->min_permeability[1], (this->children[i].permeability_1[j] - valuePermeability_1));
-                        this->children[i].permeability_2[j] = max(this->min_permeability[1], (this->children[i].permeability_2[j] - valuePermeability_2));
-                        this->children[i].permeability_3[j] = max(this->min_permeability[1], (this->children[i].permeability_3[j] - valuePermeability_3));
+                        valuePorosityD = ((this->children[i].porosity[j] * 5) / 100);
+                        valuePermeability_1D = ((this->children[i].permeability_1[j] * 5) / 100);
+                        valuePermeability_2D = ((this->children[i].permeability_2[j] * 5) / 100);
+                        valuePermeability_3D = ((this->children[i].permeability_3[j] * 5) / 100);
+                        if(tunning == 0){
+                            if(gene == 0){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityD));
+                            }else if(gene == 1){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_1[j] + valuePermeability_1D));
+                            }else if(gene == 2){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_1[j] + valuePermeability_1D));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_2[j] + valuePermeability_2D));
+                            }else if(gene == 3){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] + valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_1[j] + valuePermeability_1D));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_2[j] + valuePermeability_2D));
+                                this->children[i].permeability_3[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_3[j] + valuePermeability_3D));
+                            }
+                        }else{
+                            if(gene == 0){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityD));
+                            }else if(gene == 1){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_1[j] - valuePermeability_1D));
+                            }else if(gene == 2){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_1[j] - valuePermeability_1D));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_2[j] - valuePermeability_2D));
+                            }else if(gene == 3){
+                                this->children[i].porosity[j] = min(MAX_POROSITY, (this->children[i].porosity[j] - valuePorosityD));
+                                this->children[i].permeability_1[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_1[j] - valuePermeability_1D));
+                                this->children[i].permeability_2[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_2[j] - valuePermeability_2D));
+                                this->children[i].permeability_3[j] = min(this->max_permeabilityD[1], (this->children[i].permeability_3[j] - valuePermeability_3D));
+                            }
+                        }
                     }
                 }
             }

@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 
 error = []
 
-for i in range(15):
+for i in range(10):
     inputFile = open("../Output/"+str(i)+"/error.txt")
     count = 0
     for line in inputFile:
@@ -14,14 +14,14 @@ for i in range(15):
 
 population = []
     
-for j in range(15):
-    population.append(j)
+for j in range(10):
+    population.append(j+1)
 
 plt.figure(figsize=(10, 4), dpi=300)
 plt.title("Genetic Progress")
-plt.ylabel("Error Rate (Log Scale)")
+plt.ylabel("Error Rate")
 plt.xlabel("Population")
-plt.yscale('log')
+#plt.yscale('log')
 #plt.xscale('log')
 
 plt.plot(population, error, color='red', label ='Error')

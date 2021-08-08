@@ -5,33 +5,29 @@ from matplotlib import pyplot as plt
 from sklearn.metrics import r2_score
 from sklearn.metrics import mean_absolute_percentage_error
 
-os.system("rm -f *.png")
-os.system("rm -f *.txt")
+if(not os.path.exists("Matchs")):
+    os.system("mkdir Matchs")
+else:
+    os.system("rm -f Matchs/*")
 
-for i in range(100): 
+for i in range(10): 
     water = []
     oil = []
     real_water = []
     real_oil = []
 
-    inputFile_Water = open("Output_Simulation/vazaoAgua_"+str(i)+".dat", "r")
-    inputFile_Oil = open("Output_Simulation/vazaoOleo_"+str(i)+".dat", "r")
+    inputFile_Water = open("Output_Simulation/agua/vazaoAgua_"+str(i)+".dat", "r")
+    inputFile_Oil = open("Output_Simulation/oleo/vazaoOleo_"+str(i)+".dat", "r")
 
-    count = 0
     for line in inputFile_Water:
-        if(count < 10):
-            found = line.split(" ")
-            water.append(float(found[3]))
-            count = count + 1
+        found = line.split(" ")
+        water.append(float(found[3]))
         
     inputFile_Water.close()
 
-    count = 0
     for line in inputFile_Oil:
-        if(count < 10):
-            found = line.split(" ")
-            oil.append(float(found[3]))
-            count = count + 1    
+        found = line.split(" ")
+        oil.append(float(found[3]))   
 
     inputFile_Oil.close()
 
@@ -56,7 +52,7 @@ for i in range(100):
     print(str(i)+" - R² Error Water: ", r2_score(real_oil, oil))
     print("")
 
-    output = open("resultado_"+str(i)+".txt", "w")
+    output = open("Matchs/resultado_"+str(i)+".txt", "w")
 
     output.write("MAPE Error Water: "+str(mean_absolute_percentage_error(real_water, water))+"\n")
     output.write("R² Error Water: "+str(r2_score(real_water, water))+"\n")
@@ -87,9 +83,9 @@ for i in range(100):
         plt.legend(loc = 'upper right')
         #plt.show()
         if(count == 0):
-            plt.savefig("Matching Water_"+str(i)+" - Linhas.png")
+            plt.savefig("Matchs/Matching Water_"+str(i)+" - Linhas.png")
         else:
-            plt.savefig("Matching Oil_"+str(i)+" - Linhas.png")
+            plt.savefig("Matchs/Matching Oil_"+str(i)+" - Linhas.png")
         plt.clf()
 
         count = count + 1
