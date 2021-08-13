@@ -62,6 +62,7 @@ for i in range(10):
     output.close()
 
     values = [[real_water, water],[real_oil, oil]]
+    
     count = 0
     for value in values:
         instances = []
@@ -71,21 +72,23 @@ for i in range(10):
 
         if(count == 0):
             plt.title("Water Flow")
-        else:
-            plt.title("Oil Flow")
-        plt.ylabel("Error Rate (Log Scale)")
-        plt.xlabel("Time")
-        plt.yscale('log')
-        #plt.xscale('log')
-
-        plt.plot(instances, value[0], color='red', label ='Real')
-        plt.plot(instances, value[1], color='purple', label ='Predict')
-        plt.legend(loc = 'upper right')
-        #plt.show()
-        if(count == 0):
+            plt.ylabel("Error Rate (Log Scale)")
+            plt.xlabel("Time")
+            plt.yscale('log')
+            plt.plot(instances, values[0][0], color='red', label ='Real')
+            plt.plot(instances, values[0][1], color='purple', label ='Predicted')
+            plt.legend(loc = 'upper right')
             plt.savefig("Matchs/Matching Water_"+str(i)+" - Linhas.png")
         else:
+            plt.title("Oil Flow")
+            plt.ylabel("Error Rate (Log Scale)")
+            plt.xlabel("Time")
+            plt.yscale('log')
+            plt.plot(instances, values[1][0], color='red', label ='Real')
+            plt.plot(instances, values[1][1], color='purple', label ='Predicted')
+            plt.legend(loc = 'upper right')
             plt.savefig("Matchs/Matching Oil_"+str(i)+" - Linhas.png")
+        
         plt.clf()
 
         count = count + 1
