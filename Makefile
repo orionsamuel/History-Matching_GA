@@ -19,3 +19,4 @@ functions.o: src/functions.cpp include/functions.hpp include/utils.hpp
 clean:
 	rm -f *.o
 	rm -f build/$(EXECUTABLE)
+	rm -f build/output_simulation
