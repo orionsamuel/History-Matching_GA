@@ -9,7 +9,10 @@ def simulation(n):
         os.system("mkdir Output_Simulation/agua")
         os.system("mkdir Output_Simulation/oleo")
     else:
-        os.system("rm -f Output_Simulation/*")
+        os.system("rm -r -f Output_Simulation/*")
+        os.system("mkdir Output_Simulation/agua")
+        os.system("mkdir Output_Simulation/oleo")
+
 
     os.system("rm -f output_simulation")
     for i in range(n):
