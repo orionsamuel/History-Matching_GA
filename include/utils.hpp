@@ -21,6 +21,6 @@ struct result{
 #define MAX_POROSITY 3.0000000E-01
 
 #define WATER_WEIGHT 0.6
-#define OIL_WEIGHT 0.5
+#define OIL_WEIGHT 0.4
 
 #define N_METRICS 2

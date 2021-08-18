@@ -488,13 +488,13 @@ void genetic_algorithm::fitness(int idIteration){
 
             for (int j = 0; j < v.size(); j++){
                 if(stod(v[j]) == 0){
-                    simulate_results[j].water = 1;
+                    simulate_results[j].water = -1;
                 }else{
                     simulate_results[j].water = stod(v[j]);
                 }
 
                 if(stod(v2[j]) == 0){
-                    simulate_results[j].oil = 1;
+                    simulate_results[j].oil = -1;
                 }else{
                     simulate_results[j].oil = stod(v2[j]);
                 }
@@ -547,13 +547,13 @@ void genetic_algorithm::fitness(int idIteration){
 
             for (int j = 0; j < v.size(); j++){
                 if(stod(v[j]) == 0){
-                    simulate_results[j].water = 1;
+                    simulate_results[j].water = -1;
                 }else{
                     simulate_results[j].water = stod(v[j]);
                 }
 
                 if(stod(v2[j]) == 0){
-                    simulate_results[j].oil = 1;
+                    simulate_results[j].oil = -1;
                 }else{
                     simulate_results[j].oil = stod(v2[j]);
                 }
