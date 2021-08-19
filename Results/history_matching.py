@@ -66,15 +66,15 @@ for i in range(10):
     count = 0
     for value in values:
         instances = []
-        
         for j in range(len(real_water)):
-            instances.append(j)
+            instances.append((j+1)*250)
+            j = j + 250
 
         if(count == 0):
             #plt.title("Water Flow")
             plt.subplots_adjust(left=0.13, right=0.78, bottom=0.1, top=0.95)
-            plt.ylabel("Water Cut")
-            plt.xlabel("Time")
+            plt.ylabel("Water Flow")
+            plt.xlabel("Time (in hours)")
             plt.yscale('log')
             plt.plot(instances, values[0][0], color='red', label ='Real')
             plt.plot(instances, values[0][1], color='purple', label ='Predicted', linestyle = '--')
@@ -83,8 +83,8 @@ for i in range(10):
         else:
             #plt.title("Oil Flow")
             plt.subplots_adjust(left=0.13, right=0.78, bottom=0.1, top=0.95)
-            plt.ylabel("Oil Production")
-            plt.xlabel("Time")
+            plt.ylabel("Oil Flow")
+            plt.xlabel("Time (in hours)")
             plt.yscale('log')
             plt.plot(instances, values[1][0], color='red', label ='Real')
             plt.plot(instances, values[1][1], color='purple', label ='Predicted', linestyle = '--')
